@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CoachPro - Lavagna & Session Planner</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-white select-none">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef } = React;
+
+    const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe";
+
+    function CoachProApp() {
+      const [activeTab, setActiveTab] = useState('board');
+      const [tool, setTool] = useState('move');
+      const [arrowType, setArrowType] = useState('solid');
+      
+      // Stati App
+      const [elements, setElements] = useState([
+        { id: '1', type: 'player', color: 'red', number: '9', x: 45, y: 35 },
+        { id: '2', type: 'player', color: 'blue', number: '4', x: 55, y: 45 },
+        { id: '3', type: 'ball', x: 50, y: 65 }
+      ]);
+      const [arrows, setArrows] = useState([]);
+      const [isDrawingArrow, setIsDrawingArrow] = useState(false);
+      const [arrowStart, setArrowStart] = useState(null);
+
+      // Archivio & Libreria pre-caricata
+      const [drills, setDrills] = useState([
+        { id: '1', title: 'Possesso Palla 4v2 con Orientamento', category: 'Possesso', duration: '15 min', pitchSize: '20x20m', description: 'Mantenimento del possesso con orientamento del corpo.' },
+        { id: '2', title: 'Transizione Positiva 3v2', category: 'Transizioni', duration: '20 min', pitchSize: 'Metà Campo', description: 'Riconquista rapida e attacco della porta in superiorità numerica.' },
+        { id: '3', title: 'Attivazione Tecnica Analitica', category: 'Attivazione', duration: '10 min', pitchSize: '15x15m', description: 'Trasferimenti di palla rapidi a due tocchi e mobilità.' },
+        { id: '4', title: 'Partita a Tema: 4v4 + 3 Jolly', category: 'Partita a Tema', duration: '25 min', pitchSize: 'Campo Ridotto', description: 'Ricerca della terza uomo e sfruttamento dei jolly esterni.' }
+      ]);
+
+      const [newDrill, setNewDrill] = useState({ title: '', category: 'Possesso', duration: '15 min', pitchSize: 'Metà Campo', description: '' });
+      
+      // Conferma Eliminazione
+      const [drillToDelete, setDrillToDelete] = useState(null);
+
+      // Profilo / Auth Modal
+      const [showAuthModal, setShowAuthModal] = useState(false);
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
+      const [userProfile, setUserProfile] = useState({ name: 'Mister Rossi', role: 'Allenatore UEFA B', team: 'Prima Squadra', email: 'mister@coachpro.it' });
+
+      // Match Day (Distinta)
+      const [matchLineup, setMatchLineup] = useState([
+        { num: '1', name: 'Portiere', role: 'P' },
+        { num: '2', name: 'Terzino Destro', role: 'D' },
+        { num: '5', name: '1° Centrale', role: 'D' },
+        { num: '6', name: '2° Centrale', role: 'D' },
+        { num: '3', name: 'Terzino Sinistro', role: 'D' },
+        { num: '4', name: 'Mediano', role: 'C' },
+        { num: '8', name: 'Mezzala Destra', role: 'C' },
+        { num: '10', name: 'Trequartista', role: 'C' },
+        { num: '7', name: 'Esterno Destro', role: 'A' },
+        { num: '9', name: 'Centravanti', role: 'A' },
+        { num: '11', name: 'Esterno Sinistro', role: 'A' }
+      ]);
+
+      // Presenze & Infortuni
+      const [squadRoster, setSquadRoster] = useState([
+        { id: '1', name: 'Marco Rossi', status: 'Presente', injury: 'Nessuno' },
+        { id: '2', name: 'Luca Bianchi', status: 'Presente', injury: 'Nessuno' },
+        { id: '3', name: 'Andrea Neri', status: 'Infortunato', injury: 'Distorsione caviglia (rientro 10gg)' },
+        { id: '4', name: 'Giuseppe Verdi', status: 'Presente', injury: 'Nessuno' }
+      ]);
+
+      // Timer / Cronometro
+      const [timerSeconds, setTimerSeconds] = useState(0);
+      const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+      const svgRef
