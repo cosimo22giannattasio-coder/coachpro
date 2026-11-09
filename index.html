@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>CoachPro - Lavagna & Session Planner</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Caricamento di React, ReactDOM e Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
@@ -18,18 +20,16 @@
 <body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
   <div id="root"></div>
 
-  <script>
-    const e = React.createElement;
-    const useState = React.useState;
-    const useRef = React.useRef;
+  <script type="text/babel">
+    const { useState, useRef } = React;
 
     const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe";
-    const TRIAL_DAYS = 3; // Prova gratuita impostata a 3 giorni
+    const TRIAL_DAYS = 3;
 
     function CoachProApp() {
       // Auth state
-      const [user, setUser] = useState(null); // null = non autenticato
-      const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+      const [user, setUser] = useState(null);
+      const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
       // App state
@@ -59,4 +59,543 @@
       const checkAccess = () => {
         if (!user) return false;
         if (user.isPro) return true;
-        if (user.trialEndsAt && new Date().
+        if (user.trialEndsAt && new Date().getTime() < user.trialEndsAt) return true;
+        return false;
+      };
+
+      const hasAccess = checkAccess();
+
+      // Handlers di Autenticazione
+      const handleAuth = (evt) => {
+        evt.preventDefault();
+        if (!authData.email) return;
+        const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
+        
+        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
+
+        setUser({
+          name: displayName,
+          email: authData.email,
+          isPro: false,
+          trialEndsAt: authMode === 'register' ? trialEndTime : null
+        });
+      };
+
+      const handleLogout = () => {
+        setUser(null);
+        setAuthData({ name: '', email: '', password: '' });
+      };
+
+      const activateTrial = () => {
+        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
+        setUser({ ...user, trialEndsAt: trialEndTime });
+        setShowPaywallModal(false);
+      };
+
+      const getCoords = (evt) => {
+        if (!svgRef.current) return { x: 50, y: 50 };
+        const rect = svgRef.current.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        const x = Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100));
+        const y = Math.max(5, Math.min(95, ((clientY - rect.top) / rect.height) * 100));
+        return { x, y };
+      };
+
+      const handleBoardClick = (evt) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (draggedId) {
+          setDraggedId(null);
+          return;
+        }
+        const { x, y } = getCoords(evt);
+
+        if (tool === 'player-red') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), x, y }]);
+        } else if (tool === 'player-blue') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), x, y }]);
+        } else if (tool === 'ball') {
+          setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
+        } else if (tool === 'cone') {
+          setElements([...elements, { id: Date.now().toString(), type: 'cone', x, y }]);
+        } else if (tool === 'arrow') {
+          if (!isDrawingArrow) {
+            setIsDrawingArrow(true);
+            setCurrentArrowStart({ x, y });
+          } else {
+            setArrows([...arrows, { id: Date.now().toString(), startX: currentArrowStart.x, startY: currentArrowStart.y, endX: x, endY: y }]);
+            setIsDrawingArrow(false);
+            setCurrentArrowStart(null);
+          }
+        }
+      };
+
+      const handleTouchMove = (evt) => {
+        if (!hasAccess) return;
+        if (!draggedId || tool !== 'move') return;
+        const { x, y } = getCoords(evt);
+        setElements(elements.map(el => el.id === draggedId ? { ...el, x, y } : el));
+      };
+
+      const handleElementClick = (id, evt) => {
+        evt.stopPropagation();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (tool === 'delete') {
+          setElements(elements.filter(el => el.id !== id));
+        } else if (tool === 'move') {
+          setDraggedId(draggedId === id ? null : id);
+        }
+      };
+
+      const presetFormation = (type) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        let reds = [];
+        if (type === '433') {
+          reds = [
+            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
+            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
+            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
+            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
+            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
+            { id: 'r6', type: 'player', color: 'red', number: '4', x: 50, y: 60 },
+            { id: 'r7', type: 'player', color: 'red', number: '8', x: 30, y: 50 },
+            { id: 'r8', type: 'player', color: 'red', number: '10', x: 70, y: 50 },
+            { id: 'r9', type: 'player', color: 'red', number: '7', x: 15, y: 30 },
+            { id: 'r10', type: 'player', color: 'red', number: '9', x: 50, y: 25 },
+            { id: 'r11', type: 'player', color: 'red', number: '11', x: 85, y: 30 }
+          ];
+        } else if (type === '442') {
+          reds = [
+            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
+            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
+            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
+            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
+            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
+            { id: 'r6', type: 'player', color: 'red', number: '7', x: 15, y: 50 },
+            { id: 'r7', type: 'player', color: 'red', number: '4', x: 38, y: 52 },
+            { id: 'r8', type: 'player', color: 'red', number: '8', x: 62, y: 52 },
+            { id: 'r9', type: 'player', color: 'red', number: '11', x: 85, y: 50 },
+            { id: 'r10', type: 'player', color: 'red', number: '9', x: 38, y: 28 },
+            { id: 'r11', type: 'player', color: 'red', number: '10', x: 62, y: 28 }
+          ];
+        }
+        setElements([...reds, { id: 'b1', type: 'ball', x: 50, y: 50 }]);
+        setArrows([]);
+      };
+
+      const handleShareWhatsApp = (drill) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        const text = `⚽ *COACHPRO - SCHEDA ESERCIZIO*\n\n📌 *Titolo:* ${drill.title}\n⏱️ *Durata:* ${drill.duration}\n📂 *Categoria:* ${drill.category}\n\n📝 *Descrizione:*\n${drill.description}\n\n_Inviato tramite CoachPro App_`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      };
+
+      const addDrill = (evt) => {
+        evt.preventDefault();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (!newDrillTitle) return;
+        setDrills([...drills, {
+          id: Date.now().toString(),
+          title: newDrillTitle,
+          category: newDrillCat,
+          duration: newDrillDur,
+          description: newDrillDesc
+        }]);
+        setNewDrillTitle('');
+        setNewDrillDesc('');
+      };
+
+      const addPlayer = (evt) => {
+        evt.preventDefault();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (!newPlayerName) return;
+        setPlayers([...players, {
+          id: Date.now().toString(),
+          name: newPlayerName,
+          role: newPlayerRole,
+          status: 'presente'
+        }]);
+        setNewPlayerName('');
+      };
+
+      const togglePlayerStatus = (id) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        setPlayers(players.map(p => {
+          if (p.id !== id) return p;
+          const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
+          return { ...p, status: nextStatus };
+        }));
+      };
+
+      // LOGIN / REGISTRAZIONE
+      if (!user) {
+        return (
+          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
+                <h1 className="text-2xl font-black text-white tracking-tight">CoachPro</h1>
+                <p className="text-xs text-gray-400">Piattaforma tattica professionale per allenatori</p>
+              </div>
+              <form onSubmit={handleAuth} className="space-y-4">
+                {authMode === 'register' && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-300">Nome & Cognome / Titolo</label>
+                    <input
+                      type="text"
+                      placeholder="es. Mister Rossi"
+                      value={authData.name}
+                      onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">Email</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="allenatore@email.com"
+                    value={authData.email}
+                    onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">Password</label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••"
+                    value={authData.password}
+                    onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
+                >
+                  {authMode === 'login' ? 'Accedi a CoachPro' : 'Crea Account (3 giorni gratis)'}
+                </button>
+              </form>
+              <div className="text-center border-t border-gray-800 pt-4">
+                <button
+                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                  className="text-xs text-emerald-400 font-semibold hover:underline"
+                >
+                  {authMode === 'login' ? 'Non hai un account? Registrati ora' : 'Hai già un account? Accedi'}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // APP PRINCIPALE
+      return (
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
+          {/* HEADER */}
+          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+            <div className="flex items-center space-x-3">
+              <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
+              <div>
+                <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
+                <span className="text-[10px] text-emerald-400 font-medium">
+                  {hasAccess ? (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva') : 'Account Free (Bloccato)'}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
+                className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
+              >
+                PRO 29,99€/anno
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
+              >
+                Esci
+              </button>
+            </div>
+          </header>
+
+          {/* MAIN CONTENT */}
+          <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
+            {/* TAB 1: LAVAGNA TATTICA */}
+            {activeTab === 'board' && (
+              <div className="space-y-4">
+                {/* Moduli veloci */}
+                <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                  <span className="text-gray-400 font-medium text-[11px]">Moduli rapidi:</span>
+                  <div className="flex space-x-2">
+                    <button onClick={() => presetFormation('433')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-4-2</button>
+                  </div>
+                </div>
+
+                {/* Toolbar */}
+                <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
+                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 Sposta</button>
+                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 Rosso</button>
+                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 Blu</button>
+                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ Palla</button>
+                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 Cono</button>
+                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ Freccia</button>
+                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ Gomma</button>
+                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50">🗑️ Pulisci</button>
+                </div>
+
+                {/* Campo SVG */}
+                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                  {!hasAccess && (
+                    <div 
+                      onClick={() => setShowPaywallModal(true)}
+                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
+                    >
+                      <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
+                      <h3 className="text-lg font-bold text-white">Funzionalità Bloccata</h3>
+                      <p className="text-xs text-gray-300 max-w-xs mt-1">Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.</p>
+                    </div>
+                  )}
+                  <svg
+                    ref={svgRef}
+                    className="w-full h-full cursor-pointer touch-none"
+                    onClick={handleBoardClick}
+                    onTouchMove={handleTouchMove}
+                  >
+                    {/* Segnature Campo */}
+                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+
+                    {/* Frecce */}
+                    {arrows.map(arr => (
+                      <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
+                    ))}
+
+                    {/* Elementi */}
+                    {elements.map(el => (
+                      <g key={el.id} onClick={(evt) => handleElementClick(el.id, evt)} className="cursor-pointer">
+                        {el.type === 'player' && (
+                          <>
+                            <circle cx={`${el.x}%`} cy={`${el.y}%`} r="14" fill={el.color === 'red' ? '#ef4444' : '#3b82f6'} stroke="white" strokeWidth="2.5" />
+                            <text x={`${el.x}%`} y={`${el.y}%`} dy="4" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">{el.number}</text>
+                          </>
+                        )}
+                        {el.type === 'ball' && <circle cx={`${el.x}%`} cy={`${el.y}%`} r="7" fill="white" stroke="black" strokeWidth="2" />}
+                        {el.type === 'cone' && <polygon points={`${el.x}%,${el.y - 2.5}% ${el.x - 2}%,${el.y + 2}% ${el.x + 2}%,${el.y + 2}%`} fill="#f97316" />}
+                      </g>
+                    ))}
+                  </svg>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: ARCHIVIO ESERCIZI */}
+            {activeTab === 'drills' && (
+              <div className="space-y-4">
+                <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
+                  <h3 className="text-sm font-bold text-white">Nuovo Esercizio</h3>
+                  <input
+                    type="text"
+                    placeholder="Titolo esercitazione..."
+                    value={newDrillTitle}
+                    onChange={(ev) => setNewDrillTitle(ev.target.value)}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <select
+                      value={newDrillCat}
+                      onChange={(ev) => setNewDrillCat(ev.target.value)}
+                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    >
+                      <option value="Possesso Palla">Possesso Palla</option>
+                      <option value="Tattica">Tattica</option>
+                      <option value="Atletico">Atletico</option>
+                      <option value="Rifinitura">Rifinitura</option>
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="Durata (es. 15 min)"
+                      value={newDrillDur}
+                      onChange={(ev) => setNewDrillDur(ev.target.value)}
+                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Descrizione ed obbiettivi..."
+                    value={newDrillDesc}
+                    onChange={(ev) => setNewDrillDesc(ev.target.value)}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
+                  ></textarea>
+                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">+ Salva Esercizio</button>
+                </form>
+
+                {drills.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500 text-xs">Nessun esercizio salvato. Creane uno sopra!</div>
+                ) : (
+                  drills.map(drill => (
+                    <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-bold text-sm text-white">{drill.title}</h4>
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
+                      </div>
+                      <p className="text-xs text-gray-400">{drill.description}</p>
+                      <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
+                        <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
+                        <button
+                          onClick={() => handleShareWhatsApp(drill)}
+                          className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
+                        >
+                          📲 Condividi WhatsApp
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+
+            {/* TAB 3: ROSA E PRESENZE */}
+            {activeTab === 'squad' && (
+              <div className="space-y-4">
+                <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Nome giocatore..."
+                    value={newPlayerName}
+                    onChange={(ev) => setNewPlayerName(ev.target.value)}
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  />
+                  <select
+                    value={newPlayerRole}
+                    onChange={(ev) => setNewPlayerRole(ev.target.value)}
+                    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  >
+                    <option value="Portiere">Portiere</option>
+                    <option value="Difensore">Difensore</option>
+                    <option value="Centrocampista">Centrocampista</option>
+                    <option value="Attaccante">Attaccante</option>
+                  </select>
+                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">Aggiungi</button>
+                </form>
+
+                {players.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500 text-xs">Nessun giocatore in rosa. Aggiungi il primo sopra!</div>
+                ) : (
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800">
+                    {players.map(player => (
+                      <div key={player.id} className="p-3 flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-xs text-white">{player.name}</p>
+                          <p className="text-[10px] text-gray-400">{player.role}</p>
+                        </div>
+                        <button
+                          onClick={() => togglePlayerStatus(player.id)}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                            player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
+                            player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' :
+                            'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                          }`}
+                        >
+                          {player.status.toUpperCase()}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
+
+          {/* MODALE PAYWALL */}
+          {showPaywallModal && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative">
+                <button
+                  onClick={() => setShowPaywallModal(false)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
+                >
+                  ✕
+                </button>
+                <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
+                <h3 className="text-xl font-black text-white">Accedi a CoachPro</h3>
+                <p className="text-xs text-gray-300">Per utilizzare la lavagna, salvare gli esercizi ed accedere alla rosa occorre un piano attivo o attivare la prova gratuita.</p>
+                <div className="space-y-2 pt-2">
+                  <button
+                    onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
+                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
+                  >
+                    Abbonati Ora - 29,99€/anno
+                  </button>
+                  {!user.trialEndsAt && (
+                    <button
+                      onClick={activateTrial}
+                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2.5 rounded-xl text-xs border border-emerald-500/30"
+                    >
+                      Attiva 3 Giorni di Prova Gratuita
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* BOTTOM BAR */}
+          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
+            <button
+              onClick={() => setActiveTab('board')}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
+            >
+              <span className="text-xl">⚽</span>
+              <span className="text-[10px] font-bold">Lavagna</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('drills')}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
+            >
+              <span className="text-xl">📋</span>
+              <span className="text-[10px] font-bold">Esercizi</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('squad')}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
+            >
+              <span className="text-xl">👥</span>
+              <span className="text-[10px] font-bold">Rosa</span>
+            </button>
+          </nav>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CoachProApp />);
+  </script>
+</body>
+</html>
