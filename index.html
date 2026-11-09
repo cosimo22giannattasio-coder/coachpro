@@ -2,80 +2,167 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoachPro - Lavagna & Session Planner</title>
+  <!-- React & Tailwind CDN -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-white select-none">
-
+<body class="bg-gray-950 text-white font-sans antialiased">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useRef } = React;
-
     const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe";
 
     function CoachProApp() {
       const [activeTab, setActiveTab] = useState('board');
       const [tool, setTool] = useState('move');
-      const [arrowType, setArrowType] = useState('solid');
-      
-      // Stati App
       const [elements, setElements] = useState([
-        { id: '1', type: 'player', color: 'red', number: '9', x: 45, y: 35 },
-        { id: '2', type: 'player', color: 'blue', number: '4', x: 55, y: 45 },
-        { id: '3', type: 'ball', x: 50, y: 65 }
+        { id: '1', type: 'player', color: 'red', number: '9', x: 50, y: 30 },
+        { id: '2', type: 'player', color: 'blue', number: '4', x: 50, y: 50 },
+        { id: '3', type: 'ball', x: 50, y: 70 }
       ]);
       const [arrows, setArrows] = useState([]);
       const [isDrawingArrow, setIsDrawingArrow] = useState(false);
-      const [arrowStart, setArrowStart] = useState(null);
-
-      // Archivio & Libreria pre-caricata
+      const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [drills, setDrills] = useState([
-        { id: '1', title: 'Possesso Palla 4v2 con Orientamento', category: 'Possesso', duration: '15 min', pitchSize: '20x20m', description: 'Mantenimento del possesso con orientamento del corpo.' },
-        { id: '2', title: 'Transizione Positiva 3v2', category: 'Transizioni', duration: '20 min', pitchSize: 'Metà Campo', description: 'Riconquista rapida e attacco della porta in superiorità numerica.' },
-        { id: '3', title: 'Attivazione Tecnica Analitica', category: 'Attivazione', duration: '10 min', pitchSize: '15x15m', description: 'Trasferimenti di palla rapidi a due tocchi e mobilità.' },
-        { id: '4', title: 'Partita a Tema: 4v4 + 3 Jolly', category: 'Partita a Tema', duration: '25 min', pitchSize: 'Campo Ridotto', description: 'Ricerca della terza uomo e sfruttamento dei jolly esterni.' }
+        {
+          id: '1',
+          title: 'Rondo 4v2 con transizione rapida',
+          category: 'Possesso Palla',
+          duration: '15 min',
+          pitchSize: '20x20m',
+          description: 'Mantenimento del possesso palla in uno spazio stretto con orientamento della trasmissione e recupero immediato.'
+        }
       ]);
 
-      const [newDrill, setNewDrill] = useState({ title: '', category: 'Possesso', duration: '15 min', pitchSize: 'Metà Campo', description: '' });
-      
-      // Conferma Eliminazione
-      const [drillToDelete, setDrillToDelete] = useState(null);
+      const svgRef = useRef(null);
 
-      // Profilo / Auth Modal
-      const [showAuthModal, setShowAuthModal] = useState(false);
-      const [isLoggedIn, setIsLoggedIn] = useState(false);
-      const [userProfile, setUserProfile] = useState({ name: 'Mister Rossi', role: 'Allenatore UEFA B', team: 'Prima Squadra', email: 'mister@coachpro.it' });
+      const handleBoardClick = (e) => {
+        const rect = svgRef.current.getBoundingClientRect();
+        const x = Math.max(5, Math.min(95, ((e.clientX - rect.left) / rect.width) * 100));
+        const y = Math.max(5, Math.min(95, ((e.clientY - rect.top) / rect.height) * 100));
 
-      // Match Day (Distinta)
-      const [matchLineup, setMatchLineup] = useState([
-        { num: '1', name: 'Portiere', role: 'P' },
-        { num: '2', name: 'Terzino Destro', role: 'D' },
-        { num: '5', name: '1° Centrale', role: 'D' },
-        { num: '6', name: '2° Centrale', role: 'D' },
-        { num: '3', name: 'Terzino Sinistro', role: 'D' },
-        { num: '4', name: 'Mediano', role: 'C' },
-        { num: '8', name: 'Mezzala Destra', role: 'C' },
-        { num: '10', name: 'Trequartista', role: 'C' },
-        { num: '7', name: 'Esterno Destro', role: 'A' },
-        { num: '9', name: 'Centravanti', role: 'A' },
-        { num: '11', name: 'Esterno Sinistro', role: 'A' }
-      ]);
+        if (tool === 'player-red') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: '7', x, y }]);
+        } else if (tool === 'player-blue') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: '4', x, y }]);
+        } else if (tool === 'ball') {
+          setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
+        } else if (tool === 'cone') {
+          setElements([...elements, { id: Date.now().toString(), type: 'cone', x, y }]);
+        } else if (tool === 'arrow') {
+          if (!isDrawingArrow) {
+            setIsDrawingArrow(true);
+            setCurrentArrowStart({ x, y });
+          } else {
+            setArrows([...arrows, { id: Date.now().toString(), startX: currentArrowStart.x, startY: currentArrowStart.y, endX: x, endY: y }]);
+            setIsDrawingArrow(false);
+            setCurrentArrowStart(null);
+          }
+        }
+      };
 
-      // Presenze & Infortuni
-      const [squadRoster, setSquadRoster] = useState([
-        { id: '1', name: 'Marco Rossi', status: 'Presente', injury: 'Nessuno' },
-        { id: '2', name: 'Luca Bianchi', status: 'Presente', injury: 'Nessuno' },
-        { id: '3', name: 'Andrea Neri', status: 'Infortunato', injury: 'Distorsione caviglia (rientro 10gg)' },
-        { id: '4', name: 'Giuseppe Verdi', status: 'Presente', injury: 'Nessuno' }
-      ]);
+      const handleElementClick = (id, e) => {
+        e.stopPropagation();
+        if (tool === 'delete') {
+          setElements(elements.filter(el => el.id !== id));
+        }
+      };
 
-      // Timer / Cronometro
-      const [timerSeconds, setTimerSeconds] = useState(0);
-      const [isTimerRunning, setIsTimerRunning] = useState(false);
+      const handleShareWhatsApp = (drill) => {
+        const text = `⚽ *COACHPRO - SCHEDA ESERCIZIO*\n\n📌 *Titolo:* ${drill.title}\n⏱️ *Durata:* ${drill.duration}\n📐 *Campo:* ${drill.pitchSize}\n📂 *Categoria:* ${drill.category}\n\n📝 *Descrizione:*\n${drill.description}\n\n_Inviato tramite CoachPro App_`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      };
 
-      const svgRef
+      return (
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-20">
+          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+            <div className="flex items-center space-x-2">
+              <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-lg">CP</div>
+              <div>
+                <h1 className="font-bold text-lg leading-none text-white">CoachPro</h1>
+                <span className="text-xs text-emerald-400 font-medium">Lavagna & Session Planner</span>
+              </div>
+            </div>
+            <button onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')} className="bg-emerald-500 text-gray-950 font-bold px-3 py-1.5 rounded-lg text-xs">PROVA 3 GIORNI</button>
+          </header>
+
+          <main className="flex-1 p-4 max-w-4xl mx-auto w-full">
+            {activeTab === 'board' && (
+              <div className="space-y-4">
+                <div className="bg-gray-900 p-3 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
+                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-medium ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800'}`}>👆 Sposta</button>
+                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-medium ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800'}`}>🔴 Rosso</button>
+                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-medium ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800'}`}>🔵 Blu</button>
+                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-medium ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800'}`}>⚽ Palla</button>
+                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-medium ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800'}`}>🔶 Cono</button>
+                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-medium ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800'}`}>↗️ Freccia</button>
+                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-medium ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800'}`}>❌ Gomma</button>
+                  <button onClick={() => { setElements([]); setArrows([]); }} className="p-2 rounded-xl font-medium bg-red-900/40 text-red-300">🗑️ Pulisci</button>
+                </div>
+
+                <div className="relative w-full aspect-[4/3] bg-emerald-800 rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                  <svg ref={svgRef} className="w-full h-full cursor-crosshair" onClick={handleBoardClick}>
+                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <line x1="50%" y1="5%" x2="50%" y2="95%" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+
+                    {arrows.map((arr) => (
+                      <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="3" />
+                    ))}
+
+                    {elements.map((el) => (
+                      <g key={el.id} onClick={(e) => handleElementClick(el.id, e)} className="cursor-pointer">
+                        {el.type === 'player' && (
+                          <circle cx={`${el.x}%`} cy={`${el.y}%`} r="12" fill={el.color === 'red' ? '#ef4444' : '#3b82f6'} stroke="white" strokeWidth="2" />
+                        )}
+                        {el.type === 'ball' && (
+                          <circle cx={`${el.x}%`} cy={`${el.y}%`} r="6" fill="white" stroke="black" strokeWidth="1.5" />
+                        )}
+                        {el.type === 'cone' && (
+                          <polygon points={`${el.x}%,${el.y - 2}% ${el.x - 1.5}%,${el.y + 1.5}% ${el.x + 1.5}%,${el.y + 1.5}%`} fill="#f97316" />
+                        )}
+                      </g>
+                    ))}
+                  </svg>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'drills' && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-white">Archivio Esercizi</h2>
+                {drills.map((drill) => (
+                  <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
+                    <h3 className="font-bold text-base text-white">{drill.title}</h3>
+                    <p className="text-xs text-gray-400">{drill.description}</p>
+                    <button onClick={() => handleShareWhatsApp(drill)} className="bg-emerald-600/20 text-emerald-400 text-xs px-3 py-1.5 rounded-lg">📲 Condividi su WhatsApp</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </main>
+
+          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 px-4 py-2 flex justify-around items-center z-40">
+            <button onClick={() => setActiveTab('board')} className={`flex flex-col items-center ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-500'}`}>
+              <span className="text-lg">⚽</span>
+              <span className="text-[10px] font-bold">Lavagna</span>
+            </button>
+            <button onClick={() => setActiveTab('drills')} className={`flex flex-col items-center ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-500'}`}>
+              <span className="text-lg">📋</span>
+              <span className="text-[10px] font-bold">Esercizi</span>
+            </button>
+          </nav>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<CoachProApp />, document.getElementById('root'));
+  </script>
+</body>
+</html>
