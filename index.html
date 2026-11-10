@@ -70,6 +70,7 @@
         saveDrill: "+ Salva Esercizio",
         noDrills: "Nessun esercizio salvato. Creane uno sopra!",
         shareWhatsapp: "Condividi WhatsApp",
+        exportPdf: "📄 Esporta PDF Sessione",
         playerPlaceholder: "Nome giocatore...",
         roleGoalkeeper: "Portiere",
         roleDefender: "Difensore",
@@ -141,6 +142,7 @@
         saveDrill: "+ Save Drill",
         noDrills: "No drills saved. Create one above!",
         shareWhatsapp: "Share WhatsApp",
+        exportPdf: "📄 Export Session PDF",
         playerPlaceholder: "Player name...",
         roleGoalkeeper: "Goalkeeper",
         roleDefender: "Defender",
@@ -212,6 +214,7 @@
         saveDrill: "+ Guardar Ejercicio",
         noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
         shareWhatsapp: "Compartir WhatsApp",
+        exportPdf: "📄 Exportar PDF Sesión",
         playerPlaceholder: "Nombre del jugador...",
         roleGoalkeeper: "Portero",
         roleDefender: "Defensa",
@@ -283,6 +286,7 @@
         saveDrill: "+ Enregistrer l'Exercice",
         noDrills: "Aucun exercice enregistré. Créez-en un !",
         shareWhatsapp: "Partager WhatsApp",
+        exportPdf: "📄 Exporter PDF Séance",
         playerPlaceholder: "Nom du joueur...",
         roleGoalkeeper: "Gardien",
         roleDefender: "Défenseur",
@@ -354,6 +358,7 @@
         saveDrill: "+ Übung speichern",
         noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
         shareWhatsapp: "WhatsApp teilen",
+        exportPdf: "📄 Trainingseinheit als PDF",
         playerPlaceholder: "Spielername...",
         roleGoalkeeper: "Torhüter",
         roleDefender: "Verteidiger",
@@ -397,7 +402,6 @@
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
 
-      // Helper funzione di traduzione attiva
       const t = (key) => {
         return translations[language][key] || translations['it'][key] || key;
       };
@@ -429,7 +433,6 @@
 
       const svgRef = useRef(null);
 
-      // Gestione caricamento immagine profilo/società
       const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -441,7 +444,6 @@
         }
       };
 
-      // Verifica dello stato dell'abbonamento / Prova gratuita
       const checkAccess = () => {
         if (!user) return false;
         if (user.isPro) return true;
@@ -451,7 +453,6 @@
 
       const hasAccess = checkAccess();
 
-      // Handlers di Autenticazione
       const handleAuth = (evt) => {
         evt.preventDefault();
         if (!authData.email) return;
@@ -480,7 +481,6 @@
         setShowPaywallModal(false);
       };
 
-      // Riscatto Codice Società
       const handleRedeemClubCode = (e) => {
         e.preventDefault();
         if (!clubCodeInput.trim()) return;
@@ -503,7 +503,6 @@
         }
       };
 
-      // Invia invito licenza via WhatsApp agli allenatori della società
       const handleShareClubInvite = () => {
         const codeToShare = user?.clubCode || "CP-CLUB-2026";
         const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
@@ -514,6 +513,100 @@
         } else {
           window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
         }
+      };
+
+      // Nuova Funzione: Esportazione in PDF della seduta di allenamento
+      const handleExportPDF = () => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+
+        // Creazione di una pagina temporanea stampabile in PDF
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          alert("Abilita i popup per scaricare il PDF.");
+          return;
+        }
+
+        const drillsHtml = drills.length === 0 
+          ? `<p style="color:#666; font-style:italic;">Nessun esercizio inserito in questa sessione.</p>`
+          : drills.map((d, index) => `
+            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa;">
+              <h3 style="margin: 0 0 5px 0; color: #15803d;">#${index + 1} - ${d.title}</h3>
+              <p style="margin: 0 0 8px 0; font-size: 12px; color: #555;"><strong>Categoria:</strong> ${d.category} | ⏱️ <strong>Durata:</strong> ${d.duration}</p>
+              <p style="margin: 0; font-size: 13px; color: #333; white-space: pre-line;">${d.description || 'Nessuna descrizione.'}</p>
+            </div>
+          `).join('');
+
+        const squadHtml = players.length === 0
+          ? `<p style="color:#666; font-style:italic;">Nessun giocatore registrato in rosa.</p>`
+          : `
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px;">
+              <thead>
+                <tr style="background: #15803d; color: white;">
+                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Giocatore</th>
+                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Ruolo</th>
+                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Stato</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${players.map(p => `
+                  <tr>
+                    <td style="padding: 6px; border: 1px solid #ddd;">${p.name}</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">${p.role}</td>
+                    <td style="padding: 6px; border: 1px solid #ddd; text-transform: uppercase; font-weight: bold; color: ${p.status === 'presente' ? '#15803d' : '#dc2626'};">${p.status}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>CoachPro - Sessione di Allenamento</title>
+            <style>
+              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
+              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 24px; }
+              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
+              h2 { color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin-top: 30px; font-size: 16px; }
+              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; pt: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title-box">
+                <h1>COACHPRO - SESSION PLANNER</h1>
+                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+              </div>
+              <div>
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
+              </div>
+            </div>
+
+            <h2>📋 Esercitazioni della Seduta</h2>
+            ${drillsHtml}
+
+            <h2>👥 Rosa & Convocati</h2>
+            ${squadHtml}
+
+            <div class="footer">
+              Generato con CoachPro App - Piattaforma Tattica Professionale
+            </div>
+            
+            <script>
+              window.onload = function() {
+                window.print();
+              };
+            </script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
       };
 
       const getCoords = (evt) => {
@@ -752,7 +845,6 @@
           {/* HEADER CON SEZIONE PROFILO (3 Linee + Foto) */}
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
-              {/* Tasto 3 linee (Menu Profilo) */}
               <button
                 onClick={() => setShowProfileDrawer(true)}
                 className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
@@ -814,7 +906,6 @@
                     </button>
                   </div>
 
-                  {/* Foto Profilo */}
                   <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
                       {profileImage ? (
@@ -833,7 +924,6 @@
                     </label>
                   </div>
 
-                  {/* Cambio Lingua Reattivo */}
                   <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
                       <span>🌍</span>
@@ -852,7 +942,6 @@
                     </select>
                   </div>
 
-                  {/* Info Account */}
                   <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
                     <p>• {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
@@ -874,7 +963,6 @@
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
-            {/* Banner Licenza Club */}
             {user.clubCode && (
               <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
                 <div>
@@ -901,7 +989,6 @@
                   </div>
                 </div>
 
-                {/* Toolbar */}
                 <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
                   <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 {t('toolMove')}</button>
                   <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
@@ -915,7 +1002,6 @@
                   <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
                 </div>
 
-                {/* Campo SVG */}
                 <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
                     <div 
@@ -971,11 +1057,21 @@
               </div>
             )}
 
-            {/* TAB 2: ARCHIVIO ESERCIZI */}
+            {/* TAB 2: ARCHIVIO ESERCIZI & ESPORTAZIONE PDF */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
+                    {/* Tasto Esportazione PDF Sessione */}
+                    <button
+                      type="button"
+                      onClick={handleExportPDF}
+                      className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow"
+                    >
+                      {t('exportPdf')}
+                    </button>
+                  </div>
                   <input
                     type="text"
                     placeholder={t('drillTitlePlaceholder')}
@@ -999,7 +1095,7 @@
                       placeholder={t('drillDurationPlaceholder')}
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <textarea
