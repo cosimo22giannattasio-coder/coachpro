@@ -10,35 +10,14 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      touch-action: manipulation; 
-      user-select: none; 
-      -webkit-user-select: none; 
-    }
+    body { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
     .pitch-bg {
-      background-color: #0f5128;
-      background-image: 
-        radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.15) 0%, transparent 80%),
-        repeating-linear-gradient(0deg, #10592c, #10592c 45px, #0b4521 45px, #0b4521 90px);
-    }
-    .glass-card {
-      background: rgba(24, 24, 27, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .glass-modal {
-      background: rgba(18, 18, 20, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-    .glow-emerald {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+      background-color: #15803d;
+      background-image: repeating-linear-gradient(0deg, #15803d, #15803d 40px, #166534 40px, #166534 80px);
     }
   </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-black">
+<body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -589,7 +568,6 @@
           <!DOCTYPE html>
           <html>
           <head>
-            <meta charset="UTF-8" />
             <title>CoachPro - Sessione di Allenamento</title>
             <style>
               body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
@@ -649,7 +627,6 @@
           <!DOCTYPE html>
           <html>
           <head>
-            <meta charset="UTF-8" />
             <title>CoachPro - Esercizio: ${drill.title}</title>
             <style>
               body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
@@ -862,65 +839,62 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE MODERNIZZATI
+      // LOGIN / REGISTRAZIONE
       if (!user) {
         return (
-          <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
-            
-            <div className="w-full max-w-md glass-card rounded-3xl p-8 space-y-6 shadow-2xl relative z-10 border border-zinc-800/80">
-              <div className="text-center space-y-3">
-                <div className="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 text-zinc-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg glow-emerald">CP</div>
-                <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('appTitle')}</h1>
-                <p className="text-xs text-zinc-400 font-medium">{t('subtitle')}</p>
+          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
+                <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
+                <p className="text-xs text-gray-400">{t('subtitle')}</p>
               </div>
-              <form onSubmit={handleAuth} className="space-y-4 pt-2">
+              <form onSubmit={handleAuth} className="space-y-4">
                 {authMode === 'register' && (
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-zinc-300">{t('namePlaceholder')}</label>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
                     <input
                       type="text"
                       placeholder={t('namePlaceholder')}
                       value={authData.name}
                       onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
-                      className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                 )}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-zinc-300">{t('emailLabel')}</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
                   <input
                     type="email"
                     required
                     placeholder="allenatore@email.com"
                     value={authData.email}
                     onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
-                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-zinc-300">{t('passwordLabel')}</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
                   <input
                     type="password"
                     required
                     placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
                     value={authData.password}
                     onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
-                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold py-3.5 rounded-xl transition-all duration-200 text-sm shadow-lg glow-emerald active:scale-[0.99]"
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
                 >
                   {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
-              <div className="text-center border-t border-zinc-800/80 pt-5">
+              <div className="text-center border-t border-gray-800 pt-4">
                 <button
                   onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                  className="text-xs text-emerald-400 font-semibold hover:text-emerald-300 transition"
+                  className="text-xs text-emerald-400 font-semibold hover:underline"
                 >
                   {authMode === 'login' ? t('noAccount') : t('hasAccount')}
                 </button>
@@ -930,18 +904,18 @@
         );
       }
 
-      // APP PRINCIPALE MODERNIZZATA
+      // APP PRINCIPALE
       return (
-        <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col pb-24 relative">
-          <header className="glass-card border-b border-zinc-800/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
+          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowProfileDrawer(true)}
-                className="w-10 h-10 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-2xl flex flex-col items-center justify-center space-y-1 transition focus:outline-none overflow-hidden"
+                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
                 title={t('profileSettings')}
               >
                 {profileImage ? (
-                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
+                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
                 ) : (
                   <>
                     <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
@@ -952,10 +926,10 @@
               </button>
 
               <div className="flex items-center space-x-2.5">
-                <div className="bg-gradient-to-br from-emerald-500 to-teal-400 text-zinc-950 p-2 rounded-xl font-black text-sm shadow-md">CP</div>
+                <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
                 <div>
-                  <h1 className="font-bold text-sm leading-none text-white tracking-tight">{user.name}</h1>
-                  <span className="text-[10px] text-emerald-400 font-semibold">
+                  <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
+                  <span className="text-[10px] text-emerald-400 font-medium">
                     {hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}
                   </span>
                 </div>
@@ -965,13 +939,13 @@
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowPaywallModal(true)}
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition active:scale-95"
+                className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
               >
                 {t('subButton')}
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 px-3 py-2 rounded-xl text-xs font-semibold border border-zinc-700/50 transition"
+                className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
               >
                 {t('exitButton')}
               </button>
@@ -979,24 +953,24 @@
           </header>
 
           {showProfileDrawer && (
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex justify-start">
-              <div className="w-80 max-w-[85vw] glass-modal border-r border-zinc-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
+              <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+                  <div className="flex items-center justify-between border-b border-gray-800 pb-4">
                     <h3 className="font-black text-base text-white flex items-center space-x-2">
                       <span>âï¸</span>
                       <span>{t('profileSettings')}</span>
                     </h3>
                     <button
                       onClick={() => setShowProfileDrawer(false)}
-                      className="text-zinc-400 hover:text-white font-bold text-sm p-1.5 rounded-xl bg-zinc-800"
+                      className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800"
                     >
                       â
                     </button>
                   </div>
 
-                  <div className="space-y-3 text-center bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
-                    <div className="w-20 h-20 bg-zinc-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
+                  <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                    <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
                       {profileImage ? (
                         <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
                       ) : (
@@ -1005,23 +979,23 @@
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-white">{user.name}</h4>
-                      <p className="text-[11px] text-zinc-400">{user.email}</p>
+                      <p className="text-[11px] text-gray-400">{user.email}</p>
                     </div>
-                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-4 py-2 rounded-xl text-xs cursor-pointer transition shadow">
+                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
                       {t('uploadPhoto')}
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                     </label>
                   </div>
 
-                  <div className="space-y-2 bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
-                    <label className="text-xs font-bold text-zinc-300 flex items-center space-x-1.5">
+                  <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
                       <span>ð</span>
                       <span>{t('languageLabel')}</span>
                     </label>
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                     >
                       <option value="it">ð®ð¹ Italiano</option>
                       <option value="en">ð¬ð§ English</option>
@@ -1031,14 +1005,14 @@
                     </select>
                   </div>
 
-                  <div className="space-y-1 text-xs text-zinc-400 bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
+                  <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
                     <p>â¢ {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
                     {user.clubCode && <p className="text-teal-300 mt-1">{t('clubLicenseActive')}</p>}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-zinc-800">
+                <div className="pt-4 border-t border-gray-800">
                   <button
                     onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
                     className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
@@ -1052,14 +1026,14 @@
 
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
             {user.clubCode && (
-              <div className="bg-teal-950/40 border border-teal-800/60 rounded-2xl p-4 flex items-center justify-between backdrop-blur-md">
+              <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
                 <div>
                   <h4 className="text-xs font-bold text-teal-300">ð¡ï¸ {t('clubInviteBanner')}: {user.clubCode}</h4>
                   <p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p>
                 </div>
                 <button
                   onClick={handleShareClubInvite}
-                  className="bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow transition"
+                  className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
                 >
                   {t('inviteCoach')}
                 </button>
@@ -1068,36 +1042,36 @@
 
             {activeTab === 'board' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between glass-card p-3 rounded-2xl border border-zinc-800/80 text-xs">
-                  <span className="text-zinc-400 font-semibold text-[11px]">{t('quickFormations')}</span>
+                <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
+                  <span className="text-gray-400 font-medium text-[11px]">{t('quickFormations')}</span>
                   <div className="flex space-x-2">
-                    <button onClick={() => presetFormation('433')} className="bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl text-emerald-400 font-bold border border-zinc-700/50 transition">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl text-emerald-400 font-bold border border-zinc-700/50 transition">4-4-2</button>
+                    <button onClick={() => presetFormation('433')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-4-2</button>
                   </div>
                 </div>
 
-                <div className="glass-card p-3 rounded-2xl border border-zinc-800/80 grid grid-cols-4 gap-2 text-xs">
-                  <button onClick={() => setTool('move')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð {t('toolMove')}</button>
-                  <button onClick={() => setTool('player-red')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð´ {t('toolRed')}</button>
-                  <button onClick={() => setTool('player-blue')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ðµ {t('toolBlue')}</button>
-                  <button onClick={() => setTool('ball')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>â½ {t('toolBall')}</button>
-                  <button onClick={() => setTool('cone')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð¶ {t('toolCone')}</button>
-                  <button onClick={() => setTool('cinesina')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð¡ {t('toolCinesina')}</button>
-                  <button onClick={() => setTool('ladder')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ðª {t('toolLadder')}</button>
-                  <button onClick={() => setTool('arrow')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>âï¸ {t('toolArrow')}</button>
-                  <button onClick={() => setTool('delete')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>â {t('toolDelete')}</button>
-                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2.5 rounded-xl font-semibold text-center bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-900/50 col-span-3 transition">ðï¸ {t('toolClear')}</button>
+                <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
+                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>ð {t('toolMove')}</button>
+                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>ð´ {t('toolRed')}</button>
+                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>ðµ {t('toolBlue')}</button>
+                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>â½ {t('toolBall')}</button>
+                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>ð¶ {t('toolCone')}</button>
+                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>ð¡ {t('toolCinesina')}</button>
+                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>ðª {t('toolLadder')}</button>
+                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>âï¸ {t('toolArrow')}</button>
+                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>â {t('toolDelete')}</button>
+                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">ðï¸ {t('toolClear')}</button>
                 </div>
 
-                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-zinc-800/80">
+                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
                     <div 
                       onClick={() => setShowPaywallModal(true)}
-                      className="absolute inset-0 bg-black/70 backdrop-blur-md z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
+                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
                     >
-                      <div className="bg-emerald-500 text-zinc-950 p-3.5 rounded-2xl text-2xl mb-3 font-bold shadow-lg glow-emerald">ð</div>
-                      <h3 className="text-xl font-extrabold text-white">{t('lockedTitle')}</h3>
-                      <p className="text-xs text-zinc-300 max-w-xs mt-1.5">{t('lockedDesc')}</p>
+                      <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">ð</div>
+                      <h3 className="text-lg font-bold text-white">{t('lockedTitle')}</h3>
+                      <p className="text-xs text-gray-300 max-w-xs mt-1">{t('lockedDesc')}</p>
                     </div>
                   )}
                   <svg
@@ -1106,11 +1080,11 @@
                     onClick={handleBoardClick}
                     onTouchMove={handleTouchMove}
                   >
-                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
-                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
-                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
-                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
-                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
 
                     {arrows.map(arr => (
                       <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
@@ -1146,13 +1120,13 @@
 
             {activeTab === 'drills' && (
               <div className="space-y-4">
-                <form onSubmit={addDrill} className="glass-card border border-zinc-800/80 p-5 rounded-3xl space-y-3.5 shadow-xl">
+                <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
                     <button
                       type="button"
                       onClick={handleExportPDF}
-                      className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow transition"
+                      className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow"
                     >
                       {t('exportPdf')}
                     </button>
@@ -1162,13 +1136,13 @@
                     placeholder={t('drillTitlePlaceholder')}
                     value={newDrillTitle}
                     onChange={(ev) => setNewDrillTitle(ev.target.value)}
-                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                   />
                   <div className="grid grid-cols-2 gap-2">
                     <select
                       value={newDrillCat}
                       onChange={(ev) => setNewDrillCat(ev.target.value)}
-                      className="bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     >
                       <option value="Possesso Palla">{t('categoryPossesso')}</option>
                       <option value="Tattica">{t('categoryTactics')}</option>
@@ -1180,40 +1154,40 @@
                       placeholder={t('drillDurationPlaceholder')}
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <textarea
                     placeholder={t('drillDescPlaceholder')}
                     value={newDrillDesc}
                     onChange={(ev) => setNewDrillDesc(ev.target.value)}
-                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white h-24 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
                   ></textarea>
-                  <button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold py-3 rounded-xl text-xs shadow-md transition">{t('saveDrill')}</button>
+                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">{t('saveDrill')}</button>
                 </form>
 
                 {drills.length === 0 ? (
-                  <div className="text-center py-10 text-zinc-500 text-xs">{t('noDrills')}</div>
+                  <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div>
                 ) : (
                   drills.map(drill => (
-                    <div key={drill.id} className="glass-card border border-zinc-800/80 p-5 rounded-3xl space-y-3 shadow-lg">
+                    <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
                       <div className="flex justify-between items-start">
                         <h4 className="font-bold text-sm text-white">{drill.title}</h4>
-                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2.5 py-0.5 rounded-full">{drill.category}</span>
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
                       </div>
-                      <p className="text-xs text-zinc-400 leading-relaxed">{drill.description}</p>
-                      <div className="flex items-center justify-between pt-3 border-t border-zinc-800/80 text-xs">
-                        <span className="text-zinc-500 font-medium">â±ï¸ {drill.duration}</span>
+                      <p className="text-xs text-gray-400">{drill.description}</p>
+                      <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
+                        <span className="text-gray-500 font-medium">â±ï¸ {drill.duration}</span>
                         <div className="flex space-x-2">
                           <button
                             onClick={() => handleExportSingleDrillPDF(drill)}
-                            className="bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 text-xs px-3 py-1.5 rounded-xl font-semibold flex items-center space-x-1 border border-teal-500/30 transition"
+                            className="bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 border border-teal-500/30"
                           >
                             {t('exportDrillPdf')}
                           </button>
                           <button
                             onClick={() => handleShareWhatsApp(drill)}
-                            className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs px-3 py-1.5 rounded-xl font-semibold flex items-center space-x-1 border border-emerald-500/30 transition"
+                            className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
                           >
                             ð² {t('shareWhatsapp')}
                           </button>
@@ -1227,40 +1201,40 @@
 
             {activeTab === 'squad' && (
               <div className="space-y-4">
-                <form onSubmit={addPlayer} className="glass-card border border-zinc-800/80 p-4 rounded-2xl flex space-x-2 shadow-lg">
+                <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
                   <input
                     type="text"
                     placeholder={t('playerPlaceholder')}
                     value={newPlayerName}
                     onChange={(ev) => setNewPlayerName(ev.target.value)}
-                    className="flex-1 bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                   />
                   <select
                     value={newPlayerRole}
                     onChange={(ev) => setNewPlayerRole(ev.target.value)}
-                    className="bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                   >
                     <option value="Portiere">{t('roleGoalkeeper')}</option>
                     <option value="Difensore">{t('roleDefender')}</option>
                     <option value="Centrocampista">{t('roleMidfielder')}</option>
                     <option value="Attaccante">{t('roleForward')}</option>
                   </select>
-                  <button type="submit" className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-4 py-2 rounded-xl text-xs transition">{t('addPlayer')}</button>
+                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
                 </form>
 
                 {players.length === 0 ? (
-                  <div className="text-center py-10 text-zinc-500 text-xs">{t('noPlayers')}</div>
+                  <div className="text-center py-8 text-gray-500 text-xs">{t('noPlayers')}</div>
                 ) : (
-                  <div className="glass-card border border-zinc-800/80 rounded-2xl divide-y divide-zinc-800/80 shadow-lg">
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800">
                     {players.map(player => (
-                      <div key={player.id} className="p-3.5 flex items-center justify-between">
+                      <div key={player.id} className="p-3 flex items-center justify-between">
                         <div>
                           <p className="font-semibold text-xs text-white">{player.name}</p>
-                          <p className="text-[10px] text-zinc-400">{player.role}</p>
+                          <p className="text-[10px] text-gray-400">{player.role}</p>
                         </div>
                         <button
                           onClick={() => togglePlayerStatus(player.id)}
-                          className={`px-3 py-1 rounded-xl text-xs font-bold transition ${
+                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
                             player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
                             player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' :
                             'bg-amber-500/20 text-amber-400 border border-amber-500/40'
@@ -1278,46 +1252,46 @@
 
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-              <div className="glass-modal border border-zinc-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
                 <button
                   onClick={() => setShowPaywallModal(false)}
-                  className="absolute top-4 right-4 text-zinc-400 hover:text-white font-bold text-sm"
+                  className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
                 >
                   â
                 </button>
-                <div className="w-14 h-14 bg-gradient-to-tr from-emerald-500 to-teal-400 text-zinc-950 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold glow-emerald">â­</div>
+                <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">â­</div>
                 <h3 className="text-xl font-black text-white">{t('paywallHeader')}</h3>
-                <p className="text-xs text-zinc-300">{t('paywallDesc')}</p>
+                <p className="text-xs text-gray-300">{t('paywallDesc')}</p>
                 
                 <div className="space-y-2.5 pt-2">
                   <button
                     onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-xl text-xs shadow-lg transition"
+                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
                   >
                     {t('indProBtn')}
                   </button>
 
                   <button
                     onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3.5 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5 transition"
+                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
                   >
                     <span>ð¡ï¸ {t('clubBtn')}</span>
                     <span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
                   </button>
 
-                  <div className="bg-zinc-950/80 border border-zinc-800 rounded-2xl p-3.5 space-y-2 text-left mt-3">
-                    <label className="text-[11px] font-bold text-zinc-300 block">{t('haveClubCode')}</label>
+                  <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
+                    <label className="text-[11px] font-bold text-gray-300 block">{t('haveClubCode')}</label>
                     <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
                       <input
                         type="text"
                         placeholder="es. CLUB2026"
                         value={clubCodeInput}
                         onChange={(e) => setClubCodeInput(e.target.value)}
-                        className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white uppercase font-mono"
+                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono"
                       />
                       <button
                         type="submit"
-                        className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-3 py-2 rounded-xl text-xs transition"
+                        className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
                       >
                         {t('activate')}
                       </button>
@@ -1328,7 +1302,7 @@
                   {!user.trialEndsAt && (
                     <button
                       onClick={activateTrial}
-                      className="w-full bg-zinc-800/80 hover:bg-zinc-700 text-emerald-400 font-semibold py-2.5 rounded-xl text-xs border border-emerald-500/30 transition"
+                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
                     >
                       {t('trialBtn')}
                     </button>
@@ -1338,24 +1312,24 @@
             </div>
           )}
 
-          <nav className="fixed bottom-0 left-0 right-0 glass-card border-t border-zinc-800/80 px-6 py-2.5 flex justify-around items-center z-40">
+          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
             <button
               onClick={() => setActiveTab('board')}
-              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'board' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">â½</span>
               <span className="text-[10px] font-bold">{t('navBoard')}</span>
             </button>
             <button
               onClick={() => setActiveTab('drills')}
-              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'drills' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">ð</span>
               <span className="text-[10px] font-bold">{t('navDrills')}</span>
             </button>
             <button
               onClick={() => setActiveTab('squad')}
-              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'squad' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">ð¥</span>
               <span className="text-[10px] font-bold">{t('navSquad')}</span>
