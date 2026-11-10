@@ -121,6 +121,10 @@
           setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
         } else if (tool === 'cone') {
           setElements([...elements, { id: Date.now().toString(), type: 'cone', x, y }]);
+        } else if (tool === 'cinesina') {
+          setElements([...elements, { id: Date.now().toString(), type: 'cinesina', x, y }]);
+        } else if (tool === 'ladder') {
+          setElements([...elements, { id: Date.now().toString(), type: 'ladder', x, y }]);
         } else if (tool === 'arrow') {
           if (!isDrawingArrow) {
             setIsDrawingArrow(true);
@@ -192,13 +196,22 @@
         setArrows([]);
       };
 
+      // Funzione di condivisione WhatsApp integrata (Mobile App + Web Fallback)
       const handleShareWhatsApp = (drill) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
         const text = `⚽ *COACHPRO - SCHEDA ESERCIZIO*\n\n📌 *Titolo:* ${drill.title}\n⏱️ *Durata:* ${drill.duration}\n📂 *Categoria:* ${drill.category}\n\n📝 *Descrizione:*\n${drill.description}\n\n_Inviato tramite CoachPro App_`;
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        const encodedText = encodeURIComponent(text);
+        
+        // Tentativo di apertura app nativa mobile, con fallback su WhatsApp Web se da desktop
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodedText}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        }
       };
 
       const addDrill = (evt) => {
@@ -356,16 +369,18 @@
                   </div>
                 </div>
 
-                {/* Toolbar */}
+                {/* Toolbar estesa */}
                 <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
                   <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 Sposta</button>
                   <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 Rosso</button>
                   <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 Blu</button>
                   <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ Palla</button>
                   <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 Cono</button>
+                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>🟡 Cinesina</button>
+                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>🪜 Scaletta</button>
                   <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ Freccia</button>
                   <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ Gomma</button>
-                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50">🗑️ Pulisci</button>
+                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ Pulisci Tutto</button>
                 </div>
 
                 {/* Campo SVG */}
@@ -409,6 +424,17 @@
                         )}
                         {el.type === 'ball' && <circle cx={`${el.x}%`} cy={`${el.y}%`} r="7" fill="white" stroke="black" strokeWidth="2" />}
                         {el.type === 'cone' && <polygon points={`${el.x}%,${el.y - 2.5}% ${el.x - 2}%,${el.y + 2}% ${el.x + 2}%,${el.y + 2}%`} fill="#f97316" />}
+                        {el.type === 'cinesina' && <ellipse cx={`${el.x}%`} cy={`${el.y}%`} rx="8" ry="4" fill="#facc15" stroke="#eab308" strokeWidth="1.5" />}
+                        {el.type === 'ladder' && (
+                          <g transform={`translate(${el.x * 3.5}, ${el.y * 2.5})`}>
+                            <rect x="-6" y="-30" width="12" height="60" fill="none" stroke="#e2e8f0" strokeWidth="2" rx="1" />
+                            <line x1="-6" y1="-20" x2="6" y2="-20" stroke="#facc15" strokeWidth="2" />
+                            <line x1="-6" y1="-10" x2="6" y2="-10" stroke="#facc15" strokeWidth="2" />
+                            <line x1="-6" y1="0" x2="6" y2="0" stroke="#facc15" strokeWidth="2" />
+                            <line x1="-6" y1="10" x2="6" y2="10" stroke="#facc15" strokeWidth="2" />
+                            <line x1="-6" y1="20" x2="6" y2="20" stroke="#facc15" strokeWidth="2" />
+                          </g>
+                        )}
                       </g>
                     ))}
                   </svg>
