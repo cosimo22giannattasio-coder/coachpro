@@ -27,16 +27,385 @@
     const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe_club";
     const TRIAL_DAYS = 3;
 
+    // Dizionario delle traduzioni completo e verificato
+    const translations = {
+      it: {
+        appTitle: "CoachPro",
+        subtitle: "Piattaforma tattica professionale per allenatori",
+        loginTitle: "Accedi a CoachPro",
+        registerTitle: "Crea Account (3 giorni gratis)",
+        nameLabel: "Nome & Cognome / Titolo",
+        namePlaceholder: "es. Mister Rossi",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginButton: "Accedi a CoachPro",
+        registerButton: "Crea Account (3 giorni gratis)",
+        noAccount: "Non hai un account? Registrati ora",
+        hasAccount: "Hai già un account? Accedi",
+        proActive: "Piano PRO Attivo",
+        trialActive: "Prova Gratuita Attiva",
+        freeLocked: "Account Free (Bloccato)",
+        subButton: "Abbonamento",
+        exitButton: "Esci",
+        quickFormations: "Moduli rapidi:",
+        toolMove: "Sposta",
+        toolRed: "Rosso",
+        toolBlue: "Blu",
+        toolBall: "Palla",
+        toolCone: "Cono",
+        toolCinesina: "Cinesina",
+        toolLadder: "Scaletta",
+        toolArrow: "Freccia",
+        toolDelete: "Gomma",
+        toolClear: "Pulisci Tutto",
+        lockedTitle: "Funzionalità Bloccata",
+        lockedDesc: "Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.",
+        newDrill: "Nuovo Esercizio",
+        drillTitlePlaceholder: "Titolo esercitazione...",
+        categoryPossesso: "Possesso Palla",
+        categoryTactics: "Tattica",
+        categoryFitness: "Atletico",
+        categoryFinishing: "Rifinitura",
+        drillDurationPlaceholder: "Durata (es. 15 min)",
+        drillDescPlaceholder: "Descrizione ed obbiettivi...",
+        saveDrill: "+ Salva Esercizio",
+        noDrills: "Nessun esercizio salvato. Creane uno sopra!",
+        shareWhatsapp: "Condividi WhatsApp",
+        playerPlaceholder: "Nome giocatore...",
+        roleGoalkeeper: "Portiere",
+        roleDefender: "Difensore",
+        roleMidfielder: "Centrocampista",
+        roleForward: "Attaccante",
+        addPlayer: "Aggiungi",
+        noPlayers: "Nessun giocatore in rosa. Aggiungi il primo sopra!",
+        statusPresent: "PRESENTE",
+        statusAbsent: "ASSENTE",
+        statusInjured: "INFORTUNATO",
+        paywallHeader: "Scegli il Piano CoachPro",
+        paywallDesc: "Sblocca tutte le funzionalità avanzate per te o per la tua società.",
+        indProBtn: "PRO Individuale - 29,99€/anno",
+        clubBtn: "Pacchetto Società (10 Account)",
+        clubSubBtn: "Sconto 15% - Ricevi subito il Codice Invito",
+        haveClubCode: "Hai un Codice Invito Società?",
+        activate: "Attiva",
+        trialBtn: "Attiva 3 Giorni di Prova Gratuita",
+        navBoard: "Lavagna",
+        navDrills: "Esercizi",
+        navSquad: "Rosa",
+        profileSettings: "Profilo & Impostazioni",
+        uploadPhoto: "📷 Carica Foto / Logo",
+        languageLabel: "Lingua / Language",
+        accountStatus: "Stato Account:",
+        clubLicenseActive: "🛡️ Licenza di squadra attiva",
+        logoutAccount: "Esci dall'Account",
+        clubInviteBanner: "Licenza Società",
+        inviteCoach: "📲 Invita Allenatore"
+      },
+      en: {
+        appTitle: "CoachPro",
+        subtitle: "Professional tactical platform for coaches",
+        loginTitle: "Log in to CoachPro",
+        registerTitle: "Create Account (3 days free)",
+        nameLabel: "Name & Surname / Title",
+        namePlaceholder: "e.g. Coach Smith",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginButton: "Log in to CoachPro",
+        registerButton: "Create Account (3 days free)",
+        noAccount: "Don't have an account? Sign up",
+        hasAccount: "Already have an account? Log in",
+        proActive: "PRO Plan Active",
+        trialActive: "Free Trial Active",
+        freeLocked: "Free Account (Locked)",
+        subButton: "Subscription",
+        exitButton: "Logout",
+        quickFormations: "Quick formations:",
+        toolMove: "Move",
+        toolRed: "Red",
+        toolBlue: "Blue",
+        toolBall: "Ball",
+        toolCone: "Cone",
+        toolCinesina: "Disc",
+        toolLadder: "Ladder",
+        toolArrow: "Arrow",
+        toolDelete: "Eraser",
+        toolClear: "Clear All",
+        lockedTitle: "Feature Locked",
+        lockedDesc: "Subscribe or activate the 3-day trial to use the interactive tactical board.",
+        newDrill: "New Drill",
+        drillTitlePlaceholder: "Drill title...",
+        categoryPossesso: "Ball Possession",
+        categoryTactics: "Tactics",
+        categoryFitness: "Fitness",
+        categoryFinishing: "Finishing",
+        drillDurationPlaceholder: "Duration (e.g. 15 min)",
+        drillDescPlaceholder: "Description and objectives...",
+        saveDrill: "+ Save Drill",
+        noDrills: "No drills saved. Create one above!",
+        shareWhatsapp: "Share WhatsApp",
+        playerPlaceholder: "Player name...",
+        roleGoalkeeper: "Goalkeeper",
+        roleDefender: "Defender",
+        roleMidfielder: "Midfielder",
+        roleForward: "Forward",
+        addPlayer: "Add",
+        noPlayers: "No players in squad. Add the first one above!",
+        statusPresent: "PRESENT",
+        statusAbsent: "ABSENT",
+        statusInjured: "INJURED",
+        paywallHeader: "Choose CoachPro Plan",
+        paywallDesc: "Unlock all advanced features for yourself or your club.",
+        indProBtn: "Individual PRO - €29.99/year",
+        clubBtn: "Club Package (10 Accounts)",
+        clubSubBtn: "15% Discount - Get Invitation Code",
+        haveClubCode: "Have a Club Invitation Code?",
+        activate: "Activate",
+        trialBtn: "Activate 3-Day Free Trial",
+        navBoard: "Board",
+        navDrills: "Drills",
+        navSquad: "Squad",
+        profileSettings: "Profile & Settings",
+        uploadPhoto: "📷 Upload Photo / Logo",
+        languageLabel: "Language",
+        accountStatus: "Account Status:",
+        clubLicenseActive: "🛡️ Active club license",
+        logoutAccount: "Log out",
+        clubInviteBanner: "Club License",
+        inviteCoach: "📲 Invite Coach"
+      },
+      es: {
+        appTitle: "CoachPro",
+        subtitle: "Plataforma táctica profesional para entrenadores",
+        loginTitle: "Iniciar sesión en CoachPro",
+        registerTitle: "Crear cuenta (3 días gratis)",
+        nameLabel: "Nombre y Apellidos / Título",
+        namePlaceholder: "ej. Míster Pérez",
+        emailLabel: "Correo electrónico",
+        passwordLabel: "Contraseña",
+        loginButton: "Iniciar sesión",
+        registerButton: "Crear cuenta (3 días gratis)",
+        noAccount: "¿No tienes cuenta? Regístrate",
+        hasAccount: "¿Ya tienes cuenta? Inicia sesión",
+        proActive: "Plan PRO Activo",
+        trialActive: "Prueba Gratuita Activa",
+        freeLocked: "Cuenta Free (Bloqueada)",
+        subButton: "Suscripción",
+        exitButton: "Salir",
+        quickFormations: "Formaciones rápidas:",
+        toolMove: "Mover",
+        toolRed: "Rojo",
+        toolBlue: "Azul",
+        toolBall: "Balón",
+        toolCone: "Cono",
+        toolCinesina: "Pica/Disco",
+        toolLadder: "Escalera",
+        toolArrow: "Flecha",
+        toolDelete: "Borrador",
+        toolClear: "Borrar Todo",
+        lockedTitle: "Función Bloqueada",
+        lockedDesc: "Suscríbete o activa la prueba de 3 días para usar la pizarra táctica interactiva.",
+        newDrill: "Nuevo Ejercicio",
+        drillTitlePlaceholder: "Título del ejercicio...",
+        categoryPossesso: "Posesión de Balón",
+        categoryTactics: "Táctica",
+        categoryFitness: "Físico",
+        categoryFinishing: "Finalización",
+        drillDurationPlaceholder: "Duración (ej. 15 min)",
+        drillDescPlaceholder: "Descripción y objetivos...",
+        saveDrill: "+ Guardar Ejercicio",
+        noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
+        shareWhatsapp: "Compartir WhatsApp",
+        playerPlaceholder: "Nombre del jugador...",
+        roleGoalkeeper: "Portero",
+        roleDefender: "Defensa",
+        roleMidfielder: "Centrocampista",
+        roleForward: "Delantero",
+        addPlayer: "Añadir",
+        noPlayers: "No hay jugadores. ¡Añade el primero arriba!",
+        statusPresent: "PRESENTE",
+        statusAbsent: "AUSENTE",
+        statusInjured: "LESIONADO",
+        paywallHeader: "Elige el Plan CoachPro",
+        paywallDesc: "Desbloquea todas las funciones avanzadas para ti o tu club.",
+        indProBtn: "PRO Individual - 29,99€/año",
+        clubBtn: "Paquete Club (10 Cuentas)",
+        clubSubBtn: "15% Descuento - Recibe Código de Invitación",
+        haveClubCode: "¿Tienes un código de invitación de club?",
+        activate: "Activar",
+        trialBtn: "Activar 3 Días de Prueba Gratuita",
+        navBoard: "Pizarra",
+        navDrills: "Ejercicios",
+        navSquad: "Plantilla",
+        profileSettings: "Perfil y Ajustes",
+        uploadPhoto: "📷 Subir Foto / Logo",
+        languageLabel: "Idioma / Language",
+        accountStatus: "Estado de la cuenta:",
+        clubLicenseActive: "🛡️ Licencia de club activa",
+        logoutAccount: "Cerrar sesión",
+        clubInviteBanner: "Licencia de Club",
+        inviteCoach: "📲 Invitar Entrenador"
+      },
+      fr: {
+        appTitle: "CoachPro",
+        subtitle: "Plateforme tactique professionnelle pour entraîneurs",
+        loginTitle: "Connexion à CoachPro",
+        registerTitle: "Créer un compte (3 jours gratuits)",
+        nameLabel: "Nom & Prénom / Titre",
+        namePlaceholder: "ex. Coach Martin",
+        emailLabel: "E-mail",
+        passwordLabel: "Mot de passe",
+        loginButton: "Se connecter",
+        registerButton: "Créer un compte (3 jours gratuits)",
+        noAccount: "Pas de compte ? S'inscrire",
+        hasAccount: "Déjà un compte ? Se connecter",
+        proActive: "Plan PRO Actif",
+        trialActive: "Essai Gratuit Actif",
+        freeLocked: "Compte Free (Bloqué)",
+        subButton: "Abonnement",
+        exitButton: "Quitter",
+        quickFormations: "Systèmes rapides :",
+        toolMove: "Déplacer",
+        toolRed: "Rouge",
+        toolBlue: "Bleu",
+        toolBall: "Ballon",
+        toolCone: "Cône",
+        toolCinesina: "Coupelle",
+        toolLadder: "Échelle",
+        toolArrow: "Flèche",
+        toolDelete: "Gomme",
+        toolClear: "Tout Effacer",
+        lockedTitle: "Fonctionnalité Bloquée",
+        lockedDesc: "Abonnez-vous ou activez l'essai de 3 jours pour utiliser le tableau tactique.",
+        newDrill: "Nouvel Exercice",
+        drillTitlePlaceholder: "Titre de l'exercice...",
+        categoryPossesso: "Conservation",
+        categoryTactics: "Tactique",
+        categoryFitness: "Athlétique",
+        categoryFinishing: "Finition",
+        drillDurationPlaceholder: "Durée (ex. 15 min)",
+        drillDescPlaceholder: "Description et objectifs...",
+        saveDrill: "+ Enregistrer l'Exercice",
+        noDrills: "Aucun exercice enregistré. Créez-en un !",
+        shareWhatsapp: "Partager WhatsApp",
+        playerPlaceholder: "Nom du joueur...",
+        roleGoalkeeper: "Gardien",
+        roleDefender: "Défenseur",
+        roleMidfielder: "Milieu",
+        roleForward: "Attaquant",
+        addPlayer: "Ajouter",
+        noPlayers: "Aucun joueur dans l'effectif.",
+        statusPresent: "PRÉSENT",
+        statusAbsent: "ABSENT",
+        statusInjured: "BLESSÉ",
+        paywallHeader: "Choisissez votre plan CoachPro",
+        paywallDesc: "Débloquez toutes les fonctionnalités avancées pour vous ou votre club.",
+        indProBtn: "PRO Individuel - 29,99€/an",
+        clubBtn: "Pack Club (10 Comptes)",
+        clubSubBtn: "15% de réduction - Obtenez le code",
+        haveClubCode: "Vous avez un code d'invitation club ?",
+        activate: "Activer",
+        trialBtn: "Activer l'essai de 3 jours",
+        navBoard: "Tableau",
+        navDrills: "Exercices",
+        navSquad: "Effectif",
+        profileSettings: "Profil & Paramètres",
+        uploadPhoto: "📷 Charger Photo / Logo",
+        languageLabel: "Langue / Language",
+        accountStatus: "Statut du compte :",
+        clubLicenseActive: "🛡️ Licence de club active",
+        logoutAccount: "Se déconnecter",
+        clubInviteBanner: "Licence Club",
+        inviteCoach: "📲 Inviter un entraîneur"
+      },
+      de: {
+        appTitle: "CoachPro",
+        subtitle: "Professionelle Taktik-Plattform für Trainer",
+        loginTitle: "Bei CoachPro anmelden",
+        registerTitle: "Konto erstellen (3 Tage kostenlos)",
+        nameLabel: "Name & Vorname / Titel",
+        namePlaceholder: "z.B. Trainer Müller",
+        emailLabel: "E-Mail",
+        passwordLabel: "Passwort",
+        loginButton: "Anmelden",
+        registerButton: "Konto erstellen (3 Tage kostenlos)",
+        noAccount: "Kein Konto? Registrieren",
+        hasAccount: "Bereits ein Konto? Anmelden",
+        proActive: "PRO-Tarif aktiv",
+        trialActive: "Kostenlose Testversion aktiv",
+        freeLocked: "Kostenloses Konto (Gesperrt)",
+        subButton: "Abo",
+        exitButton: "Abmelden",
+        quickFormations: "Schnelle Systeme:",
+        toolMove: "Verschieben",
+        toolRed: "Rot",
+        toolBlue: "Blau",
+        toolBall: "Ball",
+        toolCone: "Hütchen",
+        toolCinesina: "Markierung",
+        toolLadder: "Leiter",
+        toolArrow: "Pfeil",
+        toolDelete: "Radierer",
+        toolClear: "Alles löschen",
+        lockedTitle: "Funktion gesperrt",
+        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tägige Testversion.",
+        newDrill: "Neue Übung",
+        drillTitlePlaceholder: "Titel der Übung...",
+        categoryPossesso: "Ballbesitz",
+        categoryTactics: "Taktik",
+        categoryFitness: "Athletik",
+        categoryFinishing: "Abschluss",
+        drillDurationPlaceholder: "Dauer (z.B. 15 Min.)",
+        drillDescPlaceholder: "Beschreibung und Ziele...",
+        saveDrill: "+ Übung speichern",
+        noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
+        shareWhatsapp: "WhatsApp teilen",
+        playerPlaceholder: "Spielername...",
+        roleGoalkeeper: "Torhüter",
+        roleDefender: "Verteidiger",
+        roleMidfielder: "Mittelfeldspieler",
+        roleForward: "Stürmer",
+        addPlayer: "Hinzufügen",
+        noPlayers: "Keine Spieler im Kader.",
+        statusPresent: "ANWESEND",
+        statusAbsent: "ABWESEND",
+        statusInjured: "VERLETZT",
+        paywallHeader: "Wählen Sie Ihren CoachPro-Plan",
+        paywallDesc: "Schalten Sie alle erweiterten Funktionen für Sie oder Ihren Verein frei.",
+        indProBtn: "Einzel-PRO - 29,99 €/Jahr",
+        clubBtn: "Vereinspaket (10 Konten)",
+        clubSubBtn: "15% Rabatt - Einladungscode erhalten",
+        haveClubCode: "Haben Sie einen Vereins-Code?",
+        activate: "Aktivieren",
+        trialBtn: "3 Tage Testversion aktivieren",
+        navBoard: "Tafel",
+        navDrills: "Übungen",
+        navSquad: "Kader",
+        profileSettings: "Profil & Einstellungen",
+        uploadPhoto: "📷 Foto / Logo hochladen",
+        languageLabel: "Sprache / Language",
+        accountStatus: "Kontostatus:",
+        clubLicenseActive: "🛡️ Aktive Vereinslizenz",
+        logoutAccount: "Abmelden",
+        clubInviteBanner: "Vereinslizenz",
+        inviteCoach: "📲 Trainer einladen"
+      }
+    };
+
     function CoachProApp() {
       // Auth state
       const [user, setUser] = useState(null);
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
-      // Profile & Settings state (Nuovo)
+      // Profile & Language state
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
+
+      // Funzione di traduzione reattiva globale
+      const t = (key) => {
+        return translations[language]?.[key] || translations['it'][key] || key;
+      };
 
       // App state
       const [activeTab, setActiveTab] = useState('board');
@@ -65,7 +434,6 @@
 
       const svgRef = useRef(null);
 
-      // Gestione caricamento immagine profilo/società
       const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -77,7 +445,6 @@
         }
       };
 
-      // Verifica dello stato dell'abbonamento / Prova gratuita
       const checkAccess = () => {
         if (!user) return false;
         if (user.isPro) return true;
@@ -87,12 +454,10 @@
 
       const hasAccess = checkAccess();
 
-      // Handlers di Autenticazione
       const handleAuth = (evt) => {
         evt.preventDefault();
         if (!authData.email) return;
         const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
-        
         const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
 
         setUser({
@@ -116,33 +481,26 @@
         setShowPaywallModal(false);
       };
 
-      // Riscatto Codice Società
       const handleRedeemClubCode = (e) => {
         e.preventDefault();
         if (!clubCodeInput.trim()) return;
-        
         const code = clubCodeInput.trim().toUpperCase();
         if (code.length >= 4) {
-          setUser({
-            ...user,
-            isPro: true,
-            clubCode: code
-          });
-          setClubCodeMsg('✅ Codice Società riscattato con successo! Licenza attiva.');
+          setUser({ ...user, isPro: true, clubCode: code });
+          setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
           setTimeout(() => {
             setShowPaywallModal(false);
             setClubCodeMsg('');
             setClubCodeInput('');
           }, 1500);
         } else {
-          setClubCodeMsg('❌ Codice non valido. Verificalo con la tua società.');
+          setClubCodeMsg('❌ ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
         }
       };
 
-      // Invia invito licenza via WhatsApp agli allenatori della società
       const handleShareClubInvite = () => {
         const codeToShare = user?.clubCode || "CP-CLUB-2026";
-        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ SPORTIVA*\n\nSei stato invitato ad attivare l'account CoachPro con la licenza della tua società!\n\n🔑 *Codice Attivazione:* ${codeToShare}\n\n1. Apri l'app CoachPro\n2. Vai su Abbonamento > Riscatta Codice Società\n3. Inserisci il codice per attivare l'accesso PRO!`;
+        const text = `⚽ *COACHPRO - CLUB LICENSE*\n\n🔑 *Code:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
         const encodedText = encodeURIComponent(text);
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
@@ -261,9 +619,8 @@
           setShowPaywallModal(true);
           return;
         }
-        const text = `⚽ *COACHPRO - SCHEDA ESERCIZIO*\n\n📌 *Titolo:* ${drill.title}\n⏱️ *Durata:* ${drill.duration}\n📂 *Categoria:* ${drill.category}\n\n📝 *Descrizione:*\n${drill.description}\n\n_Inviato tramite CoachPro App_`;
+        const text = `⚽ *COACHPRO - DRILL*\n\n📌 *Title:* ${drill.title}\n⏱️ *Duration:* ${drill.duration}\n📂 *Category:* ${drill.category}\n\n📝 *Description:*\n${drill.description}`;
         const encodedText = encodeURIComponent(text);
-        
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
           window.location.href = `whatsapp://send?text=${encodedText}`;
@@ -318,23 +675,38 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE
+      // LOGIN / REGISTRAZIONE (Completamente Tradotto)
       if (!user) {
         return (
-          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+          <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4 relative">
+            {/* Selettore lingua anche nella schermata di login */}
+            <div className="absolute top-4 right-4">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-gray-900 border border-gray-700 text-white text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500"
+              >
+                <option value="it">🇮🇹 IT</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="es">🇪🇸 ES</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="de">🇩🇪 DE</option>
+              </select>
+            </div>
+
             <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
               <div className="text-center space-y-2">
                 <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
-                <h1 className="text-2xl font-black text-white tracking-tight">CoachPro</h1>
-                <p className="text-xs text-gray-400">Piattaforma tattica professionale per allenatori</p>
+                <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
+                <p className="text-xs text-gray-400">{t('subtitle')}</p>
               </div>
               <form onSubmit={handleAuth} className="space-y-4">
                 {authMode === 'register' && (
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300">Nome & Cognome / Titolo</label>
+                    <label className="text-xs font-semibold text-gray-300">{t('nameLabel')}</label>
                     <input
                       type="text"
-                      placeholder="es. Mister Rossi"
+                      placeholder={t('namePlaceholder')}
                       value={authData.name}
                       onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
                       className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
@@ -342,7 +714,7 @@
                   </div>
                 )}
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">Email</label>
+                  <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
                   <input
                     type="email"
                     required
@@ -353,7 +725,7 @@
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">Password</label>
+                  <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
                   <input
                     type="password"
                     required
@@ -367,7 +739,7 @@
                   type="submit"
                   className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
                 >
-                  {authMode === 'login' ? 'Accedi a CoachPro' : 'Crea Account (3 giorni gratis)'}
+                  {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
               <div className="text-center border-t border-gray-800 pt-4">
@@ -375,7 +747,7 @@
                   onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
                   className="text-xs text-emerald-400 font-semibold hover:underline"
                 >
-                  {authMode === 'login' ? 'Non hai un account? Registrati ora' : 'Hai già un account? Accedi'}
+                  {authMode === 'login' ? t('noAccount') : t('hasAccount')}
                 </button>
               </div>
             </div>
@@ -386,14 +758,13 @@
       // APP PRINCIPALE
       return (
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          {/* HEADER CON SEZIONE PROFILO (3 Linee + Foto) */}
+          {/* HEADER */}
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
-              {/* Tasto 3 linee (Menu Profilo) */}
               <button
                 onClick={() => setShowProfileDrawer(true)}
                 className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
-                title="Apri Profilo e Impostazioni"
+                title={t('profileSettings')}
               >
                 {profileImage ? (
                   <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
@@ -411,7 +782,7 @@
                 <div>
                   <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
                   <span className="text-[10px] text-emerald-400 font-medium">
-                    {hasAccess ? (user.clubCode ? `Licenza Club (${user.clubCode})` : (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva')) : 'Account Free (Bloccato)'}
+                    {hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}
                   </span>
                 </div>
               </div>
@@ -422,27 +793,26 @@
                 onClick={() => setShowPaywallModal(true)}
                 className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
               >
-                Abbonamento
+                {t('subButton')}
               </button>
               <button
                 onClick={handleLogout}
                 className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
               >
-                Esci
+                {t('exitButton')}
               </button>
             </div>
           </header>
 
-          {/* DRAWER / DASHBOARD PROFILO & IMPOSTAZIONI (3 Linee) */}
+          {/* DRAWER / DASHBOARD PROFILO & LINGUA */}
           {showProfileDrawer && (
             <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
               <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-200">
                 <div className="space-y-6">
-                  {/* Header Drawer */}
                   <div className="flex items-center justify-between border-b border-gray-800 pb-4">
                     <h3 className="font-black text-base text-white flex items-center space-x-2">
                       <span>⚙️</span>
-                      <span>Profilo & Impostazioni</span>
+                      <span>{t('profileSettings')}</span>
                     </h3>
                     <button
                       onClick={() => setShowProfileDrawer(false)}
@@ -452,11 +822,11 @@
                     </button>
                   </div>
 
-                  {/* Foto Profilo / Logo Società */}
+                  {/* Foto Profilo */}
                   <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
                       {profileImage ? (
-                        <img src={profileImage} alt="Foto Profilo" className="w-full h-full object-cover" />
+                        <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-2xl">🛡️</span>
                       )}
@@ -466,16 +836,16 @@
                       <p className="text-[11px] text-gray-400">{user.email}</p>
                     </div>
                     <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
-                      📷 Carica Foto / Logo
+                      {t('uploadPhoto')}
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                     </label>
                   </div>
 
-                  {/* Cambio Lingua (Internazionalizzazione) */}
+                  {/* Cambio Lingua */}
                   <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
                       <span>🌍</span>
-                      <span>Lingua / Language</span>
+                      <span>{t('languageLabel')}</span>
                     </label>
                     <select
                       value={language}
@@ -490,21 +860,20 @@
                     </select>
                   </div>
 
-                  {/* Info Account / Licenza Club */}
+                  {/* Info Account */}
                   <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <p className="font-semibold text-white mb-1">Stato Account:</p>
-                    <p>• Piano: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : 'PRO Attivo') : 'Free'}</span></p>
-                    {user.clubCode && <p className="text-teal-300 mt-1">🛡️ Licenza di squadra attiva</p>}
+                    <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
+                    <p>• {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
+                    {user.clubCode && <p className="text-teal-300 mt-1">{t('clubLicenseActive')}</p>}
                   </div>
                 </div>
 
-                {/* Footer Drawer */}
                 <div className="pt-4 border-t border-gray-800">
                   <button
                     onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
                     className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
                   >
-                    Esci dall'Account
+                    {t('logoutAccount')}
                   </button>
                 </div>
               </div>
@@ -513,49 +882,45 @@
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
-            {/* Banner Gestione Licenza Club (se attiva) */}
             {user.clubCode && (
               <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
                 <div>
-                  <h4 className="text-xs font-bold text-teal-300">🛡️ Licenza Società: {user.clubCode}</h4>
-                  <p className="text-[11px] text-teal-200/70">Licenze attivate: slot attivo</p>
+                  <h4 className="text-xs font-bold text-teal-300">🛡️ {t('clubInviteBanner')}: {user.clubCode}</h4>
+                  <p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p>
                 </div>
                 <button
                   onClick={handleShareClubInvite}
                   className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
                 >
-                  📲 Invita Allenatore
+                  {t('inviteCoach')}
                 </button>
               </div>
             )}
 
-            {/* TAB 1: LAVAGNA TATTICA */}
+            {/* TAB 1: LAVAGNA */}
             {activeTab === 'board' && (
               <div className="space-y-4">
-                {/* Moduli veloci */}
                 <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
-                  <span className="text-gray-400 font-medium text-[11px]">Moduli rapidi:</span>
+                  <span className="text-gray-400 font-medium text-[11px]">{t('quickFormations')}</span>
                   <div className="flex space-x-2">
                     <button onClick={() => presetFormation('433')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-3-3</button>
                     <button onClick={() => presetFormation('442')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-4-2</button>
                   </div>
                 </div>
 
-                {/* Toolbar */}
                 <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
-                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 Sposta</button>
-                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 Rosso</button>
-                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 Blu</button>
-                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ Palla</button>
-                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 Cono</button>
-                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>🟡 Cinesina</button>
-                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>🪜 Scaletta</button>
-                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ Freccia</button>
-                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ Gomma</button>
-                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ Pulisci Tutto</button>
+                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 {t('toolMove')}</button>
+                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
+                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
+                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ {t('toolBall')}</button>
+                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 {t('toolCone')}</button>
+                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>🟡 {t('toolCinesina')}</button>
+                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
+                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ {t('toolArrow')}</button>
+                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ {t('toolDelete')}</button>
+                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
                 </div>
 
-                {/* Campo SVG */}
                 <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
                     <div 
@@ -563,8 +928,8 @@
                       className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
                     >
                       <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
-                      <h3 className="text-lg font-bold text-white">Funzionalità Bloccata</h3>
-                      <p className="text-xs text-gray-300 max-w-xs mt-1">Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.</p>
+                      <h3 className="text-lg font-bold text-white">{t('lockedTitle')}</h3>
+                      <p className="text-xs text-gray-300 max-w-xs mt-1">{t('lockedDesc')}</p>
                     </div>
                   )}
                   <svg
@@ -573,19 +938,16 @@
                     onClick={handleBoardClick}
                     onTouchMove={handleTouchMove}
                   >
-                    {/* Segnature Campo */}
                     <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
                     <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
                     <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
                     <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
                     <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
 
-                    {/* Frecce */}
                     {arrows.map(arr => (
                       <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
                     ))}
 
-                    {/* Elementi */}
                     {elements.map(el => (
                       <g key={el.id} onClick={(evt) => handleElementClick(el.id, evt)} className="cursor-pointer">
                         {el.type === 'player' && (
@@ -614,14 +976,14 @@
               </div>
             )}
 
-            {/* TAB 2: ARCHIVIO ESERCIZI */}
+            {/* TAB 2: ESERCIZI */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <h3 className="text-sm font-bold text-white">Nuovo Esercizio</h3>
+                  <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
                   <input
                     type="text"
-                    placeholder="Titolo esercitazione..."
+                    placeholder={t('drillTitlePlaceholder')}
                     value={newDrillTitle}
                     onChange={(ev) => setNewDrillTitle(ev.target.value)}
                     className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -632,30 +994,30 @@
                       onChange={(ev) => setNewDrillCat(ev.target.value)}
                       className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     >
-                      <option value="Possesso Palla">Possesso Palla</option>
-                      <option value="Tattica">Tattica</option>
-                      <option value="Atletico">Atletico</option>
-                      <option value="Rifinitura">Rifinitura</option>
+                      <option value="Possesso Palla">{t('categoryPossesso')}</option>
+                      <option value="Tattica">{t('categoryTactics')}</option>
+                      <option value="Atletico">{t('categoryFitness')}</option>
+                      <option value="Rifinitura">{t('categoryFinishing')}</option>
                     </select>
                     <input
                       type="text"
-                      placeholder="Durata (es. 15 min)"
+                      placeholder={t('drillDurationPlaceholder')}
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
                       className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <textarea
-                    placeholder="Descrizione ed obbiettivi..."
+                    placeholder={t('drillDescPlaceholder')}
                     value={newDrillDesc}
                     onChange={(ev) => setNewDrillDesc(ev.target.value)}
                     className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
                   ></textarea>
-                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">+ Salva Esercizio</button>
+                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">{t('saveDrill')}</button>
                 </form>
 
                 {drills.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">Nessun esercizio salvato. Creane uno sopra!</div>
+                  <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div>
                 ) : (
                   drills.map(drill => (
                     <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
@@ -670,7 +1032,7 @@
                           onClick={() => handleShareWhatsApp(drill)}
                           className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
                         >
-                          📲 Condividi WhatsApp
+                          📲 {t('shareWhatsapp')}
                         </button>
                       </div>
                     </div>
@@ -679,13 +1041,13 @@
               </div>
             )}
 
-            {/* TAB 3: ROSA E PRESENZE */}
+            {/* TAB 3: ROSA */}
             {activeTab === 'squad' && (
               <div className="space-y-4">
                 <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
                   <input
                     type="text"
-                    placeholder="Nome giocatore..."
+                    placeholder={t('playerPlaceholder')}
                     value={newPlayerName}
                     onChange={(ev) => setNewPlayerName(ev.target.value)}
                     className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
@@ -695,16 +1057,16 @@
                     onChange={(ev) => setNewPlayerRole(ev.target.value)}
                     className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                   >
-                    <option value="Portiere">Portiere</option>
-                    <option value="Difensore">Difensore</option>
-                    <option value="Centrocampista">Centrocampista</option>
-                    <option value="Attaccante">Attaccante</option>
+                    <option value="Portiere">{t('roleGoalkeeper')}</option>
+                    <option value="Difensore">{t('roleDefender')}</option>
+                    <option value="Centrocampista">{t('roleMidfielder')}</option>
+                    <option value="Attaccante">{t('roleForward')}</option>
                   </select>
-                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">Aggiungi</button>
+                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
                 </form>
 
                 {players.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">Nessun giocatore in rosa. Aggiungi il primo sopra!</div>
+                  <div className="text-center py-8 text-gray-500 text-xs">{t('noPlayers')}</div>
                 ) : (
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800">
                     {players.map(player => (
@@ -721,7 +1083,7 @@
                             'bg-amber-500/20 text-amber-400 border border-amber-500/40'
                           }`}
                         >
-                          {player.status.toUpperCase()}
+                          {player.status === 'presente' ? t('statusPresent') : player.status === 'assente' ? t('statusAbsent') : t('statusInjured')}
                         </button>
                       </div>
                     ))}
@@ -731,7 +1093,7 @@
             )}
           </main>
 
-          {/* MODALE PAYWALL & RISCATTO CODICE CLUB */}
+          {/* MODALE PAYWALL */}
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
               <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -742,30 +1104,27 @@
                   ✕
                 </button>
                 <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
-                <h3 className="text-xl font-black text-white">Scegli il Piano CoachPro</h3>
-                <p className="text-xs text-gray-300">Sblocca tutte le funzionalità avanzate per te o per la tua società.</p>
+                <h3 className="text-xl font-black text-white">{t('paywallHeader')}</h3>
+                <p className="text-xs text-gray-300">{t('paywallDesc')}</p>
                 
                 <div className="space-y-2.5 pt-2">
-                  {/* Piano PRO Individuale */}
                   <button
                     onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
                     className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
                   >
-                    PRO Individuale - 29,99€/anno
+                    {t('indProBtn')}
                   </button>
 
-                  {/* Piano Società Sportive */}
                   <button
                     onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
                     className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
                   >
-                    <span>🛡️ Pacchetto Società (10 Account)</span>
-                    <span className="text-[10px] text-emerald-200 font-semibold">Sconto 15% - Ricevi subito il Codice Invito</span>
+                    <span>🛡️ {t('clubBtn')}</span>
+                    <span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
                   </button>
 
-                  {/* Riscatto Codice Società */}
                   <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
-                    <label className="text-[11px] font-bold text-gray-300 block">Hai un Codice Invito Società?</label>
+                    <label className="text-[11px] font-bold text-gray-300 block">{t('haveClubCode')}</label>
                     <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
                       <input
                         type="text"
@@ -778,7 +1137,7 @@
                         type="submit"
                         className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
                       >
-                        Attiva
+                        {t('activate')}
                       </button>
                     </form>
                     {clubCodeMsg && <p className="text-[10px] font-semibold text-emerald-400">{clubCodeMsg}</p>}
@@ -789,7 +1148,7 @@
                       onClick={activateTrial}
                       className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
                     >
-                      Attiva 3 Giorni di Prova Gratuita
+                      {t('trialBtn')}
                     </button>
                   )}
                 </div>
@@ -804,28 +1163,28 @@
               className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">⚽</span>
-              <span className="text-[10px] font-bold">Lavagna</span>
+              <span className="text-[10px] font-bold">{t('navBoard')}</span>
             </button>
             <button
               onClick={() => setActiveTab('drills')}
               className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">📋</span>
-              <span className="text-[10px] font-bold">Esercizi</span>
+              <span className="text-[10px] font-bold">{t('navDrills')}</span>
             </button>
             <button
               onClick={() => setActiveTab('squad')}
               className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
             >
               <span className="text-xl">👥</span>
-              <span className="text-[10px] font-bold">Rosa</span>
+              <span className="text-[10px] font-bold">{t('navSquad')}</span>
             </button>
           </nav>
         </div>
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
+    const root = ReactDOM.createRoot(default = document.getElementById('root')); // Correggiamo con la sintassi corretta standard
     root.render(<CoachProApp />);
   </script>
 </body>
