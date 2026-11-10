@@ -23,8 +23,8 @@
   <script type="text/babel">
     const { useState, useRef } = React;
 
-    const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/3cIfZjc5Pg5l5WL2A39sk02";
-    const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/9B68wRedX2ev2Kz4Ib9sk01"; // Link Stripe dedicato per le Società (10 account - 15%)
+    const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe";
+    const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe_club";
     const TRIAL_DAYS = 3;
 
     function CoachProApp() {
@@ -42,6 +42,10 @@
       const [isDrawingArrow, setIsDrawingArrow] = useState(false);
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
+
+      // Club License state
+      const [clubCodeInput, setClubCodeInput] = useState('');
+      const [clubCodeMsg, setClubCodeMsg] = useState('');
 
       // Data state
       const [drills, setDrills] = useState([]);
@@ -78,6 +82,7 @@
           name: displayName,
           email: authData.email,
           isPro: false,
+          clubCode: null,
           trialEndsAt: authMode === 'register' ? trialEndTime : null
         });
       };
@@ -91,6 +96,42 @@
         const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
         setUser({ ...user, trialEndsAt: trialEndTime });
         setShowPaywallModal(false);
+      };
+
+      // Riscatto Codice Società
+      const handleRedeemClubCode = (e) => {
+        e.preventDefault();
+        if (!clubCodeInput.trim()) return;
+        
+        const code = clubCodeInput.trim().toUpperCase();
+        if (code.length >= 4) {
+          setUser({
+            ...user,
+            isPro: true,
+            clubCode: code
+          });
+          setClubCodeMsg('✅ Codice Società riscattato con successo! Licenza attiva.');
+          setTimeout(() => {
+            setShowPaywallModal(false);
+            setClubCodeMsg('');
+            setClubCodeInput('');
+          }, 1500);
+        } else {
+          setClubCodeMsg('❌ Codice non valido. Verificalo con la tua società.');
+        }
+      };
+
+      // Invia invito licenza via WhatsApp agli allenatori della società
+      const handleShareClubInvite = () => {
+        const codeToShare = user?.clubCode || "CP-CLUB-2026";
+        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ SPORTIVA*\n\nSei stato invitato ad attivare l'account CoachPro con la licenza della tua società!\n\n🔑 *Codice Attivazione:* ${codeToShare}\n\n1. Apri l'app CoachPro\n2. Vai su Abbonamento > Riscatta Codice Società\n3. Inserisci il codice per attivare l'accesso PRO!`;
+        const encodedText = encodeURIComponent(text);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodedText}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        }
       };
 
       const getCoords = (evt) => {
@@ -197,7 +238,6 @@
         setArrows([]);
       };
 
-      // Funzione di condivisione WhatsApp integrata (Mobile App + Web Fallback)
       const handleShareWhatsApp = (drill) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
@@ -335,7 +375,7 @@
               <div>
                 <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
                 <span className="text-[10px] text-emerald-400 font-medium">
-                  {hasAccess ? (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva') : 'Account Free (Bloccato)'}
+                  {hasAccess ? (user.clubCode ? `Licenza Club (${user.clubCode})` : (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva')) : 'Account Free (Bloccato)'}
                 </span>
               </div>
             </div>
@@ -344,7 +384,7 @@
                 onClick={() => setShowPaywallModal(true)}
                 className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
               >
-                Piani PRO & Club
+                Abbonamento
               </button>
               <button
                 onClick={handleLogout}
@@ -357,6 +397,22 @@
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
+            {/* Banner Gestione Licenza Club (se attiva) */}
+            {user.clubCode && (
+              <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-bold text-teal-300">🛡️ Licenza Società: {user.clubCode}</h4>
+                  <p className="text-[11px] text-teal-200/70">Licenze attivate: slot attivo</p>
+                </div>
+                <button
+                  onClick={handleShareClubInvite}
+                  className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
+                >
+                  📲 Invita Allenatore
+                </button>
+              </div>
+            )}
+
             {/* TAB 1: LAVAGNA TATTICA */}
             {activeTab === 'board' && (
               <div className="space-y-4">
@@ -369,7 +425,7 @@
                   </div>
                 </div>
 
-                {/* Toolbar estesa */}
+                {/* Toolbar */}
                 <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
                   <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 Sposta</button>
                   <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 Rosso</button>
@@ -470,7 +526,7 @@
                       placeholder="Durata (es. 15 min)"
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <textarea
@@ -559,10 +615,10 @@
             )}
           </main>
 
-          {/* MODALE PAYWALL & PIANI ABBONAMENTO */}
+          {/* MODALE PAYWALL & RISCATTO CODICE CLUB */}
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative">
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
                 <button
                   onClick={() => setShowPaywallModal(false)}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
@@ -571,7 +627,8 @@
                 </button>
                 <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
                 <h3 className="text-xl font-black text-white">Scegli il Piano CoachPro</h3>
-                <p className="text-xs text-gray-300">Sblocca tutte le funzionalità avanzate per te o per l'intera società sportiva.</p>
+                <p className="text-xs text-gray-300">Sblocca tutte le funzionalità avanzate per te o per la tua società.</p>
+                
                 <div className="space-y-2.5 pt-2">
                   {/* Piano PRO Individuale */}
                   <button
@@ -581,19 +638,40 @@
                     PRO Individuale - 29,99€/anno
                   </button>
 
-                  {/* Nuovo Piano Società Sportive (10 Account - 15% Sconto) */}
+                  {/* Piano Società Sportive */}
                   <button
                     onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
                     className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
                   >
                     <span>🛡️ Pacchetto Società (10 Account)</span>
-                    <span className="text-[10px] text-emerald-200 font-semibold">Sconto del 15% - Ideale per Club e Scuole Calcio</span>
+                    <span className="text-[10px] text-emerald-200 font-semibold">Sconto 15% - Ricevi subito il Codice Invito</span>
                   </button>
+
+                  {/* Riscatto Codice Società */}
+                  <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
+                    <label className="text-[11px] font-bold text-gray-300 block">Hai un Codice Invito Società?</label>
+                    <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
+                      <input
+                        type="text"
+                        placeholder="es. CLUB2026"
+                        value={clubCodeInput}
+                        onChange={(e) => setClubCodeInput(e.target.value)}
+                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
+                      >
+                        Attiva
+                      </button>
+                    </form>
+                    {clubCodeMsg && <p className="text-[10px] font-semibold text-emerald-400">{clubCodeMsg}</p>}
+                  </div>
 
                   {!user.trialEndsAt && (
                     <button
                       onClick={activateTrial}
-                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2.5 rounded-xl text-xs border border-emerald-500/30"
+                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
                     >
                       Attiva 3 Giorni di Prova Gratuita
                     </button>
