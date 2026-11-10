@@ -1,30 +1,751 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>CoachPro</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { touch-action: manipulation; user-select: none; }
-    .pitch-bg { background-color: #15803d; background-image: repeating-linear-gradient(0deg, #15803d, #15803d 40px, #166534 40px, #166534 80px); }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CoachPro - Lavagna & Session Planner</title>
+  <!-- Caricamento di React, ReactDOM e Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+    .pitch-bg {
+      background-color: #15803d;
+      background-image: repeating-linear-gradient(0deg, #15803d, #15803d 40px, #166534 40px, #166534 80px);
+    }
+  </style>
 </head>
-<body class="bg-gray-950 text-white font-sans">
-  <div id="root"></div>
-  <script type="text/babel">
-    function App() {
-      return (
-        <div className="p-6 text-center">
-          <h1 className="text-2xl font-bold text-emerald-400">CoachPro Funzionante</h1>
-          <p className="text-gray-400 mt-2">L'ambiente di React è attivo correttamente.</p>
-        </div>
-      );
-    }
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-  </script>
-</body>
-</html>
+<body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef } = React;
+
+    const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe";
+    const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe_club";
+    const TRIAL_DAYS = 3;
+
+    // Dizionario delle traduzioni per l'internazionalizzazione
+    const translations = {
+      it: {
+        appTitle: "CoachPro",
+        subtitle: "Piattaforma tattica professionale per allenatori",
+        loginTitle: "Accedi a CoachPro",
+        registerTitle: "Crea Account (3 giorni gratis)",
+        namePlaceholder: "es. Mister Rossi",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginButton: "Accedi a CoachPro",
+        registerButton: "Crea Account (3 giorni gratis)",
+        noAccount: "Non hai un account? Registrati ora",
+        hasAccount: "Hai già un account? Accedi",
+        proActive: "Piano PRO Attivo",
+        trialActive: "Prova Gratuita Attiva",
+        freeLocked: "Account Free (Bloccato)",
+        subButton: "Abbonamento",
+        exitButton: "Esci",
+        quickFormations: "Moduli rapidi:",
+        toolMove: "Sposta",
+        toolRed: "Rosso",
+        toolBlue: "Blu",
+        toolBall: "Palla",
+        toolCone: "Cono",
+        toolCinesina: "Cinesina",
+        toolLadder: "Scaletta",
+        toolArrow: "Freccia",
+        toolDelete: "Gomma",
+        toolClear: "Pulisci Tutto",
+        lockedTitle: "Funzionalità Bloccata",
+        lockedDesc: "Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.",
+        newDrill: "Nuovo Esercizio",
+        drillTitlePlaceholder: "Titolo esercitazione...",
+        categoryPossesso: "Possesso Palla",
+        categoryTactics: "Tattica",
+        categoryFitness: "Atletico",
+        categoryFinishing: "Rifinitura",
+        drillDurationPlaceholder: "Durata (es. 15 min)",
+        drillDescPlaceholder: "Descrizione ed obbiettivi...",
+        saveDrill: "+ Salva Esercizio",
+        noDrills: "Nessun esercizio salvato. Creane uno sopra!",
+        shareWhatsapp: "Condividi WhatsApp",
+        playerPlaceholder: "Nome giocatore...",
+        roleGoalkeeper: "Portiere",
+        roleDefender: "Difensore",
+        roleMidfielder: "Centrocampista",
+        roleForward: "Attaccante",
+        addPlayer: "Aggiungi",
+        noPlayers: "Nessun giocatore in rosa. Aggiungi il primo sopra!",
+        statusPresent: "PRESENTE",
+        statusAbsent: "ASSENTE",
+        statusInjured: "INFORTUNATO",
+        paywallHeader: "Scegli il Piano CoachPro",
+        paywallDesc: "Sblocca tutte le funzionalità avanzate per te o per la tua società.",
+        indProBtn: "PRO Individuale - 29,99€/anno",
+        clubBtn: "Pacchetto Società (10 Account)",
+        clubSubBtn: "Sconto 15% - Ricevi subito il Codice Invito",
+        haveClubCode: "Hai un Codice Invito Società?",
+        activate: "Attiva",
+        trialBtn: "Attiva 3 Giorni di Prova Gratuita",
+        navBoard: "Lavagna",
+        navDrills: "Esercizi",
+        navSquad: "Rosa",
+        profileSettings: "Profilo & Impostazioni",
+        uploadPhoto: "📷 Carica Foto / Logo",
+        languageLabel: "Lingua / Language",
+        accountStatus: "Stato Account:",
+        clubLicenseActive: "🛡️ Licenza di squadra attiva",
+        logoutAccount: "Esci dall'Account",
+        clubInviteBanner: "Licenza Società",
+        inviteCoach: "📲 Invita Allenatore"
+      },
+      en: {
+        appTitle: "CoachPro",
+        subtitle: "Professional tactical platform for coaches",
+        loginTitle: "Log in to CoachPro",
+        registerTitle: "Create Account (3 days free)",
+        namePlaceholder: "e.g. Coach Smith",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginButton: "Log in to CoachPro",
+        registerButton: "Create Account (3 days free)",
+        noAccount: "Don't have an account? Sign up",
+        hasAccount: "Already have an account? Log in",
+        proActive: "PRO Plan Active",
+        trialActive: "Free Trial Active",
+        freeLocked: "Free Account (Locked)",
+        subButton: "Subscription",
+        exitButton: "Logout",
+        quickFormations: "Quick formations:",
+        toolMove: "Move",
+        toolRed: "Red",
+        toolBlue: "Blue",
+        toolBall: "Ball",
+        toolCone: "Cone",
+        toolCinesina: "Disc",
+        toolLadder: "Ladder",
+        toolArrow: "Arrow",
+        toolDelete: "Eraser",
+        toolClear: "Clear All",
+        lockedTitle: "Feature Locked",
+        lockedDesc: "Subscribe or activate the 3-day trial to use the interactive tactical board.",
+        newDrill: "New Drill",
+        drillTitlePlaceholder: "Drill title...",
+        categoryPossesso: "Ball Possession",
+        categoryTactics: "Tactics",
+        categoryFitness: "Fitness",
+        categoryFinishing: "Finishing",
+        drillDurationPlaceholder: "Duration (e.g. 15 min)",
+        drillDescPlaceholder: "Description and objectives...",
+        saveDrill: "+ Save Drill",
+        noDrills: "No drills saved. Create one above!",
+        shareWhatsapp: "Share WhatsApp",
+        playerPlaceholder: "Player name...",
+        roleGoalkeeper: "Goalkeeper",
+        roleDefender: "Defender",
+        roleMidfielder: "Midfielder",
+        roleForward: "Forward",
+        addPlayer: "Add",
+        noPlayers: "No players in squad. Add the first one above!",
+        statusPresent: "PRESENT",
+        statusAbsent: "ABSENT",
+        statusInjured: "INJURED",
+        paywallHeader: "Choose CoachPro Plan",
+        paywallDesc: "Unlock all advanced features for yourself or your club.",
+        indProBtn: "Individual PRO - €29.99/year",
+        clubBtn: "Club Package (10 Accounts)",
+        clubSubBtn: "15% Discount - Get Invitation Code",
+        haveClubCode: "Have a Club Invitation Code?",
+        activate: "Activate",
+        trialBtn: "Activate 3-Day Free Trial",
+        navBoard: "Board",
+        navDrills: "Drills",
+        navSquad: "Squad",
+        profileSettings: "Profile & Settings",
+        uploadPhoto: "📷 Upload Photo / Logo",
+        languageLabel: "Language",
+        accountStatus: "Account Status:",
+        clubLicenseActive: "🛡️ Active club license",
+        logoutAccount: "Log out",
+        clubInviteBanner: "Club License",
+        inviteCoach: "📲 Invite Coach"
+      },
+      es: {
+        appTitle: "CoachPro",
+        subtitle: "Plataforma táctica profesional para entrenadores",
+        loginTitle: "Iniciar sesión en CoachPro",
+        registerTitle: "Crear cuenta (3 días gratis)",
+        namePlaceholder: "ej. Míster Pérez",
+        emailLabel: "Correo electrónico",
+        passwordLabel: "Contraseña",
+        loginButton: "Iniciar sesión",
+        registerButton: "Crear cuenta (3 días gratis)",
+        noAccount: "¿No tienes cuenta? Regístrate",
+        hasAccount: "¿Ya tienes cuenta? Inicia sesión",
+        proActive: "Plan PRO Activo",
+        trialActive: "Prueba Gratuita Activa",
+        freeLocked: "Cuenta Free (Bloqueada)",
+        subButton: "Suscripción",
+        exitButton: "Salir",
+        quickFormations: "Formaciones rápidas:",
+        toolMove: "Mover",
+        toolRed: "Rojo",
+        toolBlue: "Azul",
+        toolBall: "Balón",
+        toolCone: "Cono",
+        toolCinesina: "Pica/Disco",
+        toolLadder: "Escalera",
+        toolArrow: "Flecha",
+        toolDelete: "Borrador",
+        toolClear: "Borrar Todo",
+        lockedTitle: "Función Bloqueada",
+        lockedDesc: "Suscríbete o activa la prueba de 3 días para usar la pizarra táctica interactiva.",
+        newDrill: "Nuevo Ejercicio",
+        drillTitlePlaceholder: "Título del ejercicio...",
+        categoryPossesso: "Posesión de Balón",
+        categoryTactics: "Táctica",
+        categoryFitness: "Físico",
+        categoryFinishing: "Finalización",
+        drillDurationPlaceholder: "Duración (ej. 15 min)",
+        drillDescPlaceholder: "Descripción y objetivos...",
+        saveDrill: "+ Guardar Ejercicio",
+        noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
+        shareWhatsapp: "Compartir WhatsApp",
+        playerPlaceholder: "Nombre del jugador...",
+        roleGoalkeeper: "Portero",
+        roleDefender: "Defensa",
+        roleMidfielder: "Centrocampista",
+        roleForward: "Delantero",
+        addPlayer: "Añadir",
+        noPlayers: "No hay jugadores. ¡Añade el primero arriba!",
+        statusPresent: "PRESENTE",
+        statusAbsent: "AUSENTE",
+        statusInjured: "LESIONADO",
+        paywallHeader: "Elige el Plan CoachPro",
+        paywallDesc: "Desbloquea todas las funciones avanzadas para ti o tu club.",
+        indProBtn: "PRO Individual - 29,99€/año",
+        clubBtn: "Paquete Club (10 Cuentas)",
+        clubSubBtn: "15% Descuento - Recibe Código de Invitación",
+        haveClubCode: "¿Tienes un código de invitación de club?",
+        activate: "Activar",
+        trialBtn: "Activar 3 Días de Prueba Gratuita",
+        navBoard: "Pizarra",
+        navDrills: "Ejercicios",
+        navSquad: "Plantilla",
+        profileSettings: "Perfil y Ajustes",
+        uploadPhoto: "📷 Subir Foto / Logo",
+        languageLabel: "Idioma / Language",
+        accountStatus: "Estado de la cuenta:",
+        clubLicenseActive: "🛡️ Licencia de club activa",
+        logoutAccount: "Cerrar sesión",
+        clubInviteBanner: "Licencia de Club",
+        inviteCoach: "📲 Invitar Entrenador"
+      },
+      fr: {
+        appTitle: "CoachPro",
+        subtitle: "Plateforme tactique professionnelle pour entraîneurs",
+        loginTitle: "Connexion à CoachPro",
+        registerTitle: "Créer un compte (3 jours gratuits)",
+        namePlaceholder: "ex. Coach Martin",
+        emailLabel: "E-mail",
+        passwordLabel: "Mot de passe",
+        loginButton: "Se connecter",
+        registerButton: "Créer un compte (3 jours gratuits)",
+        noAccount: "Pas de compte ? S'inscrire",
+        hasAccount: "Déjà un compte ? Se connecter",
+        proActive: "Plan PRO Actif",
+        trialActive: "Essai Gratuit Actif",
+        freeLocked: "Compte Free (Bloqué)",
+        subButton: "Abonnement",
+        exitButton: "Quitter",
+        quickFormations: "Systèmes rapides :",
+        toolMove: "Déplacer",
+        toolRed: "Rouge",
+        toolBlue: "Bleu",
+        toolBall: "Ballon",
+        toolCone: "Cône",
+        toolCinesina: "Coupelle",
+        toolLadder: "Échelle",
+        toolArrow: "Flèche",
+        toolDelete: "Gomme",
+        toolClear: "Tout Effacer",
+        lockedTitle: "Fonctionnalité Bloquée",
+        lockedDesc: "Abonnez-vous ou activez l'essai de 3 jours pour utiliser le tableau tactique.",
+        newDrill: "Nouvel Exercice",
+        drillTitlePlaceholder: "Titre de l'exercice...",
+        categoryPossesso: "Conservation",
+        categoryTactics: "Tactique",
+        categoryFitness: "Athlétique",
+        categoryFinishing: "Finition",
+        drillDurationPlaceholder: "Durée (ex. 15 min)",
+        drillDescPlaceholder: "Description et objectifs...",
+        saveDrill: "+ Enregistrer l'Exercice",
+        noDrills: "Aucun exercice enregistré. Créez-en un !",
+        shareWhatsapp: "Partager WhatsApp",
+        playerPlaceholder: "Nom du joueur...",
+        roleGoalkeeper: "Gardien",
+        roleDefender: "Défenseur",
+        roleMidfielder: "Milieu",
+        roleForward: "Attaquant",
+        addPlayer: "Ajouter",
+        noPlayers: "Aucun joueur dans l'effectif.",
+        statusPresent: "PRÉSENT",
+        statusAbsent: "ABSENT",
+        statusInjured: "BLESSÉ",
+        paywallHeader: "Choisissez votre plan CoachPro",
+        paywallDesc: "Débloquez toutes les fonctionnalités avancées pour vous ou votre club.",
+        indProBtn: "PRO Individuel - 29,99€/an",
+        clubBtn: "Pack Club (10 Comptes)",
+        clubSubBtn: "15% de réduction - Obtenez le code",
+        haveClubCode: "Vous avez un code d'invitation club ?",
+        activate: "Activer",
+        trialBtn: "Activer l'essai de 3 jours",
+        navBoard: "Tableau",
+        navDrills: "Exercices",
+        navSquad: "Effectif",
+        profileSettings: "Profil & Paramètres",
+        uploadPhoto: "📷 Charger Photo / Logo",
+        languageLabel: "Langue / Language",
+        accountStatus: "Statut du compte :",
+        clubLicenseActive: "🛡️ Licence de club active",
+        logoutAccount: "Se déconnecter",
+        clubInviteBanner: "Licence Club",
+        inviteCoach: "📲 Inviter un entraîneur"
+      },
+      de: {
+        appTitle: "CoachPro",
+        subtitle: "Professionelle Taktik-Plattform für Trainer",
+        loginTitle: "Bei CoachPro anmelden",
+        registerTitle: "Konto erstellen (3 Tage kostenlos)",
+        namePlaceholder: "z.B. Trainer Müller",
+        emailLabel: "E-Mail",
+        passwordLabel: "Passwort",
+        loginButton: "Anmelden",
+        registerButton: "Konto erstellen (3 Tage kostenlos)",
+        noAccount: "Kein Konto? Registrieren",
+        hasAccount: "Bereits ein Konto? Anmelden",
+        proActive: "PRO-Tarif aktiv",
+        trialActive: "Kostenlose Testversion aktiv",
+        freeLocked: "Kostenloses Konto (Gesperrt)",
+        subButton: "Abo",
+        exitButton: "Abmelden",
+        quickFormations: "Schnelle Systeme:",
+        toolMove: "Verschieben",
+        toolRed: "Rot",
+        toolBlue: "Blau",
+        toolBall: "Ball",
+        toolCone: "Hütchen",
+        toolCinesina: "Markierung",
+        toolLadder: "Leiter",
+        toolArrow: "Pfeil",
+        toolDelete: "Radierer",
+        toolClear: "Alles löschen",
+        lockedTitle: "Funktion gesperrt",
+        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tägige Testversion.",
+        newDrill: "Neue Übung",
+        drillTitlePlaceholder: "Titel der Übung...",
+        categoryPossesso: "Ballbesitz",
+        categoryTactics: "Taktik",
+        categoryFitness: "Athletik",
+        categoryFinishing: "Abschluss",
+        drillDurationPlaceholder: "Dauer (z.B. 15 Min.)",
+        drillDescPlaceholder: "Beschreibung und Ziele...",
+        saveDrill: "+ Übung speichern",
+        noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
+        shareWhatsapp: "WhatsApp teilen",
+        playerPlaceholder: "Spielername...",
+        roleGoalkeeper: "Torhüter",
+        roleDefender: "Verteidiger",
+        roleMidfielder: "Mittelfeldspieler",
+        roleForward: "Stürmer",
+        addPlayer: "Hinzufügen",
+        noPlayers: "Keine Spieler im Kader.",
+        statusPresent: "ANWESEND",
+        statusAbsent: "ABWESEND",
+        statusInjured: "VERLETZT",
+        paywallHeader: "Wählen Sie Ihren CoachPro-Plan",
+        paywallDesc: "Schalten Sie alle erweiterten Funktionen für Sie oder Ihren Verein frei.",
+        indProBtn: "Einzel-PRO - 29,99 €/Jahr",
+        clubBtn: "Vereinspaket (10 Konten)",
+        clubSubBtn: "15% Rabatt - Einladungscode erhalten",
+        haveClubCode: "Haben Sie einen Vereins-Code?",
+        activate: "Aktivieren",
+        trialBtn: "3 Tage Testversion aktivieren",
+        navBoard: "Tafel",
+        navDrills: "Übungen",
+        navSquad: "Kader",
+        profileSettings: "Profil & Einstellungen",
+        uploadPhoto: "📷 Foto / Logo hochladen",
+        languageLabel: "Sprache / Language",
+        accountStatus: "Kontostatus:",
+        clubLicenseActive: "🛡️ Aktive Vereinslizenz",
+        logoutAccount: "Abmelden",
+        clubInviteBanner: "Vereinslizenz",
+        inviteCoach: "📲 Trainer einladen"
+      }
+    };
+
+    function CoachProApp() {
+      // Auth state
+      const [user, setUser] = useState(null);
+      const [authMode, setAuthMode] = useState('login');
+      const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
+
+      // Profile & Settings state (Nuovo con supporto linguistico reattivo)
+      const [showProfileDrawer, setShowProfileDrawer] = useState(false);
+      const [profileImage, setProfileImage] = useState(null);
+      const [language, setLanguage] = useState('it');
+
+      // Helper funzione di traduzione attiva
+      const t = (key) => {
+        return translations[language][key] || translations['it'][key] || key;
+      };
+
+      // App state
+      const [activeTab, setActiveTab] = useState('board');
+      const [tool, setTool] = useState('move');
+      const [draggedId, setDraggedId] = useState(null);
+      const [elements, setElements] = useState([]);
+      const [arrows, setArrows] = useState([]);
+      const [isDrawingArrow, setIsDrawingArrow] = useState(false);
+      const [currentArrowStart, setCurrentArrowStart] = useState(null);
+      const [showPaywallModal, setShowPaywallModal] = useState(false);
+
+      // Club License state
+      const [clubCodeInput, setClubCodeInput] = useState('');
+      const [clubCodeMsg, setClubCodeMsg] = useState('');
+
+      // Data state
+      const [drills, setDrills] = useState([]);
+      const [players, setPlayers] = useState([]);
+      const [newPlayerName, setNewPlayerName] = useState('');
+      const [newPlayerRole, setNewPlayerRole] = useState('Centrocampista');
+      
+      const [newDrillTitle, setNewDrillTitle] = useState('');
+      const [newDrillCat, setNewDrillCat] = useState('Possesso Palla');
+      const [newDrillDur, setNewDrillDur] = useState('15 min');
+      const [newDrillDesc, setNewDrillDesc] = useState('');
+
+      const svgRef = useRef(null);
+
+      // Gestione caricamento immagine profilo/società
+      const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setProfileImage(reader.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      // Verifica dello stato dell'abbonamento / Prova gratuita
+      const checkAccess = () => {
+        if (!user) return false;
+        if (user.isPro) return true;
+        if (user.trialEndsAt && new Date().getTime() < user.trialEndsAt) return true;
+        return false;
+      };
+
+      const hasAccess = checkAccess();
+
+      // Handlers di Autenticazione
+      const handleAuth = (evt) => {
+        evt.preventDefault();
+        if (!authData.email) return;
+        const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
+        
+        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
+
+        setUser({
+          name: displayName,
+          email: authData.email,
+          isPro: false,
+          clubCode: null,
+          trialEndsAt: authMode === 'register' ? trialEndTime : null
+        });
+      };
+
+      const handleLogout = () => {
+        setUser(null);
+        setAuthData({ name: '', email: '', password: '' });
+        setProfileImage(null);
+      };
+
+      const activateTrial = () => {
+        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
+        setUser({ ...user, trialEndsAt: trialEndTime });
+        setShowPaywallModal(false);
+      };
+
+      // Riscatto Codice Società
+      const handleRedeemClubCode = (e) => {
+        e.preventDefault();
+        if (!clubCodeInput.trim()) return;
+        
+        const code = clubCodeInput.trim().toUpperCase();
+        if (code.length >= 4) {
+          setUser({
+            ...user,
+            isPro: true,
+            clubCode: code
+          });
+          setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
+          setTimeout(() => {
+            setShowPaywallModal(false);
+            setClubCodeMsg('');
+            setClubCodeInput('');
+          }, 1500);
+        } else {
+          setClubCodeMsg('❌ ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
+        }
+      };
+
+      // Invia invito licenza via WhatsApp agli allenatori della società
+      const handleShareClubInvite = () => {
+        const codeToShare = user?.clubCode || "CP-CLUB-2026";
+        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
+        const encodedText = encodeURIComponent(text);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodedText}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        }
+      };
+
+      const getCoords = (evt) => {
+        if (!svgRef.current) return { x: 50, y: 50 };
+        const rect = svgRef.current.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        const x = Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100));
+        const y = Math.max(5, Math.min(95, ((clientY - rect.top) / rect.height) * 100));
+        return { x, y };
+      };
+
+      const handleBoardClick = (evt) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (draggedId) {
+          setDraggedId(null);
+          return;
+        }
+        const { x, y } = getCoords(evt);
+
+        if (tool === 'player-red') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), x, y }]);
+        } else if (tool === 'player-blue') {
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), x, y }]);
+        } else if (tool === 'ball') {
+          setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
+        } else if (tool === 'cone') {
+          setElements([...elements, { id: Date.now().toString(), type: 'cone', x, y }]);
+        } else if (tool === 'cinesina') {
+          setElements([...elements, { id: Date.now().toString(), type: 'cinesina', x, y }]);
+        } else if (tool === 'ladder') {
+          setElements([...elements, { id: Date.now().toString(), type: 'ladder', x, y }]);
+        } else if (tool === 'arrow') {
+          if (!isDrawingArrow) {
+            setIsDrawingArrow(true);
+            setCurrentArrowStart({ x, y });
+          } else {
+            setArrows([...arrows, { id: Date.now().toString(), startX: currentArrowStart.x, startY: currentArrowStart.y, endX: x, endY: y }]);
+            setIsDrawingArrow(false);
+            setCurrentArrowStart(null);
+          }
+        }
+      };
+
+      const handleTouchMove = (evt) => {
+        if (!hasAccess) return;
+        if (!draggedId || tool !== 'move') return;
+        const { x, y } = getCoords(evt);
+        setElements(elements.map(el => el.id === draggedId ? { ...el, x, y } : el));
+      };
+
+      const handleElementClick = (id, evt) => {
+        evt.stopPropagation();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (tool === 'delete') {
+          setElements(elements.filter(el => el.id !== id));
+        } else if (tool === 'move') {
+          setDraggedId(draggedId === id ? null : id);
+        }
+      };
+
+      const presetFormation = (type) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        let reds = [];
+        if (type === '433') {
+          reds = [
+            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
+            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
+            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
+            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
+            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
+            { id: 'r6', type: 'player', color: 'red', number: '4', x: 50, y: 60 },
+            { id: 'r7', type: 'player', color: 'red', number: '8', x: 30, y: 50 },
+            { id: 'r8', type: 'player', color: 'red', number: '10', x: 70, y: 50 },
+            { id: 'r9', type: 'player', color: 'red', number: '7', x: 15, y: 30 },
+            { id: 'r10', type: 'player', color: 'red', number: '9', x: 50, y: 25 },
+            { id: 'r11', type: 'player', color: 'red', number: '11', x: 85, y: 30 }
+          ];
+        } else if (type === '442') {
+          reds = [
+            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
+            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
+            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
+            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
+            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
+            { id: 'r6', type: 'player', color: 'red', number: '7', x: 15, y: 50 },
+            { id: 'r7', type: 'player', color: 'red', number: '4', x: 38, y: 52 },
+            { id: 'r8', type: 'player', color: 'red', number: '8', x: 62, y: 52 },
+            { id: 'r9', type: 'player', color: 'red', number: '11', x: 85, y: 50 },
+            { id: 'r10', type: 'player', color: 'red', number: '9', x: 38, y: 28 },
+            { id: 'r11', type: 'player', color: 'red', number: '10', x: 62, y: 28 }
+          ];
+        }
+        setElements([...reds, { id: 'b1', type: 'ball', x: 50, y: 50 }]);
+        setArrows([]);
+      };
+
+      const handleShareWhatsApp = (drill) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        const text = `⚽ *COACHPRO - DRILL*\n\n📌 *Title:* ${drill.title}\n⏱️ *Duration:* ${drill.duration}\n📂 *Category:* ${drill.category}\n\n📝 *Description:*\n${drill.description}`;
+        const encodedText = encodeURIComponent(text);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodedText}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        }
+      };
+
+      const addDrill = (evt) => {
+        evt.preventDefault();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (!newDrillTitle) return;
+        setDrills([...drills, {
+          id: Date.now().toString(),
+          title: newDrillTitle,
+          category: newDrillCat,
+          duration: newDrillDur,
+          description: newDrillDesc
+        }]);
+        setNewDrillTitle('');
+        setNewDrillDesc('');
+      };
+
+      const addPlayer = (evt) => {
+        evt.preventDefault();
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        if (!newPlayerName) return;
+        setPlayers([...players, {
+          id: Date.now().toString(),
+          name: newPlayerName,
+          role: newPlayerRole,
+          status: 'presente'
+        }]);
+        setNewPlayerName('');
+      };
+
+      const togglePlayerStatus = (id) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+        setPlayers(players.map(p => {
+          if (p.id !== id) return p;
+          const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
+          return { ...p, status: nextStatus };
+        }));
+      };
+
+      // LOGIN / REGISTRAZIONE
+      if (!user) {
+        return (
+          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
+                <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
+                <p className="text-xs text-gray-400">{t('subtitle')}</p>
+              </div>
+              <form onSubmit={handleAuth} className="space-y-4">
+                {authMode === 'register' && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
+                    <input
+                      type="text"
+                      placeholder={t('namePlaceholder')}
+                      value={authData.name}
+                      onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="allenatore@email.com"
+                    value={authData.email}
+                    onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••"
+                    value={authData.password}
+                    onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
+                >
+                  {authMode === 'login' ? t('loginButton') : t('registerButton')}
+                </button>
+              </form>
+              <div className="text-center border-t border-gray-800 pt-4">
+                <button
+                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                  className="text-xs text-emerald-400 font-semibold hover:underline"
+                >
+                  {authMode === 'login' ? t('noAccount') : t('hasAccount')}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // APP PRINCIPALE
+      return (
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
