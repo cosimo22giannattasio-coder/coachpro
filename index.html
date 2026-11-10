@@ -10,14 +10,35 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: manipulation; 
+      user-select: none; 
+      -webkit-user-select: none; 
+    }
     .pitch-bg {
-      background-color: #15803d;
-      background-image: repeating-linear-gradient(0deg, #15803d, #15803d 40px, #166534 40px, #166534 80px);
+      background-color: #0f5128;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.15) 0%, transparent 80%),
+        repeating-linear-gradient(0deg, #10592c, #10592c 45px, #0b4521 45px, #0b4521 90px);
+    }
+    .glass-card {
+      background: rgba(24, 24, 27, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-modal {
+      background: rgba(18, 18, 20, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
     }
   </style>
 </head>
-<body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-black">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -40,7 +61,7 @@
         loginButton: "Accedi a CoachPro",
         registerButton: "Crea Account (3 giorni gratis)",
         noAccount: "Non hai un account? Registrati ora",
-        hasAccount: "Hai già un account? Accedi",
+        hasAccount: "Hai giÃ  un account? Accedi",
         proActive: "Piano PRO Attivo",
         trialActive: "Prova Gratuita Attiva",
         freeLocked: "Account Free (Bloccato)",
@@ -57,7 +78,7 @@
         toolArrow: "Freccia",
         toolDelete: "Gomma",
         toolClear: "Pulisci Tutto",
-        lockedTitle: "Funzionalità Bloccata",
+        lockedTitle: "FunzionalitÃ  Bloccata",
         lockedDesc: "Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.",
         newDrill: "Nuovo Esercizio",
         drillTitlePlaceholder: "Titolo esercitazione...",
@@ -70,8 +91,8 @@
         saveDrill: "+ Salva Esercizio",
         noDrills: "Nessun esercizio salvato. Creane uno sopra!",
         shareWhatsapp: "Condividi WhatsApp",
-        exportPdf: "📄 Esporta PDF Sessione",
-        exportSinglePdf: "📄 PDF Esercizio",
+        exportPdf: "ð Esporta PDF Sessione",
+        exportDrillPdf: "ð Esporta PDF Esercizio",
         playerPlaceholder: "Nome giocatore...",
         roleGoalkeeper: "Portiere",
         roleDefender: "Difensore",
@@ -83,24 +104,24 @@
         statusAbsent: "ASSENTE",
         statusInjured: "INFORTUNATO",
         paywallHeader: "Scegli il Piano CoachPro",
-        paywallDesc: "Sblocca tutte le funzionalità avanzate per te o per la tua società.",
-        indProBtn: "PRO Individuale - 29,99€/anno",
-        clubBtn: "Pacchetto Società (10 Account)",
+        paywallDesc: "Sblocca tutte le funzionalitÃ  avanzate per te o per la tua societÃ .",
+        indProBtn: "PRO Individuale - 29,99â¬/anno",
+        clubBtn: "Pacchetto SocietÃ  (10 Account)",
         clubSubBtn: "Sconto 15% - Ricevi subito il Codice Invito",
-        haveClubCode: "Hai un Codice Invito Società?",
+        haveClubCode: "Hai un Codice Invito SocietÃ ?",
         activate: "Attiva",
         trialBtn: "Attiva 3 Giorni di Prova Gratuita",
         navBoard: "Lavagna",
         navDrills: "Esercizi",
         navSquad: "Rosa",
         profileSettings: "Profilo & Impostazioni",
-        uploadPhoto: "📷 Carica Foto / Logo",
+        uploadPhoto: "ð· Carica Foto / Logo",
         languageLabel: "Lingua / Language",
         accountStatus: "Stato Account:",
-        clubLicenseActive: "🛡️ Licenza di squadra attiva",
+        clubLicenseActive: "ð¡ï¸ Licenza di squadra attiva",
         logoutAccount: "Esci dall'Account",
-        clubInviteBanner: "Licenza Società",
-        inviteCoach: "📲 Invita Allenatore"
+        clubInviteBanner: "Licenza SocietÃ ",
+        inviteCoach: "ð² Invita Allenatore"
       },
       en: {
         appTitle: "CoachPro",
@@ -143,8 +164,8 @@
         saveDrill: "+ Save Drill",
         noDrills: "No drills saved. Create one above!",
         shareWhatsapp: "Share WhatsApp",
-        exportPdf: "📄 Export Session PDF",
-        exportSinglePdf: "📄 Drill PDF",
+        exportPdf: "ð Export Session PDF",
+        exportDrillPdf: "ð Export Drill PDF",
         playerPlaceholder: "Player name...",
         roleGoalkeeper: "Goalkeeper",
         roleDefender: "Defender",
@@ -157,7 +178,7 @@
         statusInjured: "INJURED",
         paywallHeader: "Choose CoachPro Plan",
         paywallDesc: "Unlock all advanced features for yourself or your club.",
-        indProBtn: "Individual PRO - €29.99/year",
+        indProBtn: "Individual PRO - â¬29.99/year",
         clubBtn: "Club Package (10 Accounts)",
         clubSubBtn: "15% Discount - Get Invitation Code",
         haveClubCode: "Have a Club Invitation Code?",
@@ -167,166 +188,166 @@
         navDrills: "Drills",
         navSquad: "Squad",
         profileSettings: "Profile & Settings",
-        uploadPhoto: "📷 Upload Photo / Logo",
+        uploadPhoto: "ð· Upload Photo / Logo",
         languageLabel: "Language",
         accountStatus: "Account Status:",
-        clubLicenseActive: "🛡️ Active club license",
+        clubLicenseActive: "ð¡ï¸ Active club license",
         logoutAccount: "Log out",
         clubInviteBanner: "Club License",
-        inviteCoach: "📲 Invite Coach"
+        inviteCoach: "ð² Invite Coach"
       },
       es: {
         appTitle: "CoachPro",
-        subtitle: "Plataforma táctica profesional para entrenadores",
-        loginTitle: "Iniciar sesión en CoachPro",
-        registerTitle: "Crear cuenta (3 días gratis)",
-        namePlaceholder: "ej. Míster Pérez",
-        emailLabel: "Correo electrónico",
-        passwordLabel: "Contraseña",
-        loginButton: "Iniciar sesión",
-        registerButton: "Crear cuenta (3 días gratis)",
-        noAccount: "¿No tienes cuenta? Regístrate",
-        hasAccount: "¿Ya tienes cuenta? Inicia sesión",
+        subtitle: "Plataforma tÃ¡ctica profesional para entrenadores",
+        loginTitle: "Iniciar sesiÃ³n en CoachPro",
+        registerTitle: "Crear cuenta (3 dÃ­as gratis)",
+        namePlaceholder: "ej. MÃ­ster PÃ©rez",
+        emailLabel: "Correo electrÃ³nico",
+        passwordLabel: "ContraseÃ±a",
+        loginButton: "Iniciar sesiÃ³n",
+        registerButton: "Crear cuenta (3 dÃ­as gratis)",
+        noAccount: "Â¿No tienes cuenta? RegÃ­strate",
+        hasAccount: "Â¿Ya tienes cuenta? Inicia sesiÃ³n",
         proActive: "Plan PRO Activo",
         trialActive: "Prueba Gratuita Activa",
         freeLocked: "Cuenta Free (Bloqueada)",
-        subButton: "Suscripción",
+        subButton: "SuscripciÃ³n",
         exitButton: "Salir",
-        quickFormations: "Formaciones rápidas:",
+        quickFormations: "Formaciones rÃ¡pidas:",
         toolMove: "Mover",
         toolRed: "Rojo",
         toolBlue: "Azul",
-        toolBall: "Balón",
+        toolBall: "BalÃ³n",
         toolCone: "Cono",
         toolCinesina: "Pica/Disco",
         toolLadder: "Escalera",
         toolArrow: "Flecha",
         toolDelete: "Borrador",
         toolClear: "Borrar Todo",
-        lockedTitle: "Función Bloqueada",
-        lockedDesc: "Suscríbete o activa la prueba de 3 días para usar la pizarra táctica interactiva.",
+        lockedTitle: "FunciÃ³n Bloqueada",
+        lockedDesc: "SuscrÃ­bete o activa la prueba de 3 dÃ­as para usar la pizarra tÃ¡ctica interactiva.",
         newDrill: "Nuevo Ejercicio",
-        drillTitlePlaceholder: "Título del ejercicio...",
-        categoryPossesso: "Posesión de Balón",
-        categoryTactics: "Táctica",
-        categoryFitness: "Físico",
-        categoryFinishing: "Finalización",
-        drillDurationPlaceholder: "Duración (ej. 15 min)",
-        drillDescPlaceholder: "Descripción y objetivos...",
+        drillTitlePlaceholder: "TÃ­tulo del ejercicio...",
+        categoryPossesso: "PosesiÃ³n de BalÃ³n",
+        categoryTactics: "TÃ¡ctica",
+        categoryFitness: "FÃ­sico",
+        categoryFinishing: "FinalizaciÃ³n",
+        drillDurationPlaceholder: "DuraciÃ³n (ej. 15 min)",
+        drillDescPlaceholder: "DescripciÃ³n y objetivos...",
         saveDrill: "+ Guardar Ejercicio",
-        noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
+        noDrills: "No hay ejercicios guardados. Â¡Crea uno arriba!",
         shareWhatsapp: "Compartir WhatsApp",
-        exportPdf: "📄 Exportar PDF Sesión",
-        exportSinglePdf: "📄 PDF Ejercicio",
+        exportPdf: "ð Exportar PDF SesiÃ³n",
+        exportDrillPdf: "ð Exportar PDF Ejercicio",
         playerPlaceholder: "Nombre del jugador...",
         roleGoalkeeper: "Portero",
         roleDefender: "Defensa",
         roleMidfielder: "Centrocampista",
         roleForward: "Delantero",
-        addPlayer: "Añadir",
-        noPlayers: "No hay jugadores. ¡Añade el primero arriba!",
+        addPlayer: "AÃ±adir",
+        noPlayers: "No hay jugadores. Â¡AÃ±ade el primero arriba!",
         statusPresent: "PRESENTE",
         statusAbsent: "AUSENTE",
         statusInjured: "LESIONADO",
         paywallHeader: "Elige el Plan CoachPro",
         paywallDesc: "Desbloquea todas las funciones avanzadas para ti o tu club.",
-        indProBtn: "PRO Individual - 29,99€/año",
+        indProBtn: "PRO Individual - 29,99â¬/aÃ±o",
         clubBtn: "Paquete Club (10 Cuentas)",
-        clubSubBtn: "15% Descuento - Recibe Código de Invitación",
-        haveClubCode: "¿Tienes un código de invitación de club?",
+        clubSubBtn: "15% Descuento - Recibe CÃ³digo de InvitaciÃ³n",
+        haveClubCode: "Â¿Tienes un cÃ³digo de invitaciÃ³n de club?",
         activate: "Activar",
-        trialBtn: "Activar 3 Días de Prueba Gratuita",
+        trialBtn: "Activar 3 DÃ­as de Prueba Gratuita",
         navBoard: "Pizarra",
         navDrills: "Ejercicios",
         navSquad: "Plantilla",
         profileSettings: "Perfil y Ajustes",
-        uploadPhoto: "📷 Subir Foto / Logo",
+        uploadPhoto: "ð· Subir Foto / Logo",
         languageLabel: "Idioma / Language",
         accountStatus: "Estado de la cuenta:",
-        clubLicenseActive: "🛡️ Licencia de club activa",
-        logoutAccount: "Cerrar sesión",
+        clubLicenseActive: "ð¡ï¸ Licencia de club activa",
+        logoutAccount: "Cerrar sesiÃ³n",
         clubInviteBanner: "Licencia de Club",
-        inviteCoach: "📲 Invitar Entrenador"
+        inviteCoach: "ð² Invitar Entrenador"
       },
       fr: {
         appTitle: "CoachPro",
-        subtitle: "Plateforme tactique professionnelle pour entraîneurs",
-        loginTitle: "Connexion à CoachPro",
-        registerTitle: "Créer un compte (3 jours gratuits)",
+        subtitle: "Plateforme tactique professionnelle pour entraÃ®neurs",
+        loginTitle: "Connexion Ã  CoachPro",
+        registerTitle: "CrÃ©er un compte (3 jours gratuits)",
         namePlaceholder: "ex. Coach Martin",
         emailLabel: "E-mail",
         passwordLabel: "Mot de passe",
         loginButton: "Se connecter",
-        registerButton: "Créer un compte (3 jours gratuits)",
+        registerButton: "CrÃ©er un compte (3 jours gratuits)",
         noAccount: "Pas de compte ? S'inscrire",
-        hasAccount: "Déjà un compte ? Se connecter",
+        hasAccount: "DÃ©jÃ  un compte ? Se connecter",
         proActive: "Plan PRO Actif",
         trialActive: "Essai Gratuit Actif",
-        freeLocked: "Compte Free (Bloqué)",
+        freeLocked: "Compte Free (BloquÃ©)",
         subButton: "Abonnement",
         exitButton: "Quitter",
-        quickFormations: "Systèmes rapides :",
-        toolMove: "Déplacer",
+        quickFormations: "SystÃ¨mes rapides :",
+        toolMove: "DÃ©placer",
         toolRed: "Rouge",
         toolBlue: "Bleu",
         toolBall: "Ballon",
-        toolCone: "Cône",
+        toolCone: "CÃ´ne",
         toolCinesina: "Coupelle",
-        toolLadder: "Échelle",
-        toolArrow: "Flèche",
+        toolLadder: "Ãchelle",
+        toolArrow: "FlÃ¨che",
         toolDelete: "Gomme",
         toolClear: "Tout Effacer",
-        lockedTitle: "Fonctionnalité Bloquée",
+        lockedTitle: "FonctionnalitÃ© BloquÃ©e",
         lockedDesc: "Abonnez-vous ou activez l'essai de 3 jours pour utiliser le tableau tactique.",
         newDrill: "Nouvel Exercice",
         drillTitlePlaceholder: "Titre de l'exercice...",
         categoryPossesso: "Conservation",
         categoryTactics: "Tactique",
-        categoryFitness: "Athlétique",
+        categoryFitness: "AthlÃ©tique",
         categoryFinishing: "Finition",
-        drillDurationPlaceholder: "Durée (ex. 15 min)",
+        drillDurationPlaceholder: "DurÃ©e (ex. 15 min)",
         drillDescPlaceholder: "Description et objectifs...",
         saveDrill: "+ Enregistrer l'Exercice",
-        noDrills: "Aucun exercice enregistré. Créez-en un !",
+        noDrills: "Aucun exercice enregistrÃ©. CrÃ©ez-en un !",
         shareWhatsapp: "Partager WhatsApp",
-        exportPdf: "📄 Exporter PDF Séance",
-        exportSinglePdf: "📄 PDF Exercice",
+        exportPdf: "ð Exporter PDF SÃ©ance",
+        exportDrillPdf: "ð Exporter PDF Exercice",
         playerPlaceholder: "Nom du joueur...",
         roleGoalkeeper: "Gardien",
-        roleDefender: "Défenseur",
+        roleDefender: "DÃ©fenseur",
         roleMidfielder: "Milieu",
         roleForward: "Attaquant",
         addPlayer: "Ajouter",
         noPlayers: "Aucun joueur dans l'effectif.",
-        statusPresent: "PRÉSENT",
+        statusPresent: "PRÃSENT",
         statusAbsent: "ABSENT",
-        statusInjured: "BLESSÉ",
+        statusInjured: "BLESSÃ",
         paywallHeader: "Choisissez votre plan CoachPro",
-        paywallDesc: "Débloquez toutes les fonctionnalités avancées pour vous ou votre club.",
-        indProBtn: "PRO Individuel - 29,99€/an",
+        paywallDesc: "DÃ©bloquez toutes les fonctionnalitÃ©s avancÃ©es pour vous ou votre club.",
+        indProBtn: "PRO Individuel - 29,99â¬/an",
         clubBtn: "Pack Club (10 Comptes)",
-        clubSubBtn: "15% de réduction - Obtenez le code",
+        clubSubBtn: "15% de rÃ©duction - Obtenez le code",
         haveClubCode: "Vous avez un code d'invitation club ?",
         activate: "Activer",
         trialBtn: "Activer l'essai de 3 jours",
         navBoard: "Tableau",
         navDrills: "Exercices",
         navSquad: "Effectif",
-        profileSettings: "Profil & Paramètres",
-        uploadPhoto: "📷 Charger Photo / Logo",
+        profileSettings: "Profil & ParamÃ¨tres",
+        uploadPhoto: "ð· Charger Photo / Logo",
         languageLabel: "Langue / Language",
         accountStatus: "Statut du compte :",
-        clubLicenseActive: "🛡️ Licence de club active",
-        logoutAccount: "Se déconnecter",
+        clubLicenseActive: "ð¡ï¸ Licence de club active",
+        logoutAccount: "Se dÃ©connecter",
         clubInviteBanner: "Licence Club",
-        inviteCoach: "📲 Inviter un entraîneur"
+        inviteCoach: "ð² Inviter un entraÃ®neur"
       },
       de: {
         appTitle: "CoachPro",
-        subtitle: "Professionelle Taktik-Plattform für Trainer",
+        subtitle: "Professionelle Taktik-Plattform fÃ¼r Trainer",
         loginTitle: "Bei CoachPro anmelden",
         registerTitle: "Konto erstellen (3 Tage kostenlos)",
-        namePlaceholder: "z.B. Trainer Müller",
+        namePlaceholder: "z.B. Trainer MÃ¼ller",
         emailLabel: "E-Mail",
         passwordLabel: "Passwort",
         loginButton: "Anmelden",
@@ -343,56 +364,56 @@
         toolRed: "Rot",
         toolBlue: "Blau",
         toolBall: "Ball",
-        toolCone: "Hütchen",
+        toolCone: "HÃ¼tchen",
         toolCinesina: "Markierung",
         toolLadder: "Leiter",
         toolArrow: "Pfeil",
         toolDelete: "Radierer",
-        toolClear: "Alles löschen",
+        toolClear: "Alles lÃ¶schen",
         lockedTitle: "Funktion gesperrt",
-        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tägige Testversion.",
-        newDrill: "Neue Übung",
-        drillTitlePlaceholder: "Titel der Übung...",
+        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tÃ¤gige Testversion.",
+        newDrill: "Neue Ãbung",
+        drillTitlePlaceholder: "Titel der Ãbung...",
         categoryPossesso: "Ballbesitz",
         categoryTactics: "Taktik",
         categoryFitness: "Athletik",
         categoryFinishing: "Abschluss",
         drillDurationPlaceholder: "Dauer (z.B. 15 Min.)",
         drillDescPlaceholder: "Beschreibung und Ziele...",
-        saveDrill: "+ Übung speichern",
-        noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
+        saveDrill: "+ Ãbung speichern",
+        noDrills: "Keine Ãbungen gespeichert. Erstellen Sie eine!",
         shareWhatsapp: "WhatsApp teilen",
-        exportPdf: "📄 Trainingseinheit als PDF",
-        exportSinglePdf: "📄 Übung PDF",
+        exportPdf: "ð Trainingseinheit als PDF",
+        exportDrillPdf: "ð Ãbung als PDF",
         playerPlaceholder: "Spielername...",
-        roleGoalkeeper: "Torhüter",
+        roleGoalkeeper: "TorhÃ¼ter",
         roleDefender: "Verteidiger",
         roleMidfielder: "Mittelfeldspieler",
-        roleForward: "Stürmer",
-        addPlayer: "Hinzufügen",
+        roleForward: "StÃ¼rmer",
+        addPlayer: "HinzufÃ¼gen",
         noPlayers: "Keine Spieler im Kader.",
         statusPresent: "ANWESEND",
         statusAbsent: "ABWESEND",
         statusInjured: "VERLETZT",
-        paywallHeader: "Wählen Sie Ihren CoachPro-Plan",
-        paywallDesc: "Schalten Sie alle erweiterten Funktionen für Sie oder Ihren Verein frei.",
-        indProBtn: "Einzel-PRO - 29,99 €/Jahr",
+        paywallHeader: "WÃ¤hlen Sie Ihren CoachPro-Plan",
+        paywallDesc: "Schalten Sie alle erweiterten Funktionen fÃ¼r Sie oder Ihren Verein frei.",
+        indProBtn: "Einzel-PRO - 29,99 â¬/Jahr",
         clubBtn: "Vereinspaket (10 Konten)",
         clubSubBtn: "15% Rabatt - Einladungscode erhalten",
         haveClubCode: "Haben Sie einen Vereins-Code?",
         activate: "Aktivieren",
         trialBtn: "3 Tage Testversion aktivieren",
         navBoard: "Tafel",
-        navDrills: "Übungen",
+        navDrills: "Ãbungen",
         navSquad: "Kader",
         profileSettings: "Profil & Einstellungen",
-        uploadPhoto: "📷 Foto / Logo hochladen",
+        uploadPhoto: "ð· Foto / Logo hochladen",
         languageLabel: "Sprache / Language",
         accountStatus: "Kontostatus:",
-        clubLicenseActive: "🛡️ Aktive Vereinslizenz",
+        clubLicenseActive: "ð¡ï¸ Aktive Vereinslizenz",
         logoutAccount: "Abmelden",
         clubInviteBanner: "Vereinslizenz",
-        inviteCoach: "📲 Trainer einladen"
+        inviteCoach: "ð² Trainer einladen"
       }
     };
 
@@ -496,20 +517,20 @@
             isPro: true,
             clubCode: code
           });
-          setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
+          setClubCodeMsg('â ' + (language === 'it' ? 'Codice SocietÃ  riscattato con successo!' : 'Club code redeemed successfully!'));
           setTimeout(() => {
             setShowPaywallModal(false);
             setClubCodeMsg('');
             setClubCodeInput('');
           }, 1500);
         } else {
-          setClubCodeMsg('❌ ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
+          setClubCodeMsg('â ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
         }
       };
 
       const handleShareClubInvite = () => {
         const codeToShare = user?.clubCode || "CP-CLUB-2026";
-        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
+        const text = `â½ *COACHPRO - LICENZA SOCIETÃ*\n\nð *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
         const encodedText = encodeURIComponent(text);
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
@@ -517,74 +538,6 @@
         } else {
           window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
         }
-      };
-
-      // NUOVA FUNZIONE: Esporta PDF per la singola esercitazione
-      const handleExportSinglePDF = (drill) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
-        }
-
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>CoachPro - ${drill.title}</title>
-            <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 24px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              .drill-card { padding: 20px; border: 2px solid #15803d; border-radius: 12px; background: #fafafa; margin-top: 20px; }
-              .drill-card h2 { margin: 0 0 10px 0; color: #15803d; font-size: 20px; }
-              .meta { font-size: 13px; color: #555; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
-              .desc { font-size: 14px; color: #333; line-height: 1.6; white-space: pre-line; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="title-box">
-                <h1>COACHPRO - ESERCITAZIONE SINGOLA</h1>
-                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
-              </div>
-              <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
-              </div>
-            </div>
-
-            <div class="drill-card">
-              <h2>${drill.title}</h2>
-              <div class="meta">
-                <strong>Categoria:</strong> ${drill.category} &nbsp;|&nbsp; ⏱️ <strong>Durata:</strong> ${drill.duration}
-              </div>
-              <div class="desc">
-                <strong>Descrizione ed Obiettivi:</strong><br/>
-                ${drill.description || 'Nessuna descrizione fornita.'}
-              </div>
-            </div>
-
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
-            
-            <script>
-              window.onload = function() {
-                window.print();
-              };
-            <\/script>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
       };
 
       const handleExportPDF = () => {
@@ -604,7 +557,7 @@
           : drills.map((d, index) => `
             <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa;">
               <h3 style="margin: 0 0 5px 0; color: #15803d;">#${index + 1} - ${d.title}</h3>
-              <p style="margin: 0 0 8px 0; font-size: 12px; color: #555;"><strong>Categoria:</strong> ${d.category} | ⏱️ <strong>Durata:</strong> ${d.duration}</p>
+              <p style="margin: 0 0 8px 0; font-size: 12px; color: #555;"><strong>Categoria:</strong> ${d.category} | â±ï¸ <strong>Durata:</strong> ${d.duration}</p>
               <p style="margin: 0; font-size: 13px; color: #333; white-space: pre-line;">${d.description || 'Nessuna descrizione.'}</p>
             </div>
           `).join('');
@@ -636,6 +589,7 @@
           <!DOCTYPE html>
           <html>
           <head>
+            <meta charset="UTF-8" />
             <title>CoachPro - Sessione di Allenamento</title>
             <style>
               body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
@@ -658,11 +612,75 @@
               </div>
             </div>
 
-            <h2>📋 Esercitazioni della Seduta</h2>
+            <h2>ð Esercitazioni della Seduta</h2>
             ${drillsHtml}
 
-            <h2>👥 Rosa & Convocati</h2>
+            <h2>ð¥ Rosa & Convocati</h2>
             ${squadHtml}
+
+            <div class="footer">
+              Generato con CoachPro App - Piattaforma Tattica Professionale
+            </div>
+            
+            <script>
+              window.onload = function() {
+                window.print();
+              };
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+      };
+
+      const handleExportSingleDrillPDF = (drill) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          alert("Abilita i popup per scaricare il PDF.");
+          return;
+        }
+
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8" />
+            <title>CoachPro - Esercizio: ${drill.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
+              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
+              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
+              .card { padding: 20px; border: 1px solid #ddd; border-radius: 12px; background: #fafafa; margin-top: 20px; }
+              .badge { display: inline-block; background: #15803d; color: white; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title-box">
+                <h1>COACHPRO - SCHEDA ESERCIZIO</h1>
+                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+              </div>
+              <div>
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
+              </div>
+            </div>
+
+            <div class="card">
+              <span class="badge">${drill.category}</span>
+              <h2 style="margin: 5px 0 10px 0; color: #1f2937; font-size: 20px;">${drill.title}</h2>
+              <p style="margin: 0 0 15px 0; font-size: 13px; color: #555;">â±ï¸ <strong>Durata:</strong> ${drill.duration}</p>
+              <hr style="border:0; border-top:1px solid #e5e7eb; margin: 15px 0;" />
+              <h4 style="margin: 0 0 8px 0; color: #374151; font-size: 14px;">Descrizione e Obiettivi:</h4>
+              <p style="margin: 0; font-size: 14px; color: #333; white-space: pre-line; line-height: 1.5;">${drill.description || 'Nessuna descrizione.'}</p>
+            </div>
 
             <div class="footer">
               Generato con CoachPro App - Piattaforma Tattica Professionale
@@ -788,7 +806,7 @@
           setShowPaywallModal(true);
           return;
         }
-        const text = `⚽ *COACHPRO - DRILL*\n\n📌 *Title:* ${drill.title}\n⏱️ *Duration:* ${drill.duration}\n📂 *Category:* ${drill.category}\n\n📝 *Description:*\n${drill.description}`;
+        const text = `â½ *COACHPRO - DRILL*\n\nð *Title:* ${drill.title}\nâ±ï¸ *Duration:* ${drill.duration}\nð *Category:* ${drill.category}\n\nð *Description:*\n${drill.description}`;
         const encodedText = encodeURIComponent(text);
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
@@ -844,62 +862,65 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE
+      // LOGIN / REGISTRAZIONE MODERNIZZATI
       if (!user) {
         return (
-          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
-              <div className="text-center space-y-2">
-                <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
-                <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
-                <p className="text-xs text-gray-400">{t('subtitle')}</p>
+          <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4 relative overflow-hidden">
+            <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"></div>
+            
+            <div className="w-full max-w-md glass-card rounded-3xl p-8 space-y-6 shadow-2xl relative z-10 border border-zinc-800/80">
+              <div className="text-center space-y-3">
+                <div className="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 text-zinc-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg glow-emerald">CP</div>
+                <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('appTitle')}</h1>
+                <p className="text-xs text-zinc-400 font-medium">{t('subtitle')}</p>
               </div>
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-4 pt-2">
                 {authMode === 'register' && (
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-zinc-300">{t('namePlaceholder')}</label>
                     <input
                       type="text"
                       placeholder={t('namePlaceholder')}
                       value={authData.name}
                       onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
                     />
                   </div>
                 )}
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-zinc-300">{t('emailLabel')}</label>
                   <input
                     type="email"
                     required
                     placeholder="allenatore@email.com"
                     value={authData.email}
                     onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-zinc-300">{t('passwordLabel')}</label>
                   <input
                     type="password"
                     required
-                    placeholder="••••••••"
+                    placeholder="â¢â¢â¢â¢â¢â¢â¢â¢"
                     value={authData.password}
                     onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold py-3.5 rounded-xl transition-all duration-200 text-sm shadow-lg glow-emerald active:scale-[0.99]"
                 >
                   {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
-              <div className="text-center border-t border-gray-800 pt-4">
+              <div className="text-center border-t border-zinc-800/80 pt-5">
                 <button
                   onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                  className="text-xs text-emerald-400 font-semibold hover:underline"
+                  className="text-xs text-emerald-400 font-semibold hover:text-emerald-300 transition"
                 >
                   {authMode === 'login' ? t('noAccount') : t('hasAccount')}
                 </button>
@@ -909,18 +930,18 @@
         );
       }
 
-      // APP PRINCIPALE
+      // APP PRINCIPALE MODERNIZZATA
       return (
-        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col pb-24 relative">
+          <header className="glass-card border-b border-zinc-800/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowProfileDrawer(true)}
-                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
+                className="w-10 h-10 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-2xl flex flex-col items-center justify-center space-y-1 transition focus:outline-none overflow-hidden"
                 title={t('profileSettings')}
               >
                 {profileImage ? (
-                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
+                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
                 ) : (
                   <>
                     <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
@@ -931,10 +952,10 @@
               </button>
 
               <div className="flex items-center space-x-2.5">
-                <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
+                <div className="bg-gradient-to-br from-emerald-500 to-teal-400 text-zinc-950 p-2 rounded-xl font-black text-sm shadow-md">CP</div>
                 <div>
-                  <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
-                  <span className="text-[10px] text-emerald-400 font-medium">
+                  <h1 className="font-bold text-sm leading-none text-white tracking-tight">{user.name}</h1>
+                  <span className="text-[10px] text-emerald-400 font-semibold">
                     {hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}
                   </span>
                 </div>
@@ -944,13 +965,13 @@
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowPaywallModal(true)}
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
+                className="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition active:scale-95"
               >
                 {t('subButton')}
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
+                className="bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 px-3 py-2 rounded-xl text-xs font-semibold border border-zinc-700/50 transition"
               >
                 {t('exitButton')}
               </button>
@@ -958,66 +979,66 @@
           </header>
 
           {showProfileDrawer && (
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
-              <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex justify-start">
+              <div className="w-80 max-w-[85vw] glass-modal border-r border-zinc-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+                  <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
                     <h3 className="font-black text-base text-white flex items-center space-x-2">
-                      <span>⚙️</span>
+                      <span>âï¸</span>
                       <span>{t('profileSettings')}</span>
                     </h3>
                     <button
                       onClick={() => setShowProfileDrawer(false)}
-                      className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800"
+                      className="text-zinc-400 hover:text-white font-bold text-sm p-1.5 rounded-xl bg-zinc-800"
                     >
-                      ✕
+                      â
                     </button>
                   </div>
 
-                  <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
+                  <div className="space-y-3 text-center bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
+                    <div className="w-20 h-20 bg-zinc-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
                       {profileImage ? (
                         <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-2xl">🛡️</span>
+                        <span className="text-2xl">ð¡ï¸</span>
                       )}
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-white">{user.name}</h4>
-                      <p className="text-[11px] text-gray-400">{user.email}</p>
+                      <p className="text-[11px] text-zinc-400">{user.email}</p>
                     </div>
-                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
+                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-4 py-2 rounded-xl text-xs cursor-pointer transition shadow">
                       {t('uploadPhoto')}
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                     </label>
                   </div>
 
-                  <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
-                      <span>🌍</span>
+                  <div className="space-y-2 bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
+                    <label className="text-xs font-bold text-zinc-300 flex items-center space-x-1.5">
+                      <span>ð</span>
                       <span>{t('languageLabel')}</span>
                     </label>
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                     >
-                      <option value="it">🇮🇹 Italiano</option>
-                      <option value="en">🇬🇧 English</option>
-                      <option value="es">🇪🇸 Español</option>
-                      <option value="fr">🇫🇷 Français</option>
-                      <option value="de">🇩🇪 Deutsch</option>
+                      <option value="it">ð®ð¹ Italiano</option>
+                      <option value="en">ð¬ð§ English</option>
+                      <option value="es">ðªð¸ EspaÃ±ol</option>
+                      <option value="fr">ð«ð· FranÃ§ais</option>
+                      <option value="de">ð©ðª Deutsch</option>
                     </select>
                   </div>
 
-                  <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                  <div className="space-y-1 text-xs text-zinc-400 bg-zinc-900/60 p-4 rounded-2xl border border-zinc-800">
                     <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
-                    <p>• {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
+                    <p>â¢ {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
                     {user.clubCode && <p className="text-teal-300 mt-1">{t('clubLicenseActive')}</p>}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-gray-800">
+                <div className="pt-4 border-t border-zinc-800">
                   <button
                     onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
                     className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
@@ -1031,14 +1052,14 @@
 
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
             {user.clubCode && (
-              <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
+              <div className="bg-teal-950/40 border border-teal-800/60 rounded-2xl p-4 flex items-center justify-between backdrop-blur-md">
                 <div>
-                  <h4 className="text-xs font-bold text-teal-300">🛡️ {t('clubInviteBanner')}: {user.clubCode}</h4>
+                  <h4 className="text-xs font-bold text-teal-300">ð¡ï¸ {t('clubInviteBanner')}: {user.clubCode}</h4>
                   <p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p>
                 </div>
                 <button
                   onClick={handleShareClubInvite}
-                  className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
+                  className="bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow transition"
                 >
                   {t('inviteCoach')}
                 </button>
@@ -1047,36 +1068,36 @@
 
             {activeTab === 'board' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
-                  <span className="text-gray-400 font-medium text-[11px]">{t('quickFormations')}</span>
+                <div className="flex items-center justify-between glass-card p-3 rounded-2xl border border-zinc-800/80 text-xs">
+                  <span className="text-zinc-400 font-semibold text-[11px]">{t('quickFormations')}</span>
                   <div className="flex space-x-2">
-                    <button onClick={() => presetFormation('433')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-4-2</button>
+                    <button onClick={() => presetFormation('433')} className="bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl text-emerald-400 font-bold border border-zinc-700/50 transition">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-xl text-emerald-400 font-bold border border-zinc-700/50 transition">4-4-2</button>
                   </div>
                 </div>
 
-                <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
-                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 {t('toolMove')}</button>
-                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
-                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
-                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ {t('toolBall')}</button>
-                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 {t('toolCone')}</button>
-                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>🟡 {t('toolCinesina')}</button>
-                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
-                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ {t('toolArrow')}</button>
-                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ {t('toolDelete')}</button>
-                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
+                <div className="glass-card p-3 rounded-2xl border border-zinc-800/80 grid grid-cols-4 gap-2 text-xs">
+                  <button onClick={() => setTool('move')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð {t('toolMove')}</button>
+                  <button onClick={() => setTool('player-red')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð´ {t('toolRed')}</button>
+                  <button onClick={() => setTool('player-blue')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ðµ {t('toolBlue')}</button>
+                  <button onClick={() => setTool('ball')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>â½ {t('toolBall')}</button>
+                  <button onClick={() => setTool('cone')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð¶ {t('toolCone')}</button>
+                  <button onClick={() => setTool('cinesina')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ð¡ {t('toolCinesina')}</button>
+                  <button onClick={() => setTool('ladder')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>ðª {t('toolLadder')}</button>
+                  <button onClick={() => setTool('arrow')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>âï¸ {t('toolArrow')}</button>
+                  <button onClick={() => setTool('delete')} className={`p-2.5 rounded-xl font-semibold text-center transition ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-zinc-800/70 text-zinc-300'}`}>â {t('toolDelete')}</button>
+                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2.5 rounded-xl font-semibold text-center bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-900/50 col-span-3 transition">ðï¸ {t('toolClear')}</button>
                 </div>
 
-                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-zinc-800/80">
                   {!hasAccess && (
                     <div 
                       onClick={() => setShowPaywallModal(true)}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
+                      className="absolute inset-0 bg-black/70 backdrop-blur-md z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
                     >
-                      <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
-                      <h3 className="text-lg font-bold text-white">{t('lockedTitle')}</h3>
-                      <p className="text-xs text-gray-300 max-w-xs mt-1">{t('lockedDesc')}</p>
+                      <div className="bg-emerald-500 text-zinc-950 p-3.5 rounded-2xl text-2xl mb-3 font-bold shadow-lg glow-emerald">ð</div>
+                      <h3 className="text-xl font-extrabold text-white">{t('lockedTitle')}</h3>
+                      <p className="text-xs text-zinc-300 max-w-xs mt-1.5">{t('lockedDesc')}</p>
                     </div>
                   )}
                   <svg
@@ -1085,11 +1106,11 @@
                     onClick={handleBoardClick}
                     onTouchMove={handleTouchMove}
                   >
-                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
+                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.8" />
 
                     {arrows.map(arr => (
                       <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
@@ -1125,13 +1146,13 @@
 
             {activeTab === 'drills' && (
               <div className="space-y-4">
-                <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
+                <form onSubmit={addDrill} className="glass-card border border-zinc-800/80 p-5 rounded-3xl space-y-3.5 shadow-xl">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
                     <button
                       type="button"
                       onClick={handleExportPDF}
-                      className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow"
+                      className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow transition"
                     >
                       {t('exportPdf')}
                     </button>
@@ -1141,13 +1162,13 @@
                     placeholder={t('drillTitlePlaceholder')}
                     value={newDrillTitle}
                     onChange={(ev) => setNewDrillTitle(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
                   />
                   <div className="grid grid-cols-2 gap-2">
                     <select
                       value={newDrillCat}
                       onChange={(ev) => setNewDrillCat(ev.target.value)}
-                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                      className="bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
                     >
                       <option value="Possesso Palla">{t('categoryPossesso')}</option>
                       <option value="Tattica">{t('categoryTactics')}</option>
@@ -1159,42 +1180,42 @@
                       placeholder={t('drillDurationPlaceholder')}
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                      className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
                     />
                   </div>
                   <textarea
                     placeholder={t('drillDescPlaceholder')}
                     value={newDrillDesc}
                     onChange={(ev) => setNewDrillDesc(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
+                    className="w-full bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3.5 py-2.5 text-xs text-white h-24 focus:outline-none focus:border-emerald-500"
                   ></textarea>
-                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">{t('saveDrill')}</button>
+                  <button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-extrabold py-3 rounded-xl text-xs shadow-md transition">{t('saveDrill')}</button>
                 </form>
 
                 {drills.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div>
+                  <div className="text-center py-10 text-zinc-500 text-xs">{t('noDrills')}</div>
                 ) : (
                   drills.map(drill => (
-                    <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
+                    <div key={drill.id} className="glass-card border border-zinc-800/80 p-5 rounded-3xl space-y-3 shadow-lg">
                       <div className="flex justify-between items-start">
                         <h4 className="font-bold text-sm text-white">{drill.title}</h4>
-                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2.5 py-0.5 rounded-full">{drill.category}</span>
                       </div>
-                      <p className="text-xs text-gray-400">{drill.description}</p>
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
-                        <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
+                      <p className="text-xs text-zinc-400 leading-relaxed">{drill.description}</p>
+                      <div className="flex items-center justify-between pt-3 border-t border-zinc-800/80 text-xs">
+                        <span className="text-zinc-500 font-medium">â±ï¸ {drill.duration}</span>
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => handleExportSinglePDF(drill)}
-                            className="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
+                            onClick={() => handleExportSingleDrillPDF(drill)}
+                            className="bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 text-xs px-3 py-1.5 rounded-xl font-semibold flex items-center space-x-1 border border-teal-500/30 transition"
                           >
-                            {t('exportSinglePdf')}
+                            {t('exportDrillPdf')}
                           </button>
                           <button
                             onClick={() => handleShareWhatsApp(drill)}
-                            className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
+                            className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs px-3 py-1.5 rounded-xl font-semibold flex items-center space-x-1 border border-emerald-500/30 transition"
                           >
-                            📲 {t('shareWhatsapp')}
+                            ð² {t('shareWhatsapp')}
                           </button>
                         </div>
                       </div>
@@ -1206,40 +1227,40 @@
 
             {activeTab === 'squad' && (
               <div className="space-y-4">
-                <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
+                <form onSubmit={addPlayer} className="glass-card border border-zinc-800/80 p-4 rounded-2xl flex space-x-2 shadow-lg">
                   <input
                     type="text"
                     placeholder={t('playerPlaceholder')}
                     value={newPlayerName}
                     onChange={(ev) => setNewPlayerName(ev.target.value)}
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    className="flex-1 bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                   />
                   <select
                     value={newPlayerRole}
                     onChange={(ev) => setNewPlayerRole(ev.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    className="bg-zinc-900/90 border border-zinc-700/70 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="Portiere">{t('roleGoalkeeper')}</option>
                     <option value="Difensore">{t('roleDefender')}</option>
                     <option value="Centrocampista">{t('roleMidfielder')}</option>
                     <option value="Attaccante">{t('roleForward')}</option>
                   </select>
-                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
+                  <button type="submit" className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-4 py-2 rounded-xl text-xs transition">{t('addPlayer')}</button>
                 </form>
 
                 {players.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">{t('noPlayers')}</div>
+                  <div className="text-center py-10 text-zinc-500 text-xs">{t('noPlayers')}</div>
                 ) : (
-                  <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800">
+                  <div className="glass-card border border-zinc-800/80 rounded-2xl divide-y divide-zinc-800/80 shadow-lg">
                     {players.map(player => (
-                      <div key={player.id} className="p-3 flex items-center justify-between">
+                      <div key={player.id} className="p-3.5 flex items-center justify-between">
                         <div>
                           <p className="font-semibold text-xs text-white">{player.name}</p>
-                          <p className="text-[10px] text-gray-400">{player.role}</p>
+                          <p className="text-[10px] text-zinc-400">{player.role}</p>
                         </div>
                         <button
                           onClick={() => togglePlayerStatus(player.id)}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                          className={`px-3 py-1 rounded-xl text-xs font-bold transition ${
                             player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
                             player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' :
                             'bg-amber-500/20 text-amber-400 border border-amber-500/40'
@@ -1257,46 +1278,46 @@
 
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
+              <div className="glass-modal border border-zinc-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
                 <button
                   onClick={() => setShowPaywallModal(false)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
+                  className="absolute top-4 right-4 text-zinc-400 hover:text-white font-bold text-sm"
                 >
-                  ✕
+                  â
                 </button>
-                <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
+                <div className="w-14 h-14 bg-gradient-to-tr from-emerald-500 to-teal-400 text-zinc-950 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold glow-emerald">â­</div>
                 <h3 className="text-xl font-black text-white">{t('paywallHeader')}</h3>
-                <p className="text-xs text-gray-300">{t('paywallDesc')}</p>
+                <p className="text-xs text-zinc-300">{t('paywallDesc')}</p>
                 
                 <div className="space-y-2.5 pt-2">
                   <button
                     onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
+                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-xl text-xs shadow-lg transition"
                   >
                     {t('indProBtn')}
                   </button>
 
                   <button
                     onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
+                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3.5 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5 transition"
                   >
-                    <span>🛡️ {t('clubBtn')}</span>
+                    <span>ð¡ï¸ {t('clubBtn')}</span>
                     <span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
                   </button>
 
-                  <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
-                    <label className="text-[11px] font-bold text-gray-300 block">{t('haveClubCode')}</label>
+                  <div className="bg-zinc-950/80 border border-zinc-800 rounded-2xl p-3.5 space-y-2 text-left mt-3">
+                    <label className="text-[11px] font-bold text-zinc-300 block">{t('haveClubCode')}</label>
                     <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
                       <input
                         type="text"
                         placeholder="es. CLUB2026"
                         value={clubCodeInput}
                         onChange={(e) => setClubCodeInput(e.target.value)}
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono"
+                        className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white uppercase font-mono"
                       />
                       <button
                         type="submit"
-                        className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
+                        className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-3 py-2 rounded-xl text-xs transition"
                       >
                         {t('activate')}
                       </button>
@@ -1307,7 +1328,7 @@
                   {!user.trialEndsAt && (
                     <button
                       onClick={activateTrial}
-                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
+                      className="w-full bg-zinc-800/80 hover:bg-zinc-700 text-emerald-400 font-semibold py-2.5 rounded-xl text-xs border border-emerald-500/30 transition"
                     >
                       {t('trialBtn')}
                     </button>
@@ -1317,26 +1338,26 @@
             </div>
           )}
 
-          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
+          <nav className="fixed bottom-0 left-0 right-0 glass-card border-t border-zinc-800/80 px-6 py-2.5 flex justify-around items-center z-40">
             <button
               onClick={() => setActiveTab('board')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
+              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'board' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              <span className="text-xl">⚽</span>
+              <span className="text-xl">â½</span>
               <span className="text-[10px] font-bold">{t('navBoard')}</span>
             </button>
             <button
               onClick={() => setActiveTab('drills')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
+              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'drills' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              <span className="text-xl">📋</span>
+              <span className="text-xl">ð</span>
               <span className="text-[10px] font-bold">{t('navDrills')}</span>
             </button>
             <button
               onClick={() => setActiveTab('squad')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
+              className={`flex flex-col items-center space-y-1 transition ${activeTab === 'squad' ? 'text-emerald-400 scale-105' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              <span className="text-xl">👥</span>
+              <span className="text-xl">ð¥</span>
               <span className="text-[10px] font-bold">{t('navSquad')}</span>
             </button>
           </nav>
