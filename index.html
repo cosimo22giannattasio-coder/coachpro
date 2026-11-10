@@ -392,22 +392,18 @@
     };
 
     function CoachProApp() {
-      // Auth state
       const [user, setUser] = useState(null);
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
-      // Profile & Settings state
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
 
-      // Helper funzione di traduzione attiva
       const t = (key) => {
         return translations[language][key] || translations['it'][key] || key;
       };
 
-      // App state
       const [activeTab, setActiveTab] = useState('board');
       const [tool, setTool] = useState('move');
       const [draggedId, setDraggedId] = useState(null);
@@ -417,11 +413,9 @@
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
 
-      // Club License state
       const [clubCodeInput, setClubCodeInput] = useState('');
       const [clubCodeMsg, setClubCodeMsg] = useState('');
 
-      // Data state
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
       const [newPlayerName, setNewPlayerName] = useState('');
@@ -434,7 +428,6 @@
 
       const svgRef = useRef(null);
 
-      // Gestione caricamento immagine profilo/società
       const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -446,7 +439,6 @@
         }
       };
 
-      // Verifica dello stato dell'abbonamento / Prova gratuita
       const checkAccess = () => {
         if (!user) return false;
         if (user.isPro) return true;
@@ -456,12 +448,10 @@
 
       const hasAccess = checkAccess();
 
-      // Handlers di Autenticazione
       const handleAuth = (evt) => {
         evt.preventDefault();
         if (!authData.email) return;
         const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
-        
         const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
 
         setUser({
@@ -485,11 +475,9 @@
         setShowPaywallModal(false);
       };
 
-      // Riscatto Codice Società
       const handleRedeemClubCode = (e) => {
         e.preventDefault();
         if (!clubCodeInput.trim()) return;
-        
         const code = clubCodeInput.trim().toUpperCase();
         if (code.length >= 4) {
           setUser({
@@ -508,7 +496,6 @@
         }
       };
 
-      // Invia invito licenza via WhatsApp agli allenatori della società
       const handleShareClubInvite = () => {
         const codeToShare = user?.clubCode || "CP-CLUB-2026";
         const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
@@ -521,7 +508,6 @@
         }
       };
 
-      // NUOVA FUNZIONE: Esportazione PDF della seduta di allenamento
       const handleExportPDF = () => {
         if (!hasAccess) {
           setShowPaywallModal(true);
@@ -779,7 +765,6 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE
       if (!user) {
         return (
           <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -844,10 +829,8 @@
         );
       }
 
-      // APP PRINCIPALE
       return (
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          {/* HEADER CON SEZIONE PROFILO (3 Linee + Foto) */}
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
               <button
@@ -893,7 +876,6 @@
             </div>
           </header>
 
-          {/* DRAWER / DASHBOARD PROFILO & LINGUA */}
           {showProfileDrawer && (
             <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
               <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
@@ -966,7 +948,6 @@
             </div>
           )}
 
-          {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
             {user.clubCode && (
               <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
@@ -983,7 +964,6 @@
               </div>
             )}
 
-            {/* TAB 1: LAVAGNA TATTICA */}
             {activeTab === 'board' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
@@ -1062,7 +1042,6 @@
               </div>
             )}
 
-            {/* TAB 2: ARCHIVIO ESERCIZI CON PULSANTE ESPORTA PDF */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
@@ -1136,7 +1115,6 @@
               </div>
             )}
 
-            {/* TAB 3: ROSA E PRESENZE */}
             {activeTab === 'squad' && (
               <div className="space-y-4">
                 <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
@@ -1188,7 +1166,6 @@
             )}
           </main>
 
-          {/* MODALE PAYWALL & RISCATTO CODICE CLUB */}
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
               <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -1251,7 +1228,6 @@
             </div>
           )}
 
-          {/* BOTTOM BAR */}
           <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
             <button
               onClick={() => setActiveTab('board')}
