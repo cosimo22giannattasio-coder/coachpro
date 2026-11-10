@@ -27,14 +27,13 @@
     const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/tua_pagina_stripe_club";
     const TRIAL_DAYS = 3;
 
-    // Dizionario delle traduzioni completo e verificato
+    // Dizionario delle traduzioni per l'internazionalizzazione
     const translations = {
       it: {
         appTitle: "CoachPro",
         subtitle: "Piattaforma tattica professionale per allenatori",
         loginTitle: "Accedi a CoachPro",
         registerTitle: "Crea Account (3 giorni gratis)",
-        nameLabel: "Nome & Cognome / Titolo",
         namePlaceholder: "es. Mister Rossi",
         emailLabel: "Email",
         passwordLabel: "Password",
@@ -106,7 +105,6 @@
         subtitle: "Professional tactical platform for coaches",
         loginTitle: "Log in to CoachPro",
         registerTitle: "Create Account (3 days free)",
-        nameLabel: "Name & Surname / Title",
         namePlaceholder: "e.g. Coach Smith",
         emailLabel: "Email",
         passwordLabel: "Password",
@@ -178,7 +176,6 @@
         subtitle: "Plataforma táctica profesional para entrenadores",
         loginTitle: "Iniciar sesión en CoachPro",
         registerTitle: "Crear cuenta (3 días gratis)",
-        nameLabel: "Nombre y Apellidos / Título",
         namePlaceholder: "ej. Míster Pérez",
         emailLabel: "Correo electrónico",
         passwordLabel: "Contraseña",
@@ -250,7 +247,6 @@
         subtitle: "Plateforme tactique professionnelle pour entraîneurs",
         loginTitle: "Connexion à CoachPro",
         registerTitle: "Créer un compte (3 jours gratuits)",
-        nameLabel: "Nom & Prénom / Titre",
         namePlaceholder: "ex. Coach Martin",
         emailLabel: "E-mail",
         passwordLabel: "Mot de passe",
@@ -322,7 +318,6 @@
         subtitle: "Professionelle Taktik-Plattform für Trainer",
         loginTitle: "Bei CoachPro anmelden",
         registerTitle: "Konto erstellen (3 Tage kostenlos)",
-        nameLabel: "Name & Vorname / Titel",
         namePlaceholder: "z.B. Trainer Müller",
         emailLabel: "E-Mail",
         passwordLabel: "Passwort",
@@ -397,14 +392,14 @@
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
-      // Profile & Language state
+      // Profile & Settings state (Nuovo con supporto linguistico reattivo)
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
 
-      // Funzione di traduzione reattiva globale
+      // Helper funzione di traduzione attiva
       const t = (key) => {
-        return translations[language]?.[key] || translations['it'][key] || key;
+        return translations[language][key] || translations['it'][key] || key;
       };
 
       // App state
@@ -434,6 +429,7 @@
 
       const svgRef = useRef(null);
 
+      // Gestione caricamento immagine profilo/società
       const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -445,6 +441,7 @@
         }
       };
 
+      // Verifica dello stato dell'abbonamento / Prova gratuita
       const checkAccess = () => {
         if (!user) return false;
         if (user.isPro) return true;
@@ -454,10 +451,12 @@
 
       const hasAccess = checkAccess();
 
+      // Handlers di Autenticazione
       const handleAuth = (evt) => {
         evt.preventDefault();
         if (!authData.email) return;
         const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
+        
         const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
 
         setUser({
@@ -481,12 +480,18 @@
         setShowPaywallModal(false);
       };
 
+      // Riscatto Codice Società
       const handleRedeemClubCode = (e) => {
         e.preventDefault();
         if (!clubCodeInput.trim()) return;
+        
         const code = clubCodeInput.trim().toUpperCase();
         if (code.length >= 4) {
-          setUser({ ...user, isPro: true, clubCode: code });
+          setUser({
+            ...user,
+            isPro: true,
+            clubCode: code
+          });
           setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
           setTimeout(() => {
             setShowPaywallModal(false);
@@ -498,9 +503,10 @@
         }
       };
 
+      // Invia invito licenza via WhatsApp agli allenatori della società
       const handleShareClubInvite = () => {
         const codeToShare = user?.clubCode || "CP-CLUB-2026";
-        const text = `⚽ *COACHPRO - CLUB LICENSE*\n\n🔑 *Code:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
+        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
         const encodedText = encodeURIComponent(text);
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
@@ -675,25 +681,10 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE (Completamente Tradotto)
+      // LOGIN / REGISTRAZIONE
       if (!user) {
         return (
-          <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4 relative">
-            {/* Selettore lingua anche nella schermata di login */}
-            <div className="absolute top-4 right-4">
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="bg-gray-900 border border-gray-700 text-white text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-500"
-              >
-                <option value="it">🇮🇹 IT</option>
-                <option value="en">🇬🇧 EN</option>
-                <option value="es">🇪🇸 ES</option>
-                <option value="fr">🇫🇷 FR</option>
-                <option value="de">🇩🇪 DE</option>
-              </select>
-            </div>
-
+          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
               <div className="text-center space-y-2">
                 <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
@@ -703,7 +694,7 @@
               <form onSubmit={handleAuth} className="space-y-4">
                 {authMode === 'register' && (
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300">{t('nameLabel')}</label>
+                    <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
                     <input
                       type="text"
                       placeholder={t('namePlaceholder')}
@@ -758,9 +749,10 @@
       // APP PRINCIPALE
       return (
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          {/* HEADER */}
+          {/* HEADER CON SEZIONE PROFILO (3 Linee + Foto) */}
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
+              {/* Tasto 3 linee (Menu Profilo) */}
               <button
                 onClick={() => setShowProfileDrawer(true)}
                 className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
@@ -841,7 +833,7 @@
                     </label>
                   </div>
 
-                  {/* Cambio Lingua */}
+                  {/* Cambio Lingua Reattivo */}
                   <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
                       <span>🌍</span>
@@ -882,6 +874,7 @@
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
+            {/* Banner Licenza Club */}
             {user.clubCode && (
               <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
                 <div>
@@ -897,7 +890,7 @@
               </div>
             )}
 
-            {/* TAB 1: LAVAGNA */}
+            {/* TAB 1: LAVAGNA TATTICA */}
             {activeTab === 'board' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
@@ -908,6 +901,7 @@
                   </div>
                 </div>
 
+                {/* Toolbar */}
                 <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
                   <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 {t('toolMove')}</button>
                   <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
@@ -921,6 +915,7 @@
                   <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
                 </div>
 
+                {/* Campo SVG */}
                 <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
                     <div 
@@ -976,7 +971,7 @@
               </div>
             )}
 
-            {/* TAB 2: ESERCIZI */}
+            {/* TAB 2: ARCHIVIO ESERCIZI */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
@@ -1041,7 +1036,7 @@
               </div>
             )}
 
-            {/* TAB 3: ROSA */}
+            {/* TAB 3: ROSA E PRESENZE */}
             {activeTab === 'squad' && (
               <div className="space-y-4">
                 <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
@@ -1093,7 +1088,7 @@
             )}
           </main>
 
-          {/* MODALE PAYWALL */}
+          {/* MODALE PAYWALL & RISCATTO CODICE CLUB */}
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
               <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -1184,7 +1179,7 @@
       );
     }
 
-    const root = ReactDOM.createRoot(default = document.getElementById('root')); // Correggiamo con la sintassi corretta standard
+    const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<CoachProApp />);
   </script>
 </body>
