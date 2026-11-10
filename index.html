@@ -33,6 +33,11 @@
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
+      // Profile & Settings state (Nuovo)
+      const [showProfileDrawer, setShowProfileDrawer] = useState(false);
+      const [profileImage, setProfileImage] = useState(null);
+      const [language, setLanguage] = useState('it');
+
       // App state
       const [activeTab, setActiveTab] = useState('board');
       const [tool, setTool] = useState('move');
@@ -59,6 +64,18 @@
       const [newDrillDesc, setNewDrillDesc] = useState('');
 
       const svgRef = useRef(null);
+
+      // Gestione caricamento immagine profilo/società
+      const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setProfileImage(reader.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       // Verifica dello stato dell'abbonamento / Prova gratuita
       const checkAccess = () => {
@@ -90,6 +107,7 @@
       const handleLogout = () => {
         setUser(null);
         setAuthData({ name: '', email: '', password: '' });
+        setProfileImage(null);
       };
 
       const activateTrial = () => {
@@ -368,17 +386,37 @@
       // APP PRINCIPALE
       return (
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          {/* HEADER */}
+          {/* HEADER CON SEZIONE PROFILO (3 Linee + Foto) */}
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
-              <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
-              <div>
-                <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
-                <span className="text-[10px] text-emerald-400 font-medium">
-                  {hasAccess ? (user.clubCode ? `Licenza Club (${user.clubCode})` : (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva')) : 'Account Free (Bloccato)'}
-                </span>
+              {/* Tasto 3 linee (Menu Profilo) */}
+              <button
+                onClick={() => setShowProfileDrawer(true)}
+                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
+                title="Apri Profilo e Impostazioni"
+              >
+                {profileImage ? (
+                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <>
+                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
+                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
+                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center space-x-2.5">
+                <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
+                <div>
+                  <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
+                  <span className="text-[10px] text-emerald-400 font-medium">
+                    {hasAccess ? (user.clubCode ? `Licenza Club (${user.clubCode})` : (user.isPro ? 'Piano PRO Attivo' : 'Prova Gratuita Attiva')) : 'Account Free (Bloccato)'}
+                  </span>
+                </div>
               </div>
             </div>
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowPaywallModal(true)}
@@ -394,6 +432,84 @@
               </button>
             </div>
           </header>
+
+          {/* DRAWER / DASHBOARD PROFILO & IMPOSTAZIONI (3 Linee) */}
+          {showProfileDrawer && (
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
+              <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-200">
+                <div className="space-y-6">
+                  {/* Header Drawer */}
+                  <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+                    <h3 className="font-black text-base text-white flex items-center space-x-2">
+                      <span>⚙️</span>
+                      <span>Profilo & Impostazioni</span>
+                    </h3>
+                    <button
+                      onClick={() => setShowProfileDrawer(false)}
+                      className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* Foto Profilo / Logo Società */}
+                  <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                    <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
+                      {profileImage ? (
+                        <img src={profileImage} alt="Foto Profilo" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-2xl">🛡️</span>
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-white">{user.name}</h4>
+                      <p className="text-[11px] text-gray-400">{user.email}</p>
+                    </div>
+                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
+                      📷 Carica Foto / Logo
+                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    </label>
+                  </div>
+
+                  {/* Cambio Lingua (Internazionalizzazione) */}
+                  <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
+                      <span>🌍</span>
+                      <span>Lingua / Language</span>
+                    </label>
+                    <select
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    >
+                      <option value="it">🇮🇹 Italiano</option>
+                      <option value="en">🇬🇧 English</option>
+                      <option value="es">🇪🇸 Español</option>
+                      <option value="fr">🇫🇷 Français</option>
+                      <option value="de">🇩🇪 Deutsch</option>
+                    </select>
+                  </div>
+
+                  {/* Info Account / Licenza Club */}
+                  <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                    <p className="font-semibold text-white mb-1">Stato Account:</p>
+                    <p>• Piano: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : 'PRO Attivo') : 'Free'}</span></p>
+                    {user.clubCode && <p className="text-teal-300 mt-1">🛡️ Licenza di squadra attiva</p>}
+                  </div>
+                </div>
+
+                {/* Footer Drawer */}
+                <div className="pt-4 border-t border-gray-800">
+                  <button
+                    onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
+                    className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
+                  >
+                    Esci dall'Account
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* MAIN CONTENT */}
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
@@ -526,7 +642,7 @@
                       placeholder="Durata (es. 15 min)"
                       value={newDrillDur}
                       onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <textarea
