@@ -568,6 +568,7 @@
           <!DOCTYPE html>
           <html>
           <head>
+            <meta charset="UTF-8" />
             <title>CoachPro - Sessione di Allenamento</title>
             <style>
               body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
@@ -627,6 +628,7 @@
           <!DOCTYPE html>
           <html>
           <head>
+            <meta charset="UTF-8" />
             <title>CoachPro - Esercizio: ${drill.title}</title>
             <style>
               body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
@@ -1237,7 +1239,7 @@
                           className={`px-3 py-1 rounded-lg text-xs font-bold ${
                             player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
                             player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' :
-                            'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                            'bg-amber-500/20 text-amber-400 border border-emerald-500/40'
                           }`}
                         >
                           {player.status === 'presente' ? t('statusPresent') : player.status === 'assente' ? t('statusAbsent') : t('statusInjured')}
