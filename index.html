@@ -71,6 +71,7 @@
         noDrills: "Nessun esercizio salvato. Creane uno sopra!",
         shareWhatsapp: "Condividi WhatsApp",
         exportPdf: "📄 Esporta PDF Sessione",
+        exportSinglePdf: "📄 PDF Esercizio",
         playerPlaceholder: "Nome giocatore...",
         roleGoalkeeper: "Portiere",
         roleDefender: "Difensore",
@@ -143,6 +144,7 @@
         noDrills: "No drills saved. Create one above!",
         shareWhatsapp: "Share WhatsApp",
         exportPdf: "📄 Export Session PDF",
+        exportSinglePdf: "📄 Drill PDF",
         playerPlaceholder: "Player name...",
         roleGoalkeeper: "Goalkeeper",
         roleDefender: "Defender",
@@ -215,6 +217,7 @@
         noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
         shareWhatsapp: "Compartir WhatsApp",
         exportPdf: "📄 Exportar PDF Sesión",
+        exportSinglePdf: "📄 PDF Ejercicio",
         playerPlaceholder: "Nombre del jugador...",
         roleGoalkeeper: "Portero",
         roleDefender: "Defensa",
@@ -287,6 +290,7 @@
         noDrills: "Aucun exercice enregistré. Créez-en un !",
         shareWhatsapp: "Partager WhatsApp",
         exportPdf: "📄 Exporter PDF Séance",
+        exportSinglePdf: "📄 PDF Exercice",
         playerPlaceholder: "Nom du joueur...",
         roleGoalkeeper: "Gardien",
         roleDefender: "Défenseur",
@@ -359,6 +363,7 @@
         noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
         shareWhatsapp: "WhatsApp teilen",
         exportPdf: "📄 Trainingseinheit als PDF",
+        exportSinglePdf: "📄 Übung PDF",
         playerPlaceholder: "Spielername...",
         roleGoalkeeper: "Torhüter",
         roleDefender: "Verteidiger",
@@ -512,6 +517,74 @@
         } else {
           window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
         }
+      };
+
+      // NUOVA FUNZIONE: Esporta PDF per la singola esercitazione
+      const handleExportSinglePDF = (drill) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          alert("Abilita i popup per scaricare il PDF.");
+          return;
+        }
+
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>CoachPro - ${drill.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
+              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 24px; }
+              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
+              .drill-card { padding: 20px; border: 2px solid #15803d; border-radius: 12px; background: #fafafa; margin-top: 20px; }
+              .drill-card h2 { margin: 0 0 10px 0; color: #15803d; font-size: 20px; }
+              .meta { font-size: 13px; color: #555; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
+              .desc { font-size: 14px; color: #333; line-height: 1.6; white-space: pre-line; }
+              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title-box">
+                <h1>COACHPRO - ESERCITAZIONE SINGOLA</h1>
+                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+              </div>
+              <div>
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
+              </div>
+            </div>
+
+            <div class="drill-card">
+              <h2>${drill.title}</h2>
+              <div class="meta">
+                <strong>Categoria:</strong> ${drill.category} &nbsp;|&nbsp; ⏱️ <strong>Durata:</strong> ${drill.duration}
+              </div>
+              <div class="desc">
+                <strong>Descrizione ed Obiettivi:</strong><br/>
+                ${drill.description || 'Nessuna descrizione fornita.'}
+              </div>
+            </div>
+
+            <div class="footer">
+              Generato con CoachPro App - Piattaforma Tattica Professionale
+            </div>
+            
+            <script>
+              window.onload = function() {
+                window.print();
+              };
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
       };
 
       const handleExportPDF = () => {
@@ -1110,12 +1183,20 @@
                       <p className="text-xs text-gray-400">{drill.description}</p>
                       <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
                         <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
-                        <button
-                          onClick={() => handleShareWhatsApp(drill)}
-                          className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
-                        >
-                          📲 {t('shareWhatsapp')}
-                        </button>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleExportSinglePDF(drill)}
+                            className="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
+                          >
+                            {t('exportSinglePdf')}
+                          </button>
+                          <button
+                            onClick={() => handleShareWhatsApp(drill)}
+                            className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
+                          >
+                            📲 {t('shareWhatsapp')}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
