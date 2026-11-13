@@ -421,6 +421,8 @@
 
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
+      const [editingPlayerId, setEditingPlayerId] = useState(null);
+      const [tempPlayerName, setTempPlayerName] = useState('');
       const [newPlayerName, setNewPlayerName] = useState('');
       const [newPlayerNumber, setNewPlayerNumber] = useState('');
       const [newPlayerRole, setNewPlayerRole] = useState('Centrocampista');
@@ -872,40 +874,79 @@
 
                   {/* Elementi in campo */}
                   {elements.map(el => {
-                    let bgClass = "bg-rose-600 border-rose-400";
-                    if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
-                    if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
-                    if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
-                    if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
-                    if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
+  let bgClass = "bg-rose-600 border-rose-400";
+  if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
+  if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
+  if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+  if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
+  if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
 
-                    return (
-                      <div
-                        key={el.id}
-                        onClick={(e) => handleElementClick(el.id, e)}
-                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                        className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
-                      >
-                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
-                          {el.type === 'player' && el.number}
-                          {el.type === 'ball' && '⚽'}
-                          {el.type === 'cone' && ''}
-                          {el.type === 'cinesina' && '•'}
-                          {el.type === 'ladder' && '☷'}
-                        </div>
-                        
-                        {el.type === 'player' && el.name && (
-                          <span className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md">
-                            {el.name}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
+  return (
+    <div
+      key={el.id}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (tool === 'delete') {
+          setElements(elements.filter(item => item.id !== el.id));
+        } else if (tool === 'move') {
+          setDraggedId(draggedId === el.id ? null : el.id);
+        }
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        if (el.type === 'player') {
+          setEditingPlayerId(el.id);
+          setTempPlayerName(el.name || '');
+        }
+      }}
+      style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+      className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
+    >
+      <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
+        {el.type === 'player' && el.number}
+        {el.type === 'ball' && '⚽'}
+        {el.type === 'cone' && ''}
+        {el.type === 'cinesina' && '•'}
+        {el.type === 'ladder' && '☷'}
+      </div>
+      
+      {/* Nome sotto il cerchietto o input per modificarlo */}
+      {el.type === 'player' && (
+        editingPlayerId === el.id ? (
+          <input
+            type="text"
+            autoFocus
+            value={tempPlayerName}
+            onChange={(e) => setTempPlayerName(e.target.value)}
+            onBlur={() => {
+              setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+              setEditingPlayerId(null);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                setEditingPlayerId(null);
+              }
+            }}
+            className="mt-1 bg-gray-900 text-white border border-emerald-500 px-1 py-0.5 rounded text-[10px] w-20 text-center font-bold outline-none shadow-lg"
+          />
+        ) : (
+          <span 
+            title="Doppio click per modificare il nome"
+            onClick={(e) => {
+              e.stopPropagation();
+              setEditingPlayerId(el.id);
+              setTempPlayerName(el.name || '');
+            }}
+            className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md hover:border-emerald-500 transition-colors"
+          >
+            {el.name || 'Modifica'}
+          </span>
+        )
+      )}
+    </div>
+  );
+})}
             {/* TAB: DRILLS */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
