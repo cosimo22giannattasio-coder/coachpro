@@ -804,8 +804,12 @@
                   <button onClick={() => setTool('cinesina')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'cinesina' ? 'bg-yellow-400 border-yellow-300 text-black' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🟡 {t('toolCinesina')}</button>
                   <button onClick={() => setTool('ladder')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'ladder' ? 'bg-purple-600 border-purple-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
                   <button onClick={() => setTool('delete')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'delete' ? 'bg-rose-600 border-rose-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🗑️ {t('toolDelete')}</button>
-                  <button onClick={() => { setElements([]); setArrows([]); }} className="px-3 py-2 rounded-xl text-xs font-bold bg-gray-900 border border-gray-800 text-gray-400 hover:text-rose-400">🧹 {t('toolClear')}</button>
-                </div>
+                 <button onClick={() => { setElements([]); setArrows([]); }} className="px-3 py-2 rounded-xl text-xs font-bold bg-gray-900 border border-gray-800 text-gray-400 hover:text-rose-400">🧹 {t('toolClear')}</button>
+
+                 <button onClick={handleExportBoardPDF} className="px-3 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow">
+                    📄 Esporta PDF Lavagna
+                 </button>
+                 </div>
 
                 {/* Campo da calcio interattivo */}
                 <div 
@@ -1070,7 +1074,92 @@
         </div>
       );
     }
+    const handleExportBoardPDF = () => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
 
+        const printWindow = window.open('', '_blank', 'width=900,height=700');
+        if (!printWindow) {
+          alert(language === 'it' ? "Consenti i popup per esportare il PDF." : "Please allow popups to export PDF.");
+          return;
+        }
+
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>CoachPro - Lavagna Tattica</title>
+            <style>
+              body { font-family: Arial, sans-serif; color: #111; padding: 20px; max-width: 800px; margin: auto; text-align: center; background: #fff; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 12px; margin-bottom: 20px; text-align: left; }
+              .logo { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 20px; }
+              .title-box p { margin: 4px 0 0 0; font-size: 12px; color: #666; }
+              .board-preview { position: relative; width: 100%; aspect-ratio: 4/3; background-color: #15803d; background-image: repeating-linear-gradient(0deg, #15803d, #15803d 30px, #166534 30px, #166534 60px); border-radius: 12px; border: 3px solid #166534; overflow: hidden; margin: 15px auto; box-sizing: border-box; }
+              .player-token { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
+              .token-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; border: 2px solid white; color: white; background: #dc2626; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+              .token-label { margin-top: 2px; background: rgba(0,0,0,0.85); color: white; padding: 1px 4px; border-radius: 3px; font-size: 8px; white-space: nowrap; font-weight: bold; }
+              .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+              @media print { body { padding: 0; } .no-print { display: none; } }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title-box">
+                <h1>COACHPRO - LAVAGNA TATTICA</h1>
+                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+              </div>
+              <div>
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:14px;">CP</div>`}
+              </div>
+            </div>
+
+            <div class="board-preview">
+              <div style="position: absolute; inset: 15px; border: 2px solid rgba(255,255,255,0.3); pointer-events: none;"></div>
+              <div style="position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.3); transform: translateY(-50%); pointer-events: none;"></div>
+              <div style="position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;"></div>
+
+              ${elements.map(el => {
+                let bg = "#dc2626";
+                if (el.color === 'blue') bg = "#2563eb";
+                if (el.type === 'ball') bg = "#ffffff";
+                if (el.type === 'cone') bg = "#f97316";
+
+                return `
+                  <div class="player-token" style="left: ${el.x}%; top: ${el.y}%;">
+                    <div class="token-circle" style="background: ${bg}; ${el.type === 'ball' ? 'color: #000;' : ''}">
+                      ${el.type === 'player' ? el.number : el.type === 'ball' ? '⚽' : '•'}
+                    </div>
+                    ${el.type === 'player' && el.name ? `<div class="token-label">${el.name}</div>` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div style="margin-top: 20px;" class="no-print">
+              <button onclick="window.print()" style="background: #15803d; color: white; border: none; padding: 10px 20px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer;">🖨️ Stampa / Salva PDF</button>
+            </div>
+
+            <div class="footer">
+              Generato con CoachPro App - Piattaforma Tattica Professionale
+            </div>
+
+            <script>
+              window.onload = function() {
+                setTimeout(function() {
+                  window.print();
+                }, 500);
+              };
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+      };
     ReactDOM.createRoot(document.getElementById('root')).render(<CoachProApp />);
   </script>
 </body>
