@@ -402,7 +402,7 @@
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
-
+      const [showBoardPdfModal, setShowBoardPdfModal] = useState(false);
       const t = (key) => {
         return translations[language][key] || translations['it'][key] || key;
       };
@@ -1079,7 +1079,8 @@
           setShowPaywallModal(true);
           return;
         }
-
+        setShowBoardPdfModal(true);
+      };
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
           alert("Abilita i popup nelle impostazioni del browser per esportare il PDF.");
@@ -1150,9 +1151,87 @@
             </div>
           </body>
           </html>
-        `);
+        `{showBoardPdfModal && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-y-auto">
+              <div className="bg-white text-gray-900 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
+                <div className="flex justify-between items-center border-b pb-3">
+                  <h3 className="font-bold text-lg text-emerald-700">📄 Anteprima Stampa / PDF Lavagna</h3>
+                  <button onClick={() => setShowBoardPdfModal(false)} className="text-gray-500 hover:text-black font-bold text-lg px-2">✕</button>
+                </div>
+
+                {/* Contenuto da stampare */}
+                <div id="print-board-area" className="p-4 bg-gray-50 rounded-2xl border border-gray-200">
+                  <div className="flex items-center justify-between border-b-2 border-emerald-700 pb-3 mb-4">
+                    <div>
+                      <h1 className="m-0 text-emerald-800 font-bold text-base">COACHPRO - LAVAGNA TATTICA</h1>
+                      <p className="m-0 text-xs text-gray-600 mt-1">Mister: <strong>{user.name}</strong> | Data: {new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                      {profileImage ? <img src={profileImage} className="w-12 h-12 rounded-xl object-cover border border-emerald-700" /> : <div className="bg-emerald-700 text-white font-bold w-10 h-10 flex items-center justify-center rounded-xl text-xs">CP</div>}
+                    </div>
+                  </div>
+
+                  {/* Miniatura campo */}
+                  <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border-2 border-emerald-700 pitch-bg shadow-inner">
+                    <div className="absolute inset-3 border-2 border-white/30 pointer-events-none"></div>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/30 transform -translate-y-1/2 pointer-events-none"></div>
+                    <div className="absolute top-1/2 left-1/2 w-20 h-20 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+                    {elements.map(el => {
+                      let bg = "bg-rose-600 border-rose-400";
+                      if (el.color === 'blue') bg = "bg-blue-600 border-blue-400";
+                      if (el.type === 'ball') bg = "bg-white text-black border-gray-300";
+                      if (el.type === 'cone') bg = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+
+                      return (
+                        <div
+                          key={el.id}
+                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                          className="absolute flex flex-col items-center select-none"
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-md border-2 ${bg}`}>
+                            {el.type === 'player' && el.number}
+                            {el.type === 'ball' && '⚽'}
+                            {el.type === 'cone' && ''}
+                          </div>
+                          {el.type === 'player' && el.name && (
+                            <span className="mt-0.5 bg-black/90 text-white px-1 py-0.5 rounded text-[8px] font-bold whitespace-nowrap shadow">
+                              {el.name}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="text-center text-[10px] text-gray-400 mt-4 border-t pt-2">
+                    Generato con CoachPro App - Piattaforma Tattica Professionale
+                  </div>
+                </div>
+
+                {/* Pulsanti azione */}
+                <div className="flex space-x-3 pt-2">
+                  <button 
+                    onClick={() => {
+                      window.print();
+                    }} 
+                    className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all"
+                  >
+                    🖨️ Stampa / Salva in PDF
+                  </button>
+                  <button 
+                    onClick={() => setShowBoardPdfModal(false)} 
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold px-5 py-3 rounded-xl text-sm"
+                  >
+                    Chiudi
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        );
         printWindow.document.close();
-      };
+       };
     ReactDOM.createRoot(document.getElementById('root')).render(<CoachProApp />);
   </script>
 </body>
