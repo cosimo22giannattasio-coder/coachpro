@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>CoachPro - Lavagna & Session Planner</title>
-  <!-- Caricamento di React, ReactDOM e Babel -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -27,7 +26,6 @@
     const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/9B68wRedX2ev2Kz4Ib9sk01";
     const TRIAL_DAYS = 3;
 
-    // Dizionario delle traduzioni per l'internazionalizzazione
     const translations = {
       it: {
         appTitle: "CoachPro",
@@ -101,298 +99,6 @@
         logoutAccount: "Esci dall'Account",
         clubInviteBanner: "Licenza Società",
         inviteCoach: "📲 Invita Allenatore"
-      },
-      en: {
-        appTitle: "CoachPro",
-        subtitle: "Professional tactical platform for coaches",
-        loginTitle: "Log in to CoachPro",
-        registerTitle: "Create Account (3 days free)",
-        namePlaceholder: "e.g. Coach Smith",
-        emailLabel: "Email",
-        passwordLabel: "Password",
-        loginButton: "Log in to CoachPro",
-        registerButton: "Create Account (3 days free)",
-        noAccount: "Don't have an account? Sign up",
-        hasAccount: "Already have an account? Log in",
-        proActive: "PRO Plan Active",
-        trialActive: "Free Trial Active",
-        freeLocked: "Free Account (Locked)",
-        subButton: "Subscription",
-        exitButton: "Logout",
-        quickFormations: "Quick formations:",
-        toolMove: "Move",
-        toolRed: "Red",
-        toolBlue: "Blue",
-        toolBall: "Ball",
-        toolCone: "Cone",
-        toolCinesina: "Disc",
-        toolLadder: "Ladder",
-        toolArrow: "Arrow",
-        toolDelete: "Eraser",
-        toolClear: "Clear All",
-        lockedTitle: "Feature Locked",
-        lockedDesc: "Subscribe or activate the 3-day trial to use the interactive tactical board.",
-        newDrill: "New Drill",
-        drillTitlePlaceholder: "Drill title...",
-        categoryPossesso: "Ball Possession",
-        categoryTactics: "Tactics",
-        categoryFitness: "Fitness",
-        categoryFinishing: "Finishing",
-        drillDurationPlaceholder: "Duration (e.g. 15 min)",
-        drillDescPlaceholder: "Description and objectives...",
-        saveDrill: "+ Save Drill",
-        noDrills: "No drills saved. Create one above!",
-        shareWhatsapp: "Share WhatsApp",
-        exportPdf: "📄 Export Session PDF",
-        exportDrillPdf: "📄 Export Drill PDF",
-        playerPlaceholder: "Player name...",
-        roleGoalkeeper: "Goalkeeper",
-        roleDefender: "Defender",
-        roleMidfielder: "Midfielder",
-        roleForward: "Forward",
-        addPlayer: "Add",
-        noPlayers: "No players in squad. Add the first one above!",
-        statusPresent: "PRESENT",
-        statusAbsent: "ABSENT",
-        statusInjured: "INJURED",
-        paywallHeader: "Choose CoachPro Plan",
-        paywallDesc: "Unlock all advanced features for yourself or your club.",
-        indProBtn: "Individual PRO - €29.99/year",
-        clubBtn: "Club Package (10 Accounts)",
-        clubSubBtn: "15% Discount - Get Invitation Code",
-        haveClubCode: "Have a Club Invitation Code?",
-        activate: "Activate",
-        trialBtn: "Activate 3-Day Free Trial",
-        navBoard: "Board",
-        navDrills: "Drills",
-        navSquad: "Squad",
-        profileSettings: "Profile & Settings",
-        uploadPhoto: "📷 Upload Photo / Logo",
-        languageLabel: "Language",
-        accountStatus: "Account Status:",
-        clubLicenseActive: "🛡️ Active club license",
-        logoutAccount: "Log out",
-        clubInviteBanner: "Club License",
-        inviteCoach: "📲 Invite Coach"
-      },
-      es: {
-        appTitle: "CoachPro",
-        subtitle: "Plataforma táctica profesional para entrenadores",
-        loginTitle: "Iniciar sesión en CoachPro",
-        registerTitle: "Crear cuenta (3 días gratis)",
-        namePlaceholder: "ej. Míster Pérez",
-        emailLabel: "Correo electrónico",
-        passwordLabel: "Contraseña",
-        loginButton: "Iniciar sesión",
-        registerButton: "Crear cuenta (3 días gratis)",
-        noAccount: "¿No tienes cuenta? Regístrate",
-        hasAccount: "¿Ya tienes cuenta? Inicia sesión",
-        proActive: "Plan PRO Activo",
-        trialActive: "Prueba Gratuita Activa",
-        freeLocked: "Cuenta Free (Bloqueada)",
-        subButton: "Suscripción",
-        exitButton: "Salir",
-        quickFormations: "Formaciones rápidas:",
-        toolMove: "Mover",
-        toolRed: "Rojo",
-        toolBlue: "Azul",
-        toolBall: "Balón",
-        toolCone: "Cono",
-        toolCinesina: "Pica/Disco",
-        toolLadder: "Escalera",
-        toolArrow: "Flecha",
-        toolDelete: "Borrador",
-        toolClear: "Borrar Todo",
-        lockedTitle: "Función Bloqueada",
-        lockedDesc: "Suscríbete o activa la prueba de 3 días para usar la pizarra táctica interactiva.",
-        newDrill: "Nuevo Ejercicio",
-        drillTitlePlaceholder: "Título del ejercicio...",
-        categoryPossesso: "Posesión de Balón",
-        categoryTactics: "Táctica",
-        categoryFitness: "Físico",
-        categoryFinishing: "Finalización",
-        drillDurationPlaceholder: "Duración (ej. 15 min)",
-        drillDescPlaceholder: "Descripción y objetivos...",
-        saveDrill: "+ Guardar Ejercicio",
-        noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
-        shareWhatsapp: "Compartir WhatsApp",
-        exportPdf: "📄 Exportar PDF Sesión",
-        exportDrillPdf: "📄 Exportar PDF Ejercicio",
-        playerPlaceholder: "Nombre del jugador...",
-        roleGoalkeeper: "Portero",
-        roleDefender: "Defensa",
-        roleMidfielder: "Centrocampista",
-        roleForward: "Delantero",
-        addPlayer: "Añadir",
-        noPlayers: "No hay jugadores. ¡Añade el primero arriba!",
-        statusPresent: "PRESENTE",
-        statusAbsent: "AUSENTE",
-        statusInjured: "LESIONADO",
-        paywallHeader: "Elige el Plan CoachPro",
-        paywallDesc: "Desbloquea todas las funciones avanzadas para ti o tu club.",
-        indProBtn: "PRO Individual - 29,99€/año",
-        clubBtn: "Paquete Club (10 Cuentas)",
-        clubSubBtn: "15% Descuento - Recibe Código de Invitación",
-        haveClubCode: "¿Tienes un código de invitación de club?",
-        activate: "Activar",
-        trialBtn: "Activar 3 Días de Prueba Gratuita",
-        navBoard: "Pizarra",
-        navDrills: "Ejercicios",
-        navSquad: "Plantilla",
-        profileSettings: "Perfil y Ajustes",
-        uploadPhoto: "📷 Subir Foto / Logo",
-        languageLabel: "Idioma / Language",
-        accountStatus: "Estado de la cuenta:",
-        clubLicenseActive: "🛡️ Licencia de club activa",
-        logoutAccount: "Cerrar sesión",
-        clubInviteBanner: "Licencia de Club",
-        inviteCoach: "📲 Invitar Entrenador"
-      },
-      fr: {
-        appTitle: "CoachPro",
-        subtitle: "Plateforme tactique professionnelle pour entraîneurs",
-        loginTitle: "Connexion à CoachPro",
-        registerTitle: "Créer un compte (3 jours gratuits)",
-        namePlaceholder: "ex. Coach Martin",
-        emailLabel: "E-mail",
-        passwordLabel: "Mot de passe",
-        loginButton: "Se connecter",
-        registerButton: "Créer un compte (3 jours gratuits)",
-        noAccount: "Pas de compte ? S'inscrire",
-        hasAccount: "Déjà un compte ? Se connecter",
-        proActive: "Plan PRO Actif",
-        trialActive: "Essai Gratuit Actif",
-        freeLocked: "Compte Free (Bloqué)",
-        subButton: "Abonnement",
-        exitButton: "Quitter",
-        quickFormations: "Systèmes rapides :",
-        toolMove: "Déplacer",
-        toolRed: "Rouge",
-        toolBlue: "Bleu",
-        toolBall: "Ballon",
-        toolCone: "Cône",
-        toolCinesina: "Coupelle",
-        toolLadder: "Échelle",
-        toolArrow: "Flèche",
-        toolDelete: "Gomme",
-        toolClear: "Tout Effacer",
-        lockedTitle: "Fonctionnalité Bloquée",
-        lockedDesc: "Abonnez-vous ou activez l'essai de 3 jours pour utiliser le tableau tactique.",
-        newDrill: "Nouvel Exercice",
-        drillTitlePlaceholder: "Titre de l'exercice...",
-        categoryPossesso: "Conservation",
-        categoryTactics: "Tactique",
-        categoryFitness: "Athlétique",
-        categoryFinishing: "Finition",
-        drillDurationPlaceholder: "Durée (ex. 15 min)",
-        drillDescPlaceholder: "Description et objectifs...",
-        saveDrill: "+ Enregistrer l'Exercice",
-        noDrills: "Aucun exercice enregistré. Créez-en un !",
-        shareWhatsapp: "Partager WhatsApp",
-        exportPdf: "📄 Exporter PDF Séance",
-        exportDrillPdf: "📄 Exporter PDF Exercice",
-        playerPlaceholder: "Nom du joueur...",
-        roleGoalkeeper: "Gardien",
-        roleDefender: "Défenseur",
-        roleMidfielder: "Milieu",
-        roleForward: "Attaquant",
-        addPlayer: "Ajouter",
-        noPlayers: "Aucun joueur dans l'effectif.",
-        statusPresent: "PRÉSENT",
-        statusAbsent: "ABSENT",
-        statusInjured: "BLESSÉ",
-        paywallHeader: "Choisissez votre plan CoachPro",
-        paywallDesc: "Débloquez toutes les fonctionnalités avancées pour vous ou votre club.",
-        indProBtn: "PRO Individuel - 29,99€/an",
-        clubBtn: "Pack Club (10 Comptes)",
-        clubSubBtn: "15% de réduction - Obtenez le code",
-        haveClubCode: "Vous avez un code d'invitation club ?",
-        activate: "Activer",
-        trialBtn: "Activer l'essai de 3 jours",
-        navBoard: "Tableau",
-        navDrills: "Exercices",
-        navSquad: "Effectif",
-        profileSettings: "Profil & Paramètres",
-        uploadPhoto: "📷 Charger Photo / Logo",
-        languageLabel: "Langue / Language",
-        accountStatus: "Statut du compte :",
-        clubLicenseActive: "🛡️ Licence de club active",
-        logoutAccount: "Se déconnecter",
-        clubInviteBanner: "Licence Club",
-        inviteCoach: "📲 Inviter un entraîneur"
-      },
-      de: {
-        appTitle: "CoachPro",
-        subtitle: "Professionelle Taktik-Plattform für Trainer",
-        loginTitle: "Bei CoachPro anmelden",
-        registerTitle: "Konto erstellen (3 Tage kostenlos)",
-        namePlaceholder: "z.B. Trainer Müller",
-        emailLabel: "E-Mail",
-        passwordLabel: "Passwort",
-        loginButton: "Anmelden",
-        registerButton: "Konto erstellen (3 Tage kostenlos)",
-        noAccount: "Kein Konto? Registrieren",
-        hasAccount: "Bereits ein Konto? Anmelden",
-        proActive: "PRO-Tarif aktiv",
-        trialActive: "Kostenlose Testversion aktiv",
-        freeLocked: "Kostenloses Konto (Gesperrt)",
-        subButton: "Abo",
-        exitButton: "Abmelden",
-        quickFormations: "Schnelle Systeme:",
-        toolMove: "Verschieben",
-        toolRed: "Rot",
-        toolBlue: "Blau",
-        toolBall: "Ball",
-        toolCone: "Hütchen",
-        toolCinesina: "Markierung",
-        toolLadder: "Leiter",
-        toolArrow: "Pfeil",
-        toolDelete: "Radierer",
-        toolClear: "Alles löschen",
-        lockedTitle: "Funktion gesperrt",
-        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tägige Testversion.",
-        newDrill: "Neue Übung",
-        drillTitlePlaceholder: "Titel der Übung...",
-        categoryPossesso: "Ballbesitz",
-        categoryTactics: "Taktik",
-        categoryFitness: "Athletik",
-        categoryFinishing: "Abschluss",
-        drillDurationPlaceholder: "Dauer (z.B. 15 Min.)",
-        drillDescPlaceholder: "Beschreibung und Ziele...",
-        saveDrill: "+ Übung speichern",
-        noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
-        shareWhatsapp: "WhatsApp teilen",
-        exportPdf: "📄 Trainingseinheit als PDF",
-        exportDrillPdf: "📄 Übung als PDF",
-        playerPlaceholder: "Spielername...",
-        roleGoalkeeper: "Torhüter",
-        roleDefender: "Verteidiger",
-        roleMidfielder: "Mittelfeldspieler",
-        roleForward: "Stürmer",
-        addPlayer: "Hinzufügen",
-        noPlayers: "Keine Spieler im Kader.",
-        statusPresent: "ANWESEND",
-        statusAbsent: "ABWESEND",
-        statusInjured: "VERLETZT",
-        paywallHeader: "Wählen Sie Ihren CoachPro-Plan",
-        paywallDesc: "Schalten Sie alle erweiterten Funktionen für Sie oder Ihren Verein frei.",
-        indProBtn: "Einzel-PRO - 29,99 €/Jahr",
-        clubBtn: "Vereinspaket (10 Konten)",
-        clubSubBtn: "15% Rabatt - Einladungscode erhalten",
-        haveClubCode: "Haben Sie einen Vereins-Code?",
-        activate: "Aktivieren",
-        trialBtn: "3 Tage Testversion aktivieren",
-        navBoard: "Tafel",
-        navDrills: "Übungen",
-        navSquad: "Kader",
-        profileSettings: "Profil & Einstellungen",
-        uploadPhoto: "📷 Foto / Logo hochladen",
-        languageLabel: "Sprache / Language",
-        accountStatus: "Kontostatus:",
-        clubLicenseActive: "🛡️ Aktive Vereinslizenz",
-        logoutAccount: "Abmelden",
-        clubInviteBanner: "Vereinslizenz",
-        inviteCoach: "📲 Trainer einladen"
       }
     };
 
@@ -488,14 +194,14 @@
             isPro: true,
             clubCode: code
           });
-          setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
+          setClubCodeMsg('✅ Codice Società riscattato con successo!');
           setTimeout(() => {
             setShowPaywallModal(false);
             setClubCodeMsg('');
             setClubCodeInput('');
           }, 1500);
         } else {
-          setClubCodeMsg('❌ ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
+          setClubCodeMsg('❌ Codice non valido.');
         }
       };
 
@@ -512,187 +218,80 @@
       };
 
       const handleExportPDF = () => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
-        }
+        if (!printWindow) { alert("Abilita i popup."); return; }
 
         const drillsHtml = drills.length === 0 
-          ? `<p style="color:#666; font-style:italic;">Nessun esercizio inserito in questa sessione.</p>`
-          : drills.map((d, index) => `
-            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa;">
-              <h3 style="margin: 0 0 5px 0; color: #15803d;">#${index + 1} - ${d.title}</h3>
-              <p style="margin: 0 0 8px 0; font-size: 12px; color: #555;"><strong>Categoria:</strong> ${d.category} | ⏱️ <strong>Durata:</strong> ${d.duration}</p>
-              <p style="margin: 0; font-size: 13px; color: #333; white-space: pre-line;">${d.description || 'Nessuna descrizione.'}</p>
+          ? `<p style="color:#666; font-style:italic;">Nessun esercizio inserito.</p>`
+          : drills.map((d, i) => `
+            <div style="margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa;">
+              <h3 style="margin: 0 0 4px 0; color: #15803d;">#${i + 1} - ${d.title}</h3>
+              <p style="margin: 0 0 6px 0; font-size: 11px; color: #555;"><strong>Categoria:</strong> ${d.category} | ⏱️ <strong>Durata:</strong> ${d.duration}</p>
+              <p style="margin: 0; font-size: 12px; color: #333; white-space: pre-line;">${d.description || 'Nessuna descrizione.'}</p>
             </div>
           `).join('');
 
         const squadHtml = players.length === 0
-          ? `<p style="color:#666; font-style:italic;">Nessun giocatore registrato in rosa.</p>`
-          : `
-            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px;">
-              <thead>
-                <tr style="background: #15803d; color: white;">
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Giocatore</th>
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Ruolo</th>
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Stato</th>
-                </tr>
-              </thead>
+          ? `<p style="color:#666; font-style:italic;">Nessun giocatore registrato.</p>`
+          : `<table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px;">
+              <thead><tr style="background: #15803d; color: white;">
+                <th style="padding: 6px; text-align: left; border: 1px solid #ddd;">Giocatore</th>
+                <th style="padding: 6px; text-align: left; border: 1px solid #ddd;">Ruolo</th>
+                <th style="padding: 6px; text-align: left; border: 1px solid #ddd;">Stato</th>
+              </tr></thead>
               <tbody>
-                ${players.map(p => `
-                  <tr>
-                    <td style="padding: 6px; border: 1px solid #ddd;">${p.name}</td>
-                    <td style="padding: 6px; border: 1px solid #ddd;">${p.role}</td>
-                    <td style="padding: 6px; border: 1px solid #ddd; text-transform: uppercase; font-weight: bold; color: ${p.status === 'presente' ? '#15803d' : '#dc2626'};">${p.status}</td>
-                  </tr>
-                `).join('')}
+                ${players.map(p => `<tr>
+                  <td style="padding: 5px; border: 1px solid #ddd;">${p.name}</td>
+                  <td style="padding: 5px; border: 1px solid #ddd;">${p.role}</td>
+                  <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold; color: ${p.status === 'presente' ? '#15803d' : '#dc2626'};">${p.status.toUpperCase()}</td>
+                </tr>`).join('')}
               </tbody>
-            </table>
-          `;
+            </table>`;
 
         printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8" />
-            <title>CoachPro - Sessione di Allenamento</title>
-            <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 24px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              h2 { color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin-top: 30px; font-size: 16px; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-            </style>
-          </head>
+          <!DOCTYPE html><html><head><meta charset="UTF-8"/><title>CoachPro - Sessione</title>
+          <style>body { font-family: Arial, sans-serif; color: #111; padding: 25px; max-width: 800px; margin: auto; }</style></head>
           <body>
-            <div class="header">
-              <div class="title-box">
-                <h1>COACHPRO - SESSION PLANNER</h1>
-                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
-              </div>
-              <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
-              </div>
-            </div>
-
-            <h2>📋 Esercitazioni della Seduta</h2>
-            ${drillsHtml}
-
-            <h2>👥 Rosa & Convocati</h2>
-            ${squadHtml}
-
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
-            
-            <script>
-              window.onload = function() {
-                window.print();
-              };
-            <\/script>
-          </body>
-          </html>
+            <h2>COACHPRO - SESSION PLANNER</h2>
+            <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+            <hr/>
+            <h3>📋 Esercitazioni</h3>${drillsHtml}
+            <h3>👥 Rosa</h3>${squadHtml}
+            <script>window.onload = function() { window.print(); };<\/script>
+          </body></html>
         `);
         printWindow.document.close();
       };
 
       const handleExportSingleDrillPDF = (drill) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
-        }
+        if (!printWindow) { alert("Abilita i popup."); return; }
 
         printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8" />
-            <title>CoachPro - Esercizio</title>
-            <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              .drill-card { background: #fafafa; border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-top: 20px; }
-              .badge { display: inline-block; background: #15803d; color: white; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-            </style>
-          </head>
+          <!DOCTYPE html><html><head><meta charset="UTF-8"/><title>CoachPro - Esercizio</title>
+          <style>body { font-family: Arial, sans-serif; color: #111; padding: 25px; max-width: 800px; margin: auto; }</style></head>
           <body>
-            <div class="header">
-              <div class="title-box">
-                <h1>COACHPRO - SCHEDA ESERCIZIO</h1>
-                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
-              </div>
-              <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
-              </div>
-            </div>
-
-            <div class="drill-card">
-              <span class="badge">${drill.category}</span>
-              <h2 style="margin: 5px 0 10px 0; color: #111; font-size: 20px;">${drill.title}</h2>
-              <p style="margin: 0 0 15px 0; font-size: 13px; color: #555;">⏱️ <strong>Durata:</strong> ${drill.duration}</p>
-              <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;" />
-              <p style="margin: 0; font-size: 14px; color: #333; line-height: 1.6; white-space: pre-line;">${drill.description || 'Nessuna descrizione.'}</p>
-            </div>
-
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
-            
-            <script>
-              window.onload = function() {
-                window.print();
-              };
-            <\/script>
-          </body>
-          </html>
+            <h2>COACHPRO - SCHEDA ESERCIZIO</h2>
+            <p>Mister: <strong>${user.name}</strong></p>
+            <hr/>
+            <span style="background:#15803d; color:white; padding:3px 8px; font-size:10px; font-weight:bold; border-radius:10px;">${drill.category}</span>
+            <h2 style="margin:10px 0 5px 0;">${drill.title}</h2>
+            <p style="font-size:12px; color:#555;">⏱️ <strong>Durata:</strong> ${drill.duration}</p>
+            <p style="font-size:13px; line-height:1.5;">${drill.description || ''}</p>
+            <script>window.onload = function() { window.print(); };<\/script>
+          </body></html>
         `);
         printWindow.document.close();
       };
 
       const handleExportBoardPDF = () => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
-        }
+        if (!printWindow) { alert("Abilita i popup."); return; }
 
-        const svgElement = svgRef.current;
-        if (!svgElement) {
-          alert("Lavagna non trovata.");
-          return;
-        }
-
-        // Cloniamo l'SVG e forziamo attributi di viewBox e dimensioni pulite per la stampa
-        const clonedSvg = svgElement.cloneNode(true);
-        clonedSvg.setAttribute("width", "100%");
-        clonedSvg.setAttribute("height", "100%");
-        if (!clonedSvg.getAttribute("viewBox")) {
-          clonedSvg.setAttribute("viewBox", "0 0 800 600");
-        }
-        const svgContent = clonedSvg.outerHTML;
+        const svgContent = svgRef.current ? svgRef.current.outerHTML : '';
 
         printWindow.document.write(`
           <!DOCTYPE html>
@@ -701,15 +300,15 @@
             <meta charset="UTF-8" />
             <title>CoachPro - Lavagna Tattica</title>
             <style>
-              @page { size: landscape; margin: 15mm; }
-              body { font-family: Arial, sans-serif; color: #111; padding: 20px; max-width: 1000px; margin: auto; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 12px; margin-bottom: 20px; text-align: left; }
-              .logo { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 20px; }
-              .title-box p { margin: 3px 0 0 0; font-size: 12px; color: #556; }
-              .pitch-container { width: 100%; max-width: 800px; margin: 0 auto; background-color: #15803d; border-radius: 12px; overflow: hidden; border: 4px solid #1f2937; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+              @page { size: landscape; margin: 10mm; }
+              body { font-family: Arial, sans-serif; color: #111; padding: 20px; max-width: 900px; margin: auto; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 10px; margin-bottom: 15px; text-align: left; }
+              .logo { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 18px; }
+              .title-box p { margin: 2px 0 0 0; font-size: 11px; color: #555; }
+              .pitch-container { width: 100%; max-width: 750px; margin: 0 auto; background-color: #15803d; border-radius: 10px; overflow: hidden; border: 3px solid #1f2937; padding: 5px; }
               .pitch-container svg { width: 100%; height: auto; display: block; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; }
-              .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #ddd; padding-top: 8px; }
+              .footer { margin-top: 20px; text-align: center; font-size: 10px; color: #777; border-top: 1px solid #ddd; padding-top: 5px; }
             </style>
           </head>
           <body>
@@ -719,7 +318,7 @@
                 <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
               </div>
               <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:14px;">CP</div>`}
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:12px;">CP</div>`}
               </div>
             </div>
 
@@ -727,15 +326,11 @@
               ${svgContent}
             </div>
 
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
+            <div class="footer">Generato con CoachPro App - Piattaforma Tattica Professionale</div>
             
             <script>
               window.onload = function() {
-                setTimeout(() => {
-                  window.print();
-                }, 300);
+                setTimeout(() => { window.print(); }, 250);
               };
             <\/script>
           </body>
@@ -743,7 +338,6 @@
         `);
         printWindow.document.close();
       };
-  
 
       const getCoords = (evt) => {
         if (!svgRef.current) return { x: 50, y: 50 };
@@ -756,14 +350,8 @@
       };
 
       const handleBoardClick = (evt) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        if (draggedId) {
-          setDraggedId(null);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
+        if (draggedId) { setDraggedId(null); return; }
         const { x, y } = getCoords(evt);
 
         if (tool === 'player-red') {
@@ -791,18 +379,14 @@
       };
 
       const handleTouchMove = (evt) => {
-        if (!hasAccess) return;
-        if (!draggedId || tool !== 'move') return;
+        if (!hasAccess || !draggedId || tool !== 'move') return;
         const { x, y } = getCoords(evt);
         setElements(elements.map(el => el.id === draggedId ? { ...el, x, y } : el));
       };
 
       const handleElementClick = (id, evt) => {
         evt.stopPropagation();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         if (tool === 'delete') {
           setElements(elements.filter(el => el.id !== id));
         } else if (tool === 'move') {
@@ -811,10 +395,7 @@
       };
 
       const presetFormation = (type) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         let reds = [];
         if (type === '433') {
           reds = [
@@ -850,10 +431,7 @@
       };
 
       const handleShareWhatsApp = (drill) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         const text = `⚽ *COACHPRO - DRILL*\n\n📌 *Title:* ${drill.title}\n⏱️ *Duration:* ${drill.duration}\n📂 *Category:* ${drill.category}\n\n📝 *Description:*\n${drill.description}`;
         const encodedText = encodeURIComponent(text);
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -866,43 +444,22 @@
 
       const addDrill = (evt) => {
         evt.preventDefault();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         if (!newDrillTitle) return;
-        setDrills([...drills, {
-          id: Date.now().toString(),
-          title: newDrillTitle,
-          category: newDrillCat,
-          duration: newDrillDur,
-          description: newDrillDesc
-        }]);
-        setNewDrillTitle('');
-        setNewDrillDesc('');
+        setDrills([...drills, { id: Date.now().toString(), title: newDrillTitle, category: newDrillCat, duration: newDrillDur, description: newDrillDesc }]);
+        setNewDrillTitle(''); setNewDrillDesc('');
       };
 
       const addPlayer = (evt) => {
         evt.preventDefault();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         if (!newPlayerName) return;
-        setPlayers([...players, {
-          id: Date.now().toString(),
-          name: newPlayerName,
-          role: newPlayerRole,
-          status: 'presente'
-        }]);
+        setPlayers([...players, { id: Date.now().toString(), name: newPlayerName, role: newPlayerRole, status: 'presente' }]);
         setNewPlayerName('');
       };
 
       const togglePlayerStatus = (id) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+        if (!hasAccess) { setShowPaywallModal(true); return; }
         setPlayers(players.map(p => {
           if (p.id !== id) return p;
           const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
@@ -923,49 +480,23 @@
                 {authMode === 'register' && (
                   <div className="space-y-1">
                     <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
-                    <input
-                      type="text"
-                      placeholder={t('namePlaceholder')}
-                      value={authData.name}
-                      onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
-                    />
+                    <input type="text" placeholder={t('namePlaceholder')} value={authData.name} onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
                   </div>
                 )}
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="allenatore@email.com"
-                    value={authData.email}
-                    onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
-                  />
+                  <input type="email" required placeholder="allenatore@email.com" value={authData.email} onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    value={authData.password}
-                    onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
-                  />
+                  <input type="password" required placeholder="••••••••" value={authData.password} onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
-                >
+                <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20">
                   {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
               <div className="text-center border-t border-gray-800 pt-4">
-                <button
-                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                  className="text-xs text-emerald-400 font-semibold hover:underline"
-                >
+                <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="text-xs text-emerald-400 font-semibold hover:underline">
                   {authMode === 'login' ? t('noAccount') : t('hasAccount')}
                 </button>
               </div>
@@ -978,11 +509,7 @@
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setShowProfileDrawer(true)}
-                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
-                title={t('profileSettings')}
-              >
+              <button onClick={() => setShowProfileDrawer(true)} className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none" title={t('profileSettings')}>
                 {profileImage ? (
                   <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
                 ) : (
@@ -993,31 +520,17 @@
                   </>
                 )}
               </button>
-
               <div className="flex items-center space-x-2.5">
                 <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
                 <div>
                   <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
-                  <span className="text-[10px] text-emerald-400 font-medium">
-                    {hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}
-                  </span>
+                  <span className="text-[10px] text-emerald-400 font-medium">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}</span>
                 </div>
               </div>
             </div>
-
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setShowPaywallModal(true)}
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
-              >
-                {t('subButton')}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
-              >
-                {t('exitButton')}
-              </button>
+              <button onClick={() => setShowPaywallModal(true)} className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md">{t('subButton')}</button>
+              <button onClick={handleLogout} className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold">{t('exitButton')}</button>
             </div>
           </header>
 
@@ -1026,68 +539,27 @@
               <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                    <h3 className="font-black text-base text-white flex items-center space-x-2">
-                      <span>⚙️</span>
-                      <span>{t('profileSettings')}</span>
-                    </h3>
-                    <button
-                      onClick={() => setShowProfileDrawer(false)}
-                      className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800"
-                    >
-                      ✕
-                    </button>
+                    <h3 className="font-black text-base text-white flex items-center space-x-2"><span>⚙️</span><span>{t('profileSettings')}</span></h3>
+                    <button onClick={() => setShowProfileDrawer(false)} className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800">✕</button>
                   </div>
-
                   <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
                     <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
-                      {profileImage ? (
-                        <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-2xl">🛡️</span>
-                      )}
+                      {profileImage ? <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" /> : <span className="text-2xl">🛡️</span>}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-white">{user.name}</h4>
-                      <p className="text-[11px] text-gray-400">{user.email}</p>
-                    </div>
+                    <div><h4 className="font-bold text-sm text-white">{user.name}</h4><p className="text-[11px] text-gray-400">{user.email}</p></div>
                     <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
-                      {t('uploadPhoto')}
-                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                      {t('uploadPhoto')}<input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                     </label>
                   </div>
-
                   <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
-                      <span>🌍</span>
-                      <span>{t('languageLabel')}</span>
-                    </label>
-                    <select
-                      value={language}
-                      onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-                    >
-                      <option value="it">🇮🇹 Italiano</option>
-                      <option value="en">🇬🇧 English</option>
-                      <option value="es">🇪🇸 Español</option>
-                      <option value="fr">🇫🇷 Français</option>
-                      <option value="de">🇩🇪 Deutsch</option>
+                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5"><span>🌍</span><span>{t('languageLabel')}</span></label>
+                    <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                      <option value="it">🇮🇹 Italiano</option><option value="en">🇬🇧 English</option><option value="es">🇪🇸 Español</option><option value="fr">🇫🇷 Français</option><option value="de">🇩🇪 Deutsch</option>
                     </select>
                   </div>
-
-                  <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
-                    <p>• {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
-                    {user.clubCode && <p className="text-teal-300 mt-1">{t('clubLicenseActive')}</p>}
-                  </div>
                 </div>
-
                 <div className="pt-4 border-t border-gray-800">
-                  <button
-                    onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
-                    className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
-                  >
-                    {t('logoutAccount')}
-                  </button>
+                  <button onClick={() => { setShowProfileDrawer(false); handleLogout(); }} className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition">{t('logoutAccount')}</button>
                 </div>
               </div>
             </div>
@@ -1096,16 +568,8 @@
           <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
             {user.clubCode && (
               <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-teal-300">🛡️ {t('clubInviteBanner')}: {user.clubCode}</h4>
-                  <p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p>
-                </div>
-                <button
-                  onClick={handleShareClubInvite}
-                  className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
-                >
-                  {t('inviteCoach')}
-                </button>
+                <div><h4 className="text-xs font-bold text-teal-300">🛡️ {t('clubInviteBanner')}: {user.clubCode}</h4><p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p></div>
+                <button onClick={handleShareClubInvite} className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow">{t('inviteCoach')}</button>
               </div>
             )}
 
@@ -1133,15 +597,13 @@
                 </div>
 
                 <button onClick={handleExportBoardPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-lg transition">
-                  <span>📄 Esporta Lavagna in PDF</span>
+                  <span>📄 Esporta Lavagna in PDF (Alta Qualità)</span>
                 </button>
 
+                <!-- VECCHIO SISTEMA VETTORIALE FISSO 800x600 -->
                 <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
-                    <div 
-                      onClick={() => setShowPaywallModal(true)}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
-                    >
+                    <div onClick={() => setShowPaywallModal(true)} className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer">
                       <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
                       <h3 className="text-lg font-bold text-white">{t('lockedTitle')}</h3>
                       <p className="text-xs text-gray-300 max-w-xs mt-1">{t('lockedDesc')}</p>
@@ -1149,43 +611,58 @@
                   )}
                   <svg
                     ref={svgRef}
+                    viewBox="0 0 800 600"
+                    preserveAspectRatio="xMidYMid meet"
                     className="w-full h-full cursor-pointer touch-none"
                     onClick={handleBoardClick}
                     onTouchMove={handleTouchMove}
                   >
-                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
+                    {/* Campo da calcio vettoriale proporzionato */}
+                    <rect x="40" y="30" width="720" height="540" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    <line x1="40" y1="300" x2="760" y2="300" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    <circle cx="400" cy="300" r="90" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    <circle cx="400" cy="300" r="4" fill="white" />
+                    
+                    {/* Area di rigore superiore */}
+                    <rect x="240" y="30" width="320" height="110" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    <rect x="320" y="30" width="160" height="40" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    
+                    {/* Area di rigore inferiore */}
+                    <rect x="240" y="460" width="320" height="110" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
+                    <rect x="320" y="530" width="160" height="40" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
 
+                    {/* Frecce tattiche */}
                     {arrows.map(arr => (
-                      <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
+                      <line key={arr.id} x1={arr.startX * 8} y1={arr.startY * 6} x2={arr.endX * 8} y2={arr.endY * 6} stroke="#34d399" strokeWidth="5" strokeDasharray="8,8" strokeLinecap="round" />
                     ))}
 
-                    {elements.map(el => (
-                      <g key={el.id} onClick={(evt) => handleElementClick(el.id, evt)} className="cursor-pointer">
-                        {el.type === 'player' && (
-                          <>
-                            <circle cx={`${el.x}%`} cy={`${el.y}%`} r="14" fill={el.color === 'red' ? '#ef4444' : '#3b82f6'} stroke="white" strokeWidth="2.5" />
-                            <text x={`${el.x}%`} y={`${el.y}%`} dy="4" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">{el.number}</text>
-                          </>
-                        )}
-                        {el.type === 'ball' && <circle cx={`${el.x}%`} cy={`${el.y}%`} r="7" fill="white" stroke="black" strokeWidth="2" />}
-                        {el.type === 'cone' && <polygon points={`${el.x}%,${el.y - 2.5}% ${el.x - 2}%,${el.y + 2}% ${el.x + 2}%,${el.y + 2}%`} fill="#f97316" />}
-                        {el.type === 'cinesina' && <ellipse cx={`${el.x}%`} cy={`${el.y}%`} rx="8" ry="4" fill="#facc15" stroke="#eab308" strokeWidth="1.5" />}
-                        {el.type === 'ladder' && (
-                          <g transform={`translate(${el.x * 3.5}, ${el.y * 2.5})`}>
-                            <rect x="-6" y="-30" width="12" height="60" fill="none" stroke="#e2e8f0" strokeWidth="2" rx="1" />
-                            <line x1="-6" y1="-20" x2="6" y2="-20" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="-10" x2="6" y2="-10" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="0" x2="6" y2="0" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="10" x2="6" y2="10" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="20" x2="6" y2="20" stroke="#facc15" strokeWidth="2" />
-                          </g>
-                        )}
-                      </g>
-                    ))}
+                    {/* Elementi (Giocatori, Palla, Coni, Cinesine, Scalette) */}
+                    {elements.map(el => {
+                      const cx = el.x * 8;
+                      const cy = el.y * 6;
+                      return (
+                        <g key={el.id} onClick={(evt) => handleElementClick(el.id, evt)} className="cursor-pointer">
+                          {el.type === 'player' && (
+                            <>
+                              <circle cx={cx} cy={cy} r="18" fill={el.color === 'red' ? '#ef4444' : '#3b82f6'} stroke="white" strokeWidth="3.5" />
+                              <text x={cx} y={cy} dy="5" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">{el.number}</text>
+                            </>
+                          )}
+                          {el.type === 'ball' && <circle cx={cx} cy={cy} r="10" fill="white" stroke="black" strokeWidth="2.5" />}
+                          {el.type === 'cone' && <polygon points={`${cx},${cy - 16} ${cx - 14},${cy + 14} ${cx + 14},${cy + 14}`} fill="#f97316" stroke="#c2410c" strokeWidth="2" />}
+                          {el.type === 'cinesina' && <ellipse cx={cx} cy={cy} rx="14" ry="7" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />}
+                          {el.type === 'ladder' && (
+                            <g transform={`translate(${cx}, ${cy})`}>
+                              <rect x="-10" y="-35" width="20" height="70" fill="none" stroke="#e2e8f0" strokeWidth="3" rx="2" />
+                              <line x1="-10" y1="-21" x2="10" y2="-21" stroke="#facc15" strokeWidth="3" />
+                              <line x1="-10" y1="-7" x2="10" y2="-7" stroke="#facc15" strokeWidth="3" />
+                              <line x1="-10" y1="7" x2="10" y2="7" stroke="#facc15" strokeWidth="3" />
+                              <line x1="-10" y1="21" x2="10" y2="21" stroke="#facc15" strokeWidth="3" />
+                            </g>
+                          )}
+                        </g>
+                      );
+                    })}
                   </svg>
                 </div>
               </div>
@@ -1196,123 +673,54 @@
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
-                    <button
-                      type="button"
-                      onClick={handleExportPDF}
-                      className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow"
-                    >
-                      {t('exportPdf')}
-                    </button>
+                    <button type="button" onClick={handleExportPDF} className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow">{t('exportPdf')}</button>
                   </div>
-                  <input
-                    type="text"
-                    placeholder={t('drillTitlePlaceholder')}
-                    value={newDrillTitle}
-                    onChange={(ev) => setNewDrillTitle(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                  />
+                  <input type="text" placeholder={t('drillTitlePlaceholder')} value={newDrillTitle} onChange={(ev) => setNewDrillTitle(ev.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white" />
                   <div className="grid grid-cols-2 gap-2">
-                    <select
-                      value={newDrillCat}
-                      onChange={(ev) => setNewDrillCat(ev.target.value)}
-                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                    >
-                      <option value="Possesso Palla">{t('categoryPossesso')}</option>
-                      <option value="Tattica">{t('categoryTactics')}</option>
-                      <option value="Atletico">{t('categoryFitness')}</option>
-                      <option value="Rifinitura">{t('categoryFinishing')}</option>
+                    <select value={newDrillCat} onChange={(ev) => setNewDrillCat(ev.target.value)} className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white">
+                      <option value="Possesso Palla">{t('categoryPossesso')}</option><option value="Tattica">{t('categoryTactics')}</option><option value="Atletico">{t('categoryFitness')}</option><option value="Rifinitura">{t('categoryFinishing')}</option>
                     </select>
-                    <input
-                      type="text"
-                      placeholder={t('drillDurationPlaceholder')}
-                      value={newDrillDur}
-                      onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                    />
+                    <input type="text" placeholder={t('drillDurationPlaceholder')} value={newDrillDur} onChange={(ev) => setNewDrillDur(ev.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white" />
                   </div>
-                  <textarea
-                    placeholder={t('drillDescPlaceholder')}
-                    value={newDrillDesc}
-                    onChange={(ev) => setNewDrillDesc(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
-                  ></textarea>
+                  <textarea placeholder={t('drillDescPlaceholder')} value={newDrillDesc} onChange={(ev) => setNewDrillDesc(ev.target.value)} className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"></textarea>
                   <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">{t('saveDrill')}</button>
                 </form>
 
-                {drills.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div>
-                ) : (
-                  drills.map(drill => (
-                    <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
-                      <div className="flex justify-between items-start">
-                        <h4 className="font-bold text-sm text-white">{drill.title}</h4>
-                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
-                      </div>
-                      <p className="text-xs text-gray-400">{drill.description}</p>
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
-                        <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleExportSingleDrillPDF(drill)}
-                            className="bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 border border-teal-500/30"
-                          >
-                            {t('exportDrillPdf')}
-                          </button>
-                          <button
-                            onClick={() => handleShareWhatsApp(drill)}
-                            className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
-                          >
-                            📲 {t('shareWhatsapp')}
-                          </button>
-                        </div>
+                {drills.length === 0 ? <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div> : drills.map(drill => (
+                  <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-sm text-white">{drill.title}</h4>
+                      <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
+                    </div>
+                    <p className="text-xs text-gray-400">{drill.description}</p>
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
+                      <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
+                      <div className="flex space-x-2">
+                        <button onClick={() => handleExportSingleDrillPDF(drill)} className="bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 text-xs px-2.5 py-1.5 rounded-lg font-semibold border border-teal-500/30">{t('exportDrillPdf')}</button>
+                        <button onClick={() => handleShareWhatsApp(drill)} className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold">📲 {t('shareWhatsapp')}</button>
                       </div>
                     </div>
-                  ))
-                )}
+                  </div>
+                ))}
               </div>
             )}
 
             {activeTab === 'squad' && (
               <div className="space-y-4">
                 <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder={t('playerPlaceholder')}
-                    value={newPlayerName}
-                    onChange={(ev) => setNewPlayerName(ev.target.value)}
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                  />
-                  <select
-                    value={newPlayerRole}
-                    onChange={(ev) => setNewPlayerRole(ev.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                  >
-                    <option value="Portiere">{t('roleGoalkeeper')}</option>
-                    <option value="Difensore">{t('roleDefender')}</option>
-                    <option value="Centrocampista">{t('roleMidfielder')}</option>
-                    <option value="Attaccante">{t('roleForward')}</option>
+                  <input type="text" placeholder={t('playerPlaceholder')} value={newPlayerName} onChange={(ev) => setNewPlayerName(ev.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white" />
+                  <select value={newPlayerRole} onChange={(ev) => setNewPlayerRole(ev.target.value)} className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white">
+                    <option value="Portiere">{t('roleGoalkeeper')}</option><option value="Difensore">{t('roleDefender')}</option><option value="Centrocampista">{t('roleMidfielder')}</option><option value="Attaccante">{t('roleForward')}</option>
                   </select>
                   <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
                 </form>
 
-                {players.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">{t('noPlayers')}</div>
-                ) : (
+                {players.length === 0 ? <div className="text-center py-8 text-gray-500 text-xs">{t('noPlayers')}</div> : (
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl divide-y divide-gray-800">
                     {players.map(player => (
                       <div key={player.id} className="p-3 flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-xs text-white">{player.name}</p>
-                          <p className="text-[10px] text-gray-400">{player.role}</p>
-                        </div>
-                        <button
-                          onClick={() => togglePlayerStatus(player.id)}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                            player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
-                            player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' :
-                            'bg-amber-500/20 text-amber-400 border border-emerald-500/40'
-                          }`}
-                        >
+                        <div><p className="font-semibold text-xs text-white">{player.name}</p><p className="text-[10px] text-gray-400">{player.role}</p></div>
+                        <button onClick={() => togglePlayerStatus(player.id)} className={`px-3 py-1 rounded-lg text-xs font-bold ${player.status === 'presente' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : player.status === 'assente' ? 'bg-red-500/20 text-red-400 border border-red-500/40' : 'bg-amber-500/20 text-amber-400 border border-emerald-500/40'}`}>
                           {player.status === 'presente' ? t('statusPresent') : player.status === 'assente' ? t('statusAbsent') : t('statusInjured')}
                         </button>
                       </div>
@@ -1326,87 +734,33 @@
           {showPaywallModal && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
               <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
-                <button
-                  onClick={() => setShowPaywallModal(false)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
-                >
-                  ✕
-                </button>
+                <button onClick={() => setShowPaywallModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm">✕</button>
                 <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
                 <h3 className="text-xl font-black text-white">{t('paywallHeader')}</h3>
                 <p className="text-xs text-gray-300">{t('paywallDesc')}</p>
-                
                 <div className="space-y-2.5 pt-2">
-                  <button
-                    onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
-                  >
-                    {t('indProBtn')}
+                  <button onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')} className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg">{t('indProBtn')}</button>
+                  <button onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')} className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5">
+                    <span>🛡️ {t('clubBtn')}</span><span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
                   </button>
-
-                  <button
-                    onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
-                  >
-                    <span>🛡️ {t('clubBtn')}</span>
-                    <span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
-                  </button>
-
                   <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
                     <label className="text-[11px] font-bold text-gray-300 block">{t('haveClubCode')}</label>
                     <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
-                      <input
-                        type="text"
-                        placeholder="es. CLUB2026"
-                        value={clubCodeInput}
-                        onChange={(e) => setClubCodeInput(e.target.value)}
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono"
-                      />
-                      <button
-                        type="submit"
-                        className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
-                      >
-                        {t('activate')}
-                      </button>
+                      <input type="text" placeholder="es. CLUB2026" value={clubCodeInput} onChange={(e) => setClubCodeInput(e.target.value)} className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono" />
+                      <button type="submit" className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs">{t('activate')}</button>
                     </form>
                     {clubCodeMsg && <p className="text-[10px] font-semibold text-emerald-400">{clubCodeMsg}</p>}
                   </div>
-
-                  {!user.trialEndsAt && (
-                    <button
-                      onClick={activateTrial}
-                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
-                    >
-                      {t('trialBtn')}
-                    </button>
-                  )}
+                  {!user.trialEndsAt && <button onClick={activateTrial} className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30">{t('trialBtn')}</button>}
                 </div>
               </div>
             </div>
           )}
 
           <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
-            <button
-              onClick={() => setActiveTab('board')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">⚽</span>
-              <span className="text-[10px] font-bold">{t('navBoard')}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('drills')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">📋</span>
-              <span className="text-[10px] font-bold">{t('navDrills')}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('squad')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">👥</span>
-              <span className="text-[10px] font-bold">{t('navSquad')}</span>
-            </button>
+            <button onClick={() => setActiveTab('board')} className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}><span className="text-xl">⚽</span><span className="text-[10px] font-bold">{t('navBoard')}</span></button>
+            <button onClick={() => setActiveTab('drills')} className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}><span className="text-xl">📋</span><span className="text-[10px] font-bold">{t('navDrills')}</span></button>
+            <button onClick={() => setActiveTab('squad')} className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}><span className="text-xl">👥</span><span className="text-[10px] font-bold">{t('navSquad')}</span></button>
           </nav>
         </div>
       );
