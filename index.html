@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
+ <style>
     body { touch-action: manipulation; user-select: none; -webkit-user-select: none; background-color: #030712; }
     .pitch-bg {
       background-color: #0d5c2f;
@@ -23,7 +23,26 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     button, input, select { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-  </style>
+
+    /* INCOLLA QUI IL CSS PER LA STAMPA */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .pitch-bg, .pitch-bg * {
+        visibility: visible;
+      }
+      .pitch-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        height: 100vh !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+</style>
 </head>
 <body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
   <div id="root"></div>
@@ -566,12 +585,14 @@
         setDrills(drills.filter(d => d.id !== id));
       };
 
+     // Funzione Esportazione PDF Lavagna ottimizzata per il browser
       const handleExportBoardPDF = () => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
-        setShowBoardPdfModal(true);
+        // Apre direttamente la finestra di stampa del browser pulita per salvare in PDF
+        window.print();
       };
 
       const presetFormation = (type) => {
