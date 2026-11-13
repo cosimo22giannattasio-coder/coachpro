@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>CoachPro - Lavagna & Session Planner</title>
-  <!-- Caricamento di React, ReactDOM e Babel -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -27,7 +26,6 @@
     const STRIPE_CLUB_PAYMENT_LINK = "https://buy.stripe.com/9B68wRedX2ev2Kz4Ib9sk01";
     const TRIAL_DAYS = 3;
 
-    // Dizionario delle traduzioni per l'internazionalizzazione
     const translations = {
       it: {
         appTitle: "CoachPro",
@@ -397,12 +395,10 @@
     };
 
     function CoachProApp() {
-      // Auth state
       const [user, setUser] = useState(null);
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
-      // Profile & Settings state
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
@@ -411,7 +407,6 @@
         return translations[language][key] || translations['it'][key] || key;
       };
 
-      // App state
       const [activeTab, setActiveTab] = useState('board');
       const [tool, setTool] = useState('move');
       const [draggedId, setDraggedId] = useState(null);
@@ -421,11 +416,9 @@
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
 
-      // Club License state
       const [clubCodeInput, setClubCodeInput] = useState('');
       const [clubCodeMsg, setClubCodeMsg] = useState('');
 
-      // Data state
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
       const [newPlayerName, setNewPlayerName] = useState('');
@@ -451,7 +444,7 @@
       };
 
       const checkAccess = () => {
-      return true;
+        return true;
       };
 
       const hasAccess = checkAccess();
@@ -517,161 +510,112 @@
         }
       };
 
-      const handleExportPDF = () => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
+      const addPlayer = (e) => {
+        e.preventDefault();
+        if (!newPlayerName.trim()) return;
+        
+        const squadPlayer = {
+          id: Date.now().toString(),
+          name: newPlayerName.trim(),
+          number: newPlayerNumber || '1',
+          role: newPlayerRole || 'Centrocampista',
+          status: 'presente'
+        };
 
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
-        }
-
-        const drillsHtml = drills.length === 0 
-          ? `<p style="color:#666; font-style:italic;">Nessun esercizio inserito in questa sessione.</p>`
-          : drills.map((d, index) => `
-            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa;">
-              <h3 style="margin: 0 0 5px 0; color: #15803d;">#${index + 1} - ${d.title}</h3>
-              <p style="margin: 0 0 8px 0; font-size: 12px; color: #555;"><strong>Categoria:</strong> ${d.category} | ⏱️ <strong>Durata:</strong> ${d.duration}</p>
-              <p style="margin: 0; font-size: 13px; color: #333; white-space: pre-line;">${d.description || 'Nessuna descrizione.'}</p>
-            </div>
-          `).join('');
-
-        const squadHtml = players.length === 0
-          ? `<p style="color:#666; font-style:italic;">Nessun giocatore registrato in rosa.</p>`
-          : `
-            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px;">
-              <thead>
-                <tr style="background: #15803d; color: white;">
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Giocatore</th>
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Ruolo</th>
-                  <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Stato</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${players.map(p => `
-                  <tr>
-                    <td style="padding: 6px; border: 1px solid #ddd;">${p.name}</td>
-                    <td style="padding: 6px; border: 1px solid #ddd;">${p.role}</td>
-                    <td style="padding: 6px; border: 1px solid #ddd; text-transform: uppercase; font-weight: bold; color: ${p.status === 'presente' ? '#15803d' : '#dc2626'};">${p.status}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `;
-
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8" />
-            <title>CoachPro - Sessione di Allenamento</title>
-            <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 24px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              h2 { color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin-top: 30px; font-size: 16px; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="title-box">
-                <h1>COACHPRO - SESSION PLANNER</h1>
-                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
-              </div>
-              <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
-              </div>
-            </div>
-
-            <h2>📋 Esercitazioni della Seduta</h2>
-            ${drillsHtml}
-
-            <h2>👥 Rosa & Convocati</h2>
-            ${squadHtml}
-
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
-            
-            <script>
-              window.onload = function() {
-                window.print();
-              };
-            <\/script>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
+        setPlayers([...players, squadPlayer]);
+        setNewPlayerName('');
+        setNewPlayerNumber('');
       };
 
-      const handleExportSingleDrillPDF = (drill) => {
+      const togglePlayerStatus = (id) => {
+        setPlayers(players.map(p => {
+          if (p.id === id) {
+            const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
+            return { ...p, status: nextStatus };
+          }
+          return p;
+        }));
+      };
+
+      const removePlayer = (id) => {
+        setPlayers(players.filter(p => p.id !== id));
+      };
+
+      const addDrill = (e) => {
+        e.preventDefault();
+        if (!newDrillTitle.trim()) return;
+        setDrills([...drills, { id: Date.now().toString(), title: newDrillTitle.trim(), category: newDrillCat, duration: newDrillDur, description: newDrillDesc }]);
+        setNewDrillTitle('');
+        setNewDrillDesc('');
+      };
+
+      const removeDrill = (id) => {
+        setDrills(drills.filter(d => d.id !== id));
+      };
+
+      const presetFormation = (type) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
+        let formationElements = [];
+        // Portiere fisso
+        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: '1', name: 'Portiere', x: 50, y: 90 });
 
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          alert("Abilita i popup per scaricare il PDF.");
-          return;
+        if (type === '433') {
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 65, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '7', name: 'Ala Dx', x: 20, y: 25 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 },
+            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Ala Sx', x: 80, y: 25 }
+          );
+        } else if (type === '442') {
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '7', name: 'Est. Dx', x: 20, y: 45 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Centr.', x: 40, y: 50 },
+            { id: 'p8', type: 'player', color: 'red', number: '8', name: 'Centr.', x: 60, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Est. Sx', x: 80, y: 45 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Prima P.', x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: '10', name: 'Seconda P.', x: 60, y: 22 }
+          );
+        } else if (type === '352') {
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Bracc. Dx', x: 30, y: 75 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Libero', x: 50, y: 80 },
+            { id: 'p4', type: 'player', color: 'red', number: '3', name: 'Bracc. Sx', x: 70, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '7', name: 'Torn. Dx', x: 15, y: 50 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 38, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 62, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Torn. Sx', x: 85, y: 50 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Attaccante', x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Attaccante', x: 60, y: 22 }
+          );
+        } else if (type === '4321') {
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 55 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 60 },
+            { id: 'p8', type: 'player', color: 'red', number: '14', name: 'Mediano', x: 65, y: 55 },
+            { id: 'p9', type: 'player', color: 'red', number: '10', name: 'Trequart.', x: 40, y: 35 },
+            { id: 'p10', type: 'player', color: 'red', number: '11', name: 'Trequart.', x: 60, y: 35 },
+            { id: 'p11', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 }
+          );
         }
-
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8" />
-            <title>CoachPro - Esercizio: ${drill.title}</title>
-            <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              .card { padding: 20px; border: 1px solid #ddd; border-radius: 12px; background: #fafafa; margin-top: 20px; }
-              .badge { display: inline-block; background: #15803d; color: white; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="title-box">
-                <h1>COACHPRO - SCHEDA ESERCIZIO</h1>
-                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
-              </div>
-              <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
-              </div>
-            </div>
-
-            <div class="card">
-              <span class="badge">${drill.category}</span>
-              <h2 style="margin: 5px 0 10px 0; color: #1f2937; font-size: 20px;">${drill.title}</h2>
-              <p style="margin: 0 0 15px 0; font-size: 13px; color: #555;">⏱️ <strong>Durata:</strong> ${drill.duration}</p>
-              <hr style="border:0; border-top:1px solid #e5e7eb; margin: 15px 0;" />
-              <h4 style="margin: 0 0 8px 0; color: #374151; font-size: 14px;">Descrizione e Obiettivi:</h4>
-              <p style="margin: 0; font-size: 14px; color: #333; white-space: pre-line; line-height: 1.5;">${drill.description || 'Nessuna descrizione.'}</p>
-            </div>
-
-            <div class="footer">
-              Generato con CoachPro App - Piattaforma Tattica Professionale
-            </div>
-            
-            <script>
-              window.onload = function() {
-                window.print();
-              };
-            <\/script>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
+        setElements(formationElements);
       };
 
       const getCoords = (evt) => {
@@ -739,235 +683,60 @@
         }
       };
 
-      const presetFormation = (type) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        let reds = [];
-        if (type === '433') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
-            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
-            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
-            { id: 'r6', type: 'player', color: 'red', number: '4', x: 50, y: 60 },
-            { id: 'r7', type: 'player', color: 'red', number: '8', x: 30, y: 50 },
-            { id: 'r8', type: 'player', color: 'red', number: '10', x: 70, y: 50 },
-            { id: 'r9', type: 'player', color: 'red', number: '7', x: 15, y: 30 },
-            { id: 'r10', type: 'player', color: 'red', number: '9', x: 50, y: 25 },
-            { id: 'r11', type: 'player', color: 'red', number: '11', x: 85, y: 30 }
-          ];
-        } else if (type === '442') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
-            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
-            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
-            { id: 'r6', type: 'player', color: 'red', number: '7', x: 15, y: 50 },
-            { id: 'r7', type: 'player', color: 'red', number: '4', x: 38, y: 52 },
-            { id: 'r8', type: 'player', color: 'red', number: '8', x: 62, y: 52 },
-            { id: 'r9', type: 'player', color: 'red', number: '11', x: 85, y: 50 },
-            { id: 'r10', type: 'player', color: 'red', number: '9', x: 38, y: 28 },
-            { id: 'r11', type: 'player', color: 'red', number: '10', x: 62, y: 28 }
-          ];
-        } else if (type === '4231') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
-            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
-            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
-            { id: 'r6', type: 'player', color: 'red', number: '4', x: 36, y: 58 },
-            { id: 'r7', type: 'player', color: 'red', number: '8', x: 64, y: 58 },
-            { id: 'r8', type: 'player', color: 'red', number: '7', x: 18, y: 40 },
-            { id: 'r9', type: 'player', color: 'red', number: '10', x: 50, y: 42 },
-            { id: 'r10', type: 'player', color: 'red', number: '11', x: 82, y: 40 },
-            { id: 'r11', type: 'player', color: 'red', number: '9', x: 50, y: 23 }
-          ];
-        } else if (type === '352') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '5', x: 26, y: 74 },
-            { id: 'r3', type: 'player', color: 'red', number: '4', x: 50, y: 76 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 74, y: 74 },
-            { id: 'r5', type: 'player', color: 'red', number: '2', x: 12, y: 52 },
-            { id: 'r6', type: 'player', color: 'red', number: '8', x: 32, y: 55 },
-            { id: 'r7', type: 'player', color: 'red', number: '6', x: 50, y: 60 },
-            { id: 'r8', type: 'player', color: 'red', number: '10', x: 68, y: 55 },
-            { id: 'r9', type: 'player', color: 'red', number: '3', x: 88, y: 52 },
-            { id: 'r10', type: 'player', color: 'red', number: '9', x: 38, y: 28 },
-            { id: 'r11', type: 'player', color: 'red', number: '11', x: 62, y: 28 }
-          ];
-        } else if (type === '3421') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '5', x: 26, y: 74 },
-            { id: 'r3', type: 'player', color: 'red', number: '4', x: 50, y: 76 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 74, y: 74 },
-            { id: 'r5', type: 'player', color: 'red', number: '2', x: 14, y: 54 },
-            { id: 'r6', type: 'player', color: 'red', number: '8', x: 38, y: 56 },
-            { id: 'r7', type: 'player', color: 'red', number: '7', x: 62, y: 56 },
-            { id: 'r8', type: 'player', color: 'red', number: '3', x: 86, y: 54 },
-            { id: 'r9', type: 'player', color: 'red', number: '10', x: 35, y: 38 },
-            { id: 'r10', type: 'player', color: 'red', number: '11', x: 65, y: 38 },
-            { id: 'r11', type: 'player', color: 'red', number: '9', x: 50, y: 23 }
-          ];
-        } else if (type === '4312') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
-            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
-            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
-            { id: 'r6', type: 'player', color: 'red', number: '4', x: 50, y: 60 },
-            { id: 'r7', type: 'player', color: 'red', number: '8', x: 28, y: 53 },
-            { id: 'r8', type: 'player', color: 'red', number: '7', x: 72, y: 53 },
-            { id: 'r9', type: 'player', color: 'red', number: '10', x: 50, y: 40 },
-            { id: 'r10', type: 'player', color: 'red', number: '9', x: 38, y: 25 },
-            { id: 'r11', type: 'player', color: 'red', number: '11', x: 62, y: 25 }
-          ];
-        } else if (type === '4321') {
-          reds = [
-            { id: 'r1', type: 'player', color: 'red', number: '1', x: 50, y: 88 },
-            { id: 'r2', type: 'player', color: 'red', number: '2', x: 15, y: 70 },
-            { id: 'r3', type: 'player', color: 'red', number: '5', x: 38, y: 75 },
-            { id: 'r4', type: 'player', color: 'red', number: '6', x: 62, y: 75 },
-            { id: 'r5', type: 'player', color: 'red', number: '3', x: 85, y: 70 },
-            { id: 'r6', type: 'player', color: 'red', number: '4', x: 50, y: 62 },
-            { id: 'r7', type: 'player', color: 'red', number: '8', x: 35, y: 50 },
-            { id: 'r8', type: 'player', color: 'red', number: '7', x: 65, y: 50 },
-            { id: 'r9', type: 'player', color: 'red', number: '10', x: 38, y: 36 },
-            { id: 'r10', type: 'player', color: 'red', number: '11', x: 62, y: 36 },
-            { id: 'r11', type: 'player', color: 'red', number: '9', x: 50, y: 23 }
-          ];
-        }
-        setElements([...reds, { id: 'b1', type: 'ball', x: 50, y: 50 }]);
-        setArrows([]);
-      };
-
-      const handleShareWhatsApp = (drill) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        const text = `⚽ *COACHPRO - DRILL*\n\n📌 *Title:* ${drill.title}\n⏱️ *Duration:* ${drill.duration}\n📂 *Category:* ${drill.category}\n\n📝 *Description:*\n${drill.description}`;
-        const encodedText = encodeURIComponent(text);
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.location.href = `whatsapp://send?text=${encodedText}`;
-        } else {
-          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
-        }
-      };
-
-      const addDrill = (evt) => {
-        evt.preventDefault();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        if (!newDrillTitle) return;
-        setDrills([...drills, {
-          id: Date.now().toString(),
-          title: newDrillTitle,
-          category: newDrillCat,
-          duration: newDrillDur,
-          description: newDrillDesc
-        }]);
-        setNewDrillTitle('');
-        setNewDrillDesc('');
-      };
-
-      const addPlayer = (e) => {
-    e.preventDefault();
-    if (!newPlayerName.trim()) return;
-    
-    const newPlayer = {
-      id: Date.now().toString(),
-      name: newPlayerName.trim(),
-      number: newPlayerNumber || '1',
-      role: newPlayerRole || 'Centrocampista',
-      status: 'presente'
-    };
-
-    setPlayers([...players, newPlayer]);
-    setNewPlayerName('');
-    setNewPlayerNumber('');
-  };
-
-     const togglePlayerStatus = (id) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        setPlayers(players.map(p => {
-          if (p.id === id) {
-            const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
-            return { ...p, status: nextStatus };
-          }
-          return p;
-        }));
-      };
-
-      // LOGIN / REGISTRAZIONE
       if (!user) {
         return (
-          <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-6 shadow-2xl">
-              <div className="text-center space-y-2">
-                <div className="w-16 h-16 bg-emerald-500 text-gray-950 rounded-2xl font-black text-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">CP</div>
+          <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4">
+            <div className="max-w-md w-full bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl">
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center font-black text-2xl text-white mb-3 shadow-lg shadow-emerald-600/30">CP</div>
                 <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
-                <p className="text-xs text-gray-400">{t('subtitle')}</p>
+                <p className="text-xs text-gray-400 mt-1">{t('subtitle')}</p>
               </div>
+
               <form onSubmit={handleAuth} className="space-y-4">
                 {authMode === 'register' && (
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300">{t('namePlaceholder')}</label>
-                    <input
-                      type="text"
-                      placeholder={t('namePlaceholder')}
-                      value={authData.name}
-                      onChange={(ev) => setAuthData({ ...authData, name: ev.target.value })}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  <div>
+                    <label className="block text-xs font-bold text-gray-300 mb-1">Nome Mister / Società</label>
+                    <input 
+                      type="text" 
+                      placeholder={t('namePlaceholder')} 
+                      value={authData.name} 
+                      onChange={(e) => setAuthData({ ...authData, name: e.target.value })} 
+                      className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                     />
                   </div>
                 )}
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">{t('emailLabel')}</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="allenatore@email.com"
-                    value={authData.email}
-                    onChange={(ev) => setAuthData({ ...authData, email: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                <div>
+                  <label className="block text-xs font-bold text-gray-300 mb-1">{t('emailLabel')}</label>
+                  <input 
+                    type="email" 
+                    required 
+                    placeholder="mister@email.com" 
+                    value={authData.email} 
+                    onChange={(e) => setAuthData({ ...authData, email: e.target.value })} 
+                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-300">{t('passwordLabel')}</label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    value={authData.password}
-                    onChange={(ev) => setAuthData({ ...authData, password: ev.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                <div>
+                  <label className="block text-xs font-bold text-gray-300 mb-1">{t('passwordLabel')}</label>
+                  <input 
+                    type="password" 
+                    required 
+                    placeholder="••••••••" 
+                    value={authData.password} 
+                    onChange={(e) => setAuthData({ ...authData, password: e.target.value })} 
+                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20"
-                >
+                <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition-all text-sm shadow-lg shadow-emerald-600/20">
                   {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
-              <div className="text-center border-t border-gray-800 pt-4">
-                <button
-                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                  className="text-xs text-emerald-400 font-semibold hover:underline"
+
+              <div className="mt-6 text-center">
+                <button 
+                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} 
+                  className="text-xs text-emerald-400 hover:underline font-semibold"
                 >
                   {authMode === 'login' ? t('noAccount') : t('hasAccount')}
                 </button>
@@ -977,463 +746,313 @@
         );
       }
 
-      // APP PRINCIPALE
       return (
-        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
-          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <div className="min-h-screen bg-gray-950 text-white flex flex-col">
+          {/* Top Bar */}
+          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-50">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setShowProfileDrawer(true)}
-                className="w-10 h-10 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl flex flex-col items-center justify-center space-y-1 relative focus:outline-none"
-                title={t('profileSettings')}
+              <div 
+                onClick={() => setShowProfileDrawer(true)} 
+                className="w-10 h-10 rounded-xl overflow-hidden bg-emerald-600 flex items-center justify-center font-bold cursor-pointer border border-emerald-500 shadow-md"
               >
-                {profileImage ? (
-                  <img src={profileImage} alt="Profilo" className="w-full h-full object-cover rounded-xl" />
-                ) : (
-                  <>
-                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                    <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                  </>
-                )}
-              </button>
-
-              <div className="flex items-center space-x-2.5">
-                <div className="bg-emerald-500 text-gray-950 p-2 rounded-xl font-black text-base">CP</div>
-                <div>
-                  <h1 className="font-bold text-sm leading-none text-white">{user.name}</h1>
-                  <span className="text-[10px] text-emerald-400 font-medium">
-                    {hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : (user.isPro ? t('proActive') : t('trialActive'))) : t('freeLocked')}
-                  </span>
-                </div>
+                {profileImage ? <img src={profileImage} className="w-full h-full object-cover" /> : user.name.substring(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <h2 className="font-bold text-sm leading-tight flex items-center gap-1.5">
+                  {user.name}
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">PRO</span>
+                </h2>
+                <p className="text-[10px] text-gray-400">CoachPro Studio</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setShowPaywallModal(true)}
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-950 font-extrabold px-3 py-1.5 rounded-lg text-xs shadow-md"
-              >
+              <button onClick={() => setShowPaywallModal(true)} className="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-3 py-1.5 rounded-xl font-bold">
                 {t('subButton')}
               </button>
-              <button
-                onClick={handleLogout}
-                className="bg-gray-800 hover:bg-gray-700 text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-semibold"
-              >
+              <button onClick={handleLogout} className="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-1.5 rounded-xl font-semibold">
                 {t('exitButton')}
               </button>
             </div>
           </header>
 
-          {showProfileDrawer && (
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-start">
-              <div className="w-80 max-w-[85vw] bg-gray-900 border-r border-gray-800 h-full p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                    <h3 className="font-black text-base text-white flex items-center space-x-2">
-                      <span>⚙️</span>
-                      <span>{t('profileSettings')}</span>
-                    </h3>
-                    <button
-                      onClick={() => setShowProfileDrawer(false)}
-                      className="text-gray-400 hover:text-white font-bold text-sm p-1.5 rounded-lg bg-gray-800"
-                    >
-                      ✕
-                    </button>
-                  </div>
+          {/* Navigation Tabs */}
+          <nav className="bg-gray-900/50 border-b border-gray-800 px-4 py-2 flex justify-around">
+            <button onClick={() => setActiveTab('board')} className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'board' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
+              ⚽ {t('navBoard')}
+            </button>
+            <button onClick={() => setActiveTab('drills')} className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'drills' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
+              📋 {t('navDrills')}
+            </button>
+            <button onClick={() => setActiveTab('squad')} className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'squad' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
+              👥 {t('navSquad')}
+            </button>
+          </nav>
 
-                  <div className="space-y-3 text-center bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <div className="w-20 h-20 bg-gray-800 rounded-2xl mx-auto overflow-hidden border-2 border-emerald-500/50 flex items-center justify-center relative shadow-lg">
-                      {profileImage ? (
-                        <img src={profileImage} alt="Profilo" className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-2xl">🛡️</span>
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-white">{user.name}</h4>
-                      <p className="text-[11px] text-gray-400">{user.email}</p>
-                    </div>
-                    <label className="inline-block bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3.5 py-2 rounded-xl text-xs cursor-pointer transition shadow">
-                      {t('uploadPhoto')}
-                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                    </label>
-                  </div>
-
-                  <div className="space-y-2 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <label className="text-xs font-bold text-gray-300 flex items-center space-x-1.5">
-                      <span>🌍</span>
-                      <span>{t('languageLabel')}</span>
-                    </label>
-                    <select
-                      value={language}
-                      onChange={(e) => setLanguage(e.target.value)}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-                    >
-                      <option value="it">🇮🇹 Italiano</option>
-                      <option value="en">🇬🇧 English</option>
-                      <option value="es">🇪🇸 Español</option>
-                      <option value="fr">🇫🇷 Français</option>
-                      <option value="de">🇩🇪 Deutsch</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-1 text-xs text-gray-400 bg-gray-950 p-4 rounded-2xl border border-gray-800">
-                    <p className="font-semibold text-white mb-1">{t('accountStatus')}</p>
-                    <p>• {t('subButton')}: <span className="text-emerald-400 font-bold">{hasAccess ? (user.clubCode ? `Club (${user.clubCode})` : t('proActive')) : 'Free'}</span></p>
-                    {user.clubCode && <p className="text-teal-300 mt-1">{t('clubLicenseActive')}</p>}
-                  </div>
+          {/* Main Workspace */}
+          <main className="flex-1 flex flex-col p-4 max-w-4xl mx-auto w-full">
+            
+            {/* TAB: BOARD */}
+            {activeTab === 'board' && (
+              <div className="flex-1 flex flex-col space-y-3">
+                {/* Moduli rapidi */}
+                <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-xs">
+                  <span className="text-gray-400 font-bold whitespace-nowrap">{t('quickFormations')}</span>
+                  <button onClick={() => presetFormation('433')} className="bg-gray-900 border border-gray-800 px-3 py-1 rounded-lg hover:border-emerald-500 font-bold">4-3-3</button>
+                  <button onClick={() => presetFormation('442')} className="bg-gray-900 border border-gray-800 px-3 py-1 rounded-lg hover:border-emerald-500 font-bold">4-4-2</button>
+                  <button onClick={() => presetFormation('352')} className="bg-gray-900 border border-gray-800 px-3 py-1 rounded-lg hover:border-emerald-500 font-bold">3-5-2</button>
+                  <button onClick={() => presetFormation('4321')} className="bg-gray-900 border border-gray-800 px-3 py-1 rounded-lg hover:border-emerald-500 font-bold">4-3-2-1</button>
                 </div>
 
-                <div className="pt-4 border-t border-gray-800">
-                  <button
-                    onClick={() => { setShowProfileDrawer(false); handleLogout(); }}
-                    className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold py-2.5 rounded-xl text-xs transition"
-                  >
-                    {t('logoutAccount')}
-                  </button>
+                {/* Strumenti lavagna */}
+                <div className="grid grid-cols-4 sm:flex sm:flex-wrap gap-2">
+                  <button onClick={() => setTool('move')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'move' ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>✋ {t('toolMove')}</button>
+                  <button onClick={() => setTool('player-red')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'player-red' ? 'bg-rose-600 border-rose-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
+                  <button onClick={() => setTool('player-blue')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'player-blue' ? 'bg-blue-600 border-blue-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
+                  <button onClick={() => setTool('ball')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'ball' ? 'bg-white text-black border-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>⚽ {t('toolBall')}</button>
+                  <button onClick={() => setTool('cone')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'cone' ? 'bg-orange-500 border-orange-400 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🔺 {t('toolCone')}</button>
+                  <button onClick={() => setTool('cinesina')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'cinesina' ? 'bg-yellow-400 border-yellow-300 text-black' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🟡 {t('toolCinesina')}</button>
+                  <button onClick={() => setTool('ladder')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'ladder' ? 'bg-purple-600 border-purple-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
+                  <button onClick={() => setTool('delete')} className={`px-3 py-2 rounded-xl text-xs font-bold border ${tool === 'delete' ? 'bg-rose-600 border-rose-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-300'}`}>🗑️ {t('toolDelete')}</button>
+                  <button onClick={() => { setElements([]); setArrows([]); }} className="px-3 py-2 rounded-xl text-xs font-bold bg-gray-900 border border-gray-800 text-gray-400 hover:text-rose-400">🧹 {t('toolClear')}</button>
                 </div>
-              </div>
-            </div>
-          )}
 
-          <main className="flex-1 p-4 max-w-4xl mx-auto w-full space-y-4">
-            {user.clubCode && (
-              <div className="bg-teal-950/60 border border-teal-800/80 rounded-2xl p-3.5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-teal-300">🛡️ {t('clubInviteBanner')}: {user.clubCode}</h4>
-                  <p className="text-[11px] text-teal-200/70">{t('clubLicenseActive')}</p>
-                </div>
-                <button
-                  onClick={handleShareClubInvite}
-                  className="bg-teal-500 hover:bg-teal-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 shadow"
+                {/* Campo da calcio interattivo */}
+                <div 
+                  ref={svgRef}
+                  onClick={handleBoardClick}
+                  onTouchMove={handleTouchMove}
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-emerald-600/50 pitch-bg shadow-2xl cursor-crosshair select-none"
                 >
-                  {t('inviteCoach')}
-                </button>
+                  {/* Linee campo */}
+                  <div className="absolute inset-4 border-2 border-white/30 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/30 transform -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-1/2 w-24 h-24 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+                  {/* Elementi in campo */}
+                  {elements.map(el => {
+                    let bgClass = "bg-rose-600 border-rose-400";
+                    if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
+                    if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
+                    if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+                    if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
+                    if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
+
+                    return (
+                      <div
+                        key={el.id}
+                        onClick={(e) => handleElementClick(el.id, e)}
+                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                        className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
+                      >
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
+                          {el.type === 'player' && el.number}
+                          {el.type === 'ball' && '⚽'}
+                          {el.type === 'cone' && ''}
+                          {el.type === 'cinesina' && '•'}
+                          {el.type === 'ladder' && '☷'}
+                        </div>
+                        
+                        {el.type === 'player' && el.name && (
+                          <span className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md">
+                            {el.name}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
 
-            {activeTab === 'board' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between bg-gray-900 p-2.5 rounded-2xl border border-gray-800 text-xs">
-                  <span className="text-gray-400 font-medium text-[11px]">{t('quickFormations')}</span>
-                  <div className="flex space-x-2">
-                    <button onClick={() => presetFormation('433')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded-lg text-emerald-400 font-bold">4-4-2</button>
-                    <button onClick={() => presetFormation('4231')} className="px-2.5 py-1 bg-gray-900 border border-gray-800 rounded-lg text-xs font-semibold hover:border-emerald-500 transition-all">4-2-3-1</button>
-                    <button onClick={() => presetFormation('352')} className="px-2.5 py-1 bg-gray-900 border border-gray-800 rounded-lg text-xs font-semibold hover:border-emerald-500 transition-all">3-5-2</button>
-                    <button onClick={() => presetFormation('3421')} className="px-2.5 py-1 bg-gray-900 border border-gray-800 rounded-lg text-xs font-semibold hover:border-emerald-500 transition-all">3-4-2-1</button>
-                    <button onClick={() => presetFormation('4312')} className="px-2.5 py-1 bg-gray-900 border border-gray-800 rounded-lg text-xs font-semibold hover:border-emerald-500 transition-all">4-3-1-2</button>
-                    <button onClick={() => presetFormation('4321')} className="px-2.5 py-1 bg-gray-900 border border-gray-800 rounded-lg text-xs font-semibold hover:border-emerald-500 transition-all">4-3-2-1</button>
-                  </div>
-                </div>
-
-                <div className="bg-gray-900 p-2.5 rounded-2xl border border-gray-800 grid grid-cols-4 gap-2 text-xs">
-                  <button onClick={() => setTool('move')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'move' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>👆 {t('toolMove')}</button>
-                  <button onClick={() => setTool('player-red')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-red' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
-                  <button onClick={() => setTool('player-blue')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'player-blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
-                  <button onClick={() => setTool('ball')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ball' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'bg-gray-800 text-gray-300'}`}>⚽ {t('toolBall')}</button>
-                  <button onClick={() => setTool('cone')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cone' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50' : 'bg-gray-800 text-gray-300'}`}>🔶 {t('toolCone')}</button>
-                  <button onClick={() => setTool('cinesina')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'cinesina' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-gray-800 text-gray-300'}`}>🟡 {t('toolCinesina')}</button>
-                  <button onClick={() => setTool('ladder')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'ladder' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
-                  <button onClick={() => setTool('arrow')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'arrow' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-gray-800 text-gray-300'}`}>↗️ {t('toolArrow')}</button>
-                  <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ {t('toolDelete')}</button>
-                  <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
-                </div>
-
-                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
-                  {!hasAccess && (
-                    <div 
-                      onClick={() => setShowPaywallModal(true)}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
-                    >
-                      <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
-                      <h3 className="text-lg font-bold text-white">{t('lockedTitle')}</h3>
-                      <p className="text-xs text-gray-300 max-w-xs mt-1">{t('lockedDesc')}</p>
-                    </div>
-                  )}
-                  <svg
-                    ref={svgRef}
-                    className="w-full h-full cursor-pointer touch-none"
-                    onClick={handleBoardClick}
-                    onTouchMove={handleTouchMove}
-                  >
-                    <rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <circle cx="50%" cy="50%" r="15%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="5%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-                    <rect x="25%" y="77%" width="50%" height="18%" fill="none" stroke="white" strokeWidth="2" strokeOpacity="0.7" />
-
-                    {arrows.map(arr => (
-                      <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
-                    ))}
-
-                    {elements.map(el => {
-  let bgClass = "bg-rose-600 border-rose-400";
-  if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
-  if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
-  if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
-  if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
-  if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
-
-  return (
-    <div
-      key={el.id}
-      onClick={(e) => handleElementClick(el.id, e)}
-      style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-      className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
-    >
-      <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
-        {el.type === 'player' && el.number}
-        {el.type === 'ball' && '⚽'}
-        {el.type === 'cone' && ''}
-        {el.type === 'cinesina' && '•'}
-        {el.type === 'ladder' && '☷'}
-      </div>
-      
-      {el.type === 'player' && el.name && (
-        <span className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md">
-          {el.name}
-        </span>
-      )}
-    </div>
-  );
-})}
-
+            {/* TAB: DRILLS */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
                 <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-bold text-white">{t('newDrill')}</h3>
-                    <button
-                      type="button"
-                      onClick={handleExportPDF}
-                      className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center space-x-1 shadow"
-                    >
-                      {t('exportPdf')}
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder={t('drillTitlePlaceholder')}
-                    value={newDrillTitle}
-                    onChange={(ev) => setNewDrillTitle(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-                  />
-                  <div className="grid grid-cols-2 gap-2">
-                    <select
-                      value={newDrillCat}
-                      onChange={(ev) => setNewDrillCat(ev.target.value)}
-                      className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  <h3 className="font-bold text-sm text-emerald-400">{t('newDrill')}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <input 
+                      type="text" 
+                      placeholder={t('drillTitlePlaceholder')} 
+                      value={newDrillTitle} 
+                      onChange={(e) => setNewDrillTitle(e.target.value)} 
+                      className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                    <select 
+                      value={newDrillCat} 
+                      onChange={(e) => setNewDrillCat(e.target.value)} 
+                      className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"
                     >
                       <option value="Possesso Palla">{t('categoryPossesso')}</option>
                       <option value="Tattica">{t('categoryTactics')}</option>
                       <option value="Atletico">{t('categoryFitness')}</option>
                       <option value="Rifinitura">{t('categoryFinishing')}</option>
                     </select>
-                    <input
-                      type="text"
-                      placeholder={t('drillDurationPlaceholder')}
-                      value={newDrillDur}
-                      onChange={(ev) => setNewDrillDur(ev.target.value)}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                    <input 
+                      type="text" 
+                      placeholder={t('drillDurationPlaceholder')} 
+                      value={newDrillDur} 
+                      onChange={(e) => setNewDrillDur(e.target.value)} 
+                      className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
-                  <textarea
-                    placeholder={t('drillDescPlaceholder')}
-                    value={newDrillDesc}
-                    onChange={(ev) => setNewDrillDesc(ev.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white h-20"
+                  <textarea 
+                    placeholder={t('drillDescPlaceholder')} 
+                    value={newDrillDesc} 
+                    onChange={(e) => setNewDrillDesc(e.target.value)} 
+                    rows="2"
+                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"
                   ></textarea>
-                  <button type="submit" className="w-full bg-emerald-500 text-gray-950 font-bold py-2 rounded-xl text-xs">{t('saveDrill')}</button>
+                  <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl text-xs">
+                    {t('saveDrill')}
+                  </button>
                 </form>
 
                 {drills.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 text-xs">{t('noDrills')}</div>
+                  <p className="text-gray-500 text-center py-10 text-sm">{t('noDrills')}</p>
                 ) : (
-                  drills.map(drill => (
-                    <div key={drill.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-2">
-                      <div className="flex justify-between items-start">
-                        <h4 className="font-bold text-sm text-white">{drill.title}</h4>
-                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">{drill.category}</span>
-                      </div>
-                      <p className="text-xs text-gray-400">{drill.description}</p>
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-800 text-xs">
-                        <span className="text-gray-500 font-medium">⏱️ {drill.duration}</span>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleExportSingleDrillPDF(drill)}
-                            className="bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 text-xs px-2.5 py-1.5 rounded-lg font-semibold flex items-center space-x-1 border border-teal-500/30"
-                          >
-                            {t('exportDrillPdf')}
-                          </button>
-                          <button
-                            onClick={() => handleShareWhatsApp(drill)}
-                            className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center space-x-1"
-                          >
-                            📲 {t('shareWhatsapp')}
-                          </button>
+                  <div className="space-y-3">
+                    {drills.map(d => (
+                      <div key={d.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex flex-col space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">{d.category}</span>
+                            <h4 className="font-bold text-sm mt-1">{d.title}</h4>
+                            <p className="text-xs text-gray-400">⏱️ {d.duration}</p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <button onClick={() => handleExportSingleDrillPDF(d)} className="text-xs bg-gray-800 hover:bg-gray-700 px-2.5 py-1 rounded-xl text-emerald-400 font-semibold">PDF</button>
+                            <button onClick={() => removeDrill(d.id)} className="text-gray-500 hover:text-rose-400">✕</button>
+                          </div>
                         </div>
+                        {d.description && <p className="text-xs text-gray-300 bg-gray-950/50 p-2 rounded-xl">{d.description}</p>}
                       </div>
-                    </div>
-                  ))
+                    ))}
+                    <button onClick={handleExportPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg">
+                      {t('exportPdf')}
+                    </button>
+                  </div>
                 )}
               </div>
             )}
 
+            {/* TAB: SQUAD / ROSA */}
             {activeTab === 'squad' && (
-  <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2 mb-4">
-  <input
-    type="number"
-    placeholder="N°"
-    value={newPlayerNumber}
-    onChange={(ev) => setNewPlayerNumber(ev.target.value)}
-    className="w-16 bg-gray-800 border border-gray-700 rounded-xl px-2 py-2 text-xs text-white text-center font-bold"
-  />
-  <input
-    type="text"
-    placeholder={t('playerPlaceholder')}
-    value={newPlayerName}
-    onChange={(ev) => setNewPlayerName(ev.target.value)}
-    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-  />
-  <select
-    value={newPlayerRole}
-    onChange={(ev) => setNewPlayerRole(ev.target.value)}
-    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
-  >
-    <option value="Portiere">{t('roleGoalkeeper')}</option>
-    <option value="Difensore">{t('roleDefender')}</option>
-    <option value="Centrocampista">{t('roleMidfielder')}</option>
-    <option value="Attaccante">{t('roleForward')}</option>
-  </select>
-  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
-</form>
+              <div className="space-y-4">
+                <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex space-x-2">
+                  <input
+                    type="number"
+                    placeholder="N°"
+                    value={newPlayerNumber}
+                    onChange={(ev) => setNewPlayerNumber(ev.target.value)}
+                    className="w-16 bg-gray-800 border border-gray-700 rounded-xl px-2 py-2 text-xs text-white text-center font-bold"
+                  />
+                  <input
+                    type="text"
+                    placeholder={t('playerPlaceholder')}
+                    value={newPlayerName}
+                    onChange={(ev) => setNewPlayerName(ev.target.value)}
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  />
+                  <select
+                    value={newPlayerRole}
+                    onChange={(ev) => setNewPlayerRole(ev.target.value)}
+                    className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white"
+                  >
+                    <option value="Portiere">{t('roleGoalkeeper')}</option>
+                    <option value="Difensore">{t('roleDefender')}</option>
+                    <option value="Centrocampista">{t('roleMidfielder')}</option>
+                    <option value="Attaccante">{t('roleForward')}</option>
+                  </select>
+                  <button type="submit" className="bg-emerald-500 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs">{t('addPlayer')}</button>
+                </form>
 
-    {players.length === 0 ? (
-      <p className="text-gray-500 text-center py-10 text-sm">{t('noPlayers')}</p>
-    ) : (
-      <div className="space-y-2">
-        {players.map(p => {
-          let statusBadge = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-          if (p.status === 'assente') statusBadge = "bg-rose-500/20 text-rose-400 border-rose-500/30";
-          if (p.status === 'infortunato') statusBadge = "bg-amber-500/20 text-amber-400 border-amber-500/30";
+                {players.length === 0 ? (
+                  <p className="text-gray-500 text-center py-10 text-sm">{t('noPlayers')}</p>
+                ) : (
+                  <div className="space-y-2">
+                    {players.map(p => {
+                      let statusBadge = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+                      if (p.status === 'assente') statusBadge = "bg-rose-500/20 text-rose-400 border-rose-500/30";
+                      if (p.status === 'infortunato') statusBadge = "bg-amber-500/20 text-amber-400 border-amber-500/30";
 
-          return (
-            <div key={p.id} className="bg-gray-900 border border-gray-800 rounded-xl p-3 flex items-center justify-between shadow">
-              <div>
-                <h4 className="font-bold text-sm">{p.name}</h4>
-                <p className="text-xs text-gray-400">{p.role}</p>
+                      return (
+                        <div key={p.id} className="bg-gray-900 border border-gray-800 rounded-xl p-3 flex items-center justify-between shadow">
+                          <div className="flex items-center space-x-3">
+                            <span className="w-7 h-7 rounded-full bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                              {p.number}
+                            </span>
+                            <div>
+                              <h4 className="font-bold text-sm">{p.name}</h4>
+                              <p className="text-xs text-gray-400">{p.role}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button 
+                              onClick={() => togglePlayerStatus(p.id)} 
+                              className={`text-[10px] px-2.5 py-1 rounded-full font-bold border transition-all ${statusBadge}`}
+                            >
+                              {p.status.toUpperCase()}
+                            </button>
+                            <button onClick={() => removePlayer(p.id)} className="text-gray-500 hover:text-rose-400 px-2 py-1">✕</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-              <div className="flex items-center space-x-2">
-                <button 
-                  onClick={() => togglePlayerStatus(p.id)} 
-                  className={`text-[10px] px-2.5 py-1 rounded-full font-bold border transition-all ${statusBadge}`}
-                >
-                  {p.status.toUpperCase()}
-                </button>
-                <button onClick={() => removePlayer(p.id)} className="text-gray-500 hover:text-rose-400 px-2 py-1">✕</button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    )}
-  </div>
-)}
+            )}
+
           </main>
 
-          {showPaywallModal && (
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl relative max-h-[90vh] overflow-y-auto">
-                <button
-                  onClick={() => setShowPaywallModal(false)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm"
-                >
-                  ✕
-                </button>
-                <div className="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">⭐</div>
-                <h3 className="text-xl font-black text-white">{t('paywallHeader')}</h3>
-                <p className="text-xs text-gray-300">{t('paywallDesc')}</p>
-                
-                <div className="space-y-2.5 pt-2">
-                  <button
-                    onClick={() => window.open(STRIPE_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg"
-                  >
-                    {t('indProBtn')}
-                  </button>
-
-                  <button
-                    onClick={() => window.open(STRIPE_CLUB_PAYMENT_LINK, '_blank')}
-                    className="w-full bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg border border-emerald-400/30 flex flex-col items-center justify-center space-y-0.5"
-                  >
-                    <span>🛡️ {t('clubBtn')}</span>
-                    <span className="text-[10px] text-emerald-200 font-semibold">{t('clubSubBtn')}</span>
-                  </button>
-
-                  <div className="bg-gray-950/80 border border-gray-800 rounded-2xl p-3 space-y-2 text-left mt-3">
-                    <label className="text-[11px] font-bold text-gray-300 block">{t('haveClubCode')}</label>
-                    <form onSubmit={handleRedeemClubCode} className="flex space-x-2">
-                      <input
-                        type="text"
-                        placeholder="es. CLUB2026"
-                        value={clubCodeInput}
-                        onChange={(e) => setClubCodeInput(e.target.value)}
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white uppercase font-mono"
-                      />
-                      <button
-                        type="submit"
-                        className="bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs"
-                      >
-                        {t('activate')}
-                      </button>
-                    </form>
-                    {clubCodeMsg && <p className="text-[10px] font-semibold text-emerald-400">{clubCodeMsg}</p>}
-                  </div>
-
-                  {!user.trialEndsAt && (
-                    <button
-                      onClick={activateTrial}
-                      className="w-full bg-gray-800 hover:bg-gray-700 text-emerald-400 font-semibold py-2 rounded-xl text-xs border border-emerald-500/30"
-                    >
-                      {t('trialBtn')}
-                    </button>
-                  )}
+          {/* Profile Drawer / Modal */}
+          {showProfileDrawer && (
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-bold text-base">{t('profileSettings')}</h3>
+                  <button onClick={() => setShowProfileDrawer(false)} className="text-gray-400 hover:text-white font-bold text-sm">✕</button>
                 </div>
+
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="w-20 h-20 rounded-2xl overflow-hidden bg-emerald-600 flex items-center justify-center font-bold text-2xl border-2 border-emerald-500 shadow-lg">
+                    {profileImage ? <img src={profileImage} className="w-full h-full object-cover" /> : user.name.substring(0, 2).toUpperCase()}
+                  </div>
+                  <label className="bg-gray-800 hover:bg-gray-700 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer border border-gray-700">
+                    {t('uploadPhoto')}
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  </label>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400">{t('languageLabel')}</label>
+                  <select 
+                    value={language} 
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"
+                  >
+                    <option value="it">Italiano</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                  </select>
+                </div>
+
+                <button onClick={() => setShowProfileDrawer(false)} className="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2.5 rounded-xl text-xs">
+                  Salva & Chiudi
+                </button>
               </div>
             </div>
           )}
 
-          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
-            <button
-              onClick={() => setActiveTab('board')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">⚽</span>
-              <span className="text-[10px] font-bold">{t('navBoard')}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('drills')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'drills' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">📋</span>
-              <span className="text-[10px] font-bold">{t('navDrills')}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('squad')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'squad' ? 'text-emerald-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">👥</span>
-              <span className="text-[10px] font-bold">{t('navSquad')}</span>
-            </button>
-          </nav>
         </div>
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<CoachProApp />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<CoachProApp />);
   </script>
 </body>
 </html>
