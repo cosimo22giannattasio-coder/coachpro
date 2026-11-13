@@ -1098,7 +1098,11 @@
                           </>
                         )}
                         {el.type === 'ball' && <circle cx={`${el.x}%`} cy={`${el.y}%`} r="7" fill="white" stroke="black" strokeWidth="2" />}
-                        {el.type === 'cone' && <polygon points={`${el.x}%,${el.y - 2.5}% ${el.x - 2}%,${el.y + 2}% ${el.x + 2}%,${el.y + 2}%`} fill="#f97316" />}
+                        {el.type === 'cone' && (
+  <text x={`${el.x}%`} y={`${el.y}%`} dominantBaseline="central" textAnchor="middle" fontSize="16">
+    🔶
+  </text>
+)}
                         {el.type === 'cinesina' && <ellipse cx={`${el.x}%`} cy={`${el.y}%`} rx="8" ry="4" fill="#facc15" stroke="#eab308" strokeWidth="1.5" />}
                         {el.type === 'ladder' && (
                           <g transform={`translate(${el.x * 3.5}, ${el.y * 2.5})`}>
