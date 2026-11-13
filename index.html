@@ -1080,13 +1080,19 @@
           return;
         }
 
-        const printWindow = window.open('', '_blank', 'width=900,height=700');
-        if (!printWindow) {
-          alert(language === 'it' ? "Consenti i popup per esportare il PDF." : "Please allow popups to export PDF.");
-          return;
-        }
+        // Crea un iframe nascosto per la stampa diretta senza blocchi popup
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
 
-        printWindow.document.write(`
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`
           <!DOCTYPE html>
           <html>
           <head>
@@ -1104,7 +1110,6 @@
               .token-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; border: 2px solid white; color: white; background: #dc2626; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
               .token-label { margin-top: 2px; background: rgba(0,0,0,0.85); color: white; padding: 1px 4px; border-radius: 3px; font-size: 8px; white-space: nowrap; font-weight: bold; }
               .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
-              @media print { body { padding: 0; } .no-print { display: none; } }
             </style>
           </head>
           <body>
@@ -1140,10 +1145,6 @@
               }).join('')}
             </div>
 
-            <div style="margin-top: 20px;" class="no-print">
-              <button onclick="window.print()" style="background: #15803d; color: white; border: none; padding: 10px 20px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer;">🖨️ Stampa / Salva PDF</button>
-            </div>
-
             <div class="footer">
               Generato con CoachPro App - Piattaforma Tattica Professionale
             </div>
@@ -1152,13 +1153,17 @@
               window.onload = function() {
                 setTimeout(function() {
                   window.print();
-                }, 500);
+                  // Rimuove l'iframe dopo la stampa
+                  setTimeout(function() {
+                    window.frameElement.remove();
+                  }, 1000);
+                }, 300);
               };
             <\/script>
           </body>
           </html>
         `);
-        printWindow.document.close();
+        doc.close();
       };
     ReactDOM.createRoot(document.getElementById('root')).render(<CoachProApp />);
   </script>
