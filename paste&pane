@@ -2,14 +2,14 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ArtisManager - Pannello Gestione Forni & Pasticcerie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtisManager PRO - Gestionale Forni & Pasticcerie</title>
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+    body { user-select: none; -webkit-user-select: none; }
   </style>
 </head>
 <body class="bg-gray-950 text-white font-sans antialiased selection:bg-amber-500 selection:text-black">
@@ -21,7 +21,6 @@
     function ArtisManagerApp() {
       const [activeTab, setActiveTab] = useState('orders');
       
-      // Lista ordini ricevuti dai clienti (simulazione gestionale laboratorio)
       const [incomingOrders, setIncomingOrders] = useState([
         {
           id: 'ORD-8492',
@@ -102,80 +101,121 @@
       };
 
       return (
-        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative max-w-md mx-auto border-x border-gray-900 shadow-2xl">
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col md:flex-row">
           
-          {/* Header del Software per il Negozio */}
-          <header className="bg-gray-900 border-b border-gray-800 p-4 sticky top-0 z-40 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-amber-500 text-gray-950 rounded-2xl font-black text-lg flex items-center justify-center shadow-lg shadow-amber-500/20">🍞</div>
-              <div>
-                <h1 className="font-bold text-sm text-white leading-tight">ArtisManager PRO</h1>
-                <span className="text-[10px] text-amber-400 font-medium">Gestionale Laboratorio & Preordini</span>
+          {/* SIDEBAR PER PC / HEADER FISSO PER MOBILE */}
+          <aside className="w-full md:w-72 bg-gray-900 border-b md:border-b-0 md:border-r border-gray-800 p-4 md:p-6 flex flex-col justify-between shrink-0">
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-amber-500 text-gray-950 rounded-2xl font-black text-xl flex items-center justify-center shadow-lg shadow-amber-500/20">🍞</div>
+                <div>
+                  <h1 className="font-extrabold text-base text-white tracking-tight">ArtisManager PRO</h1>
+                  <span className="text-xs text-amber-400 font-medium">Gestionale Forni & Pasticcerie</span>
+                </div>
               </div>
-            </div>
-            <div className="bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl text-[10px] font-semibold text-amber-300">
-              🏪 Pasticceria Centrale
-            </div>
-          </header>
 
-          {/* Contenuto Principale */}
-          <main className="flex-1 p-4 space-y-4 overflow-y-auto">
+              <div className="bg-amber-500/10 border border-amber-500/30 p-3 rounded-2xl">
+                <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">Negozio Attivo</span>
+                <span className="text-sm font-bold text-white">🏪 Pasticceria Centrale</span>
+              </div>
 
-            {/* SEZIONE 1: GESTIONE ORDINI E NOTIFICHE */}
+              {/* MENU DI NAVIGAZIONE (Adattivo PC/Mobile) */}
+              <nav className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2 overflow-x-auto">
+                <button 
+                  onClick={() => setActiveTab('orders')}
+                  className={`flex items-center space-x-3 w-full px-4 py-3 rounded-2xl font-bold text-xs md:text-sm transition text-left ${activeTab === 'orders' ? 'bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/20' : 'bg-gray-800/50 hover:bg-gray-800 text-gray-300'}`}
+                >
+                  <span className="text-lg">📥</span>
+                  <span>Preordini & Notifiche</span>
+                </button>
+                <button 
+                  onClick={() => setActiveTab('agenda')}
+                  className={`flex items-center space-x-3 w-full px-4 py-3 rounded-2xl font-bold text-xs md:text-sm transition text-left ${activeTab === 'agenda' ? 'bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/20' : 'bg-gray-800/50 hover:bg-gray-800 text-gray-300'}`}
+                >
+                  <span className="text-lg">📋</span>
+                  <span>Agenda Laboratorio</span>
+                </button>
+                <button 
+                  onClick={() => setActiveTab('settings')}
+                  className={`flex items-center space-x-3 w-full px-4 py-3 rounded-2xl font-bold text-xs md:text-sm transition text-left ${activeTab === 'settings' ? 'bg-amber-500 text-gray-950 shadow-lg shadow-amber-500/20' : 'bg-gray-800/50 hover:bg-gray-800 text-gray-300'}`}
+                >
+                  <span className="text-lg">⚙️</span>
+                  <span>Configurazione Negozio</span>
+                </button>
+              </nav>
+            </div>
+
+            <div className="hidden md:block pt-6 border-t border-gray-800 text-[11px] text-gray-500">
+              ArtisManager Cloud v2.4 • Pronto per il business artigianale.
+            </div>
+          </aside>
+
+          {/* CONTENUTO PRINCIPALE (Ottimizzato PC e Cellulare) */}
+          <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-6xl mx-auto w-full">
+
+            {/* SEZIONE 1: PREORDINI */}
             {activeTab === 'orders' && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between px-1">
-                  <h2 className="text-sm font-bold text-white">Ordini in arrivo ({incomingOrders.length})</h2>
-                  <span className="text-[11px] text-amber-400 font-medium">Aggiornato in tempo reale</span>
+              <div className="space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-gray-800 pb-4">
+                  <div>
+                    <h2 className="text-xl font-black text-white">Gestione Preordini in Arrivo</h2>
+                    <p className="text-xs text-gray-400">Ricevi le richieste, quantifica i prezzi e incassa in anticipo.</p>
+                  </div>
+                  <div className="bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-xl text-xs font-bold text-amber-400 w-fit">
+                    Totale Ordini: {incomingOrders.length}
+                  </div>
                 </div>
 
-                <div className="space-y-3">
+                {/* Griglia Ordini (Su PC si dispongono magnificamente a griglia o elenco espanso) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {incomingOrders.map(ord => (
-                    <div key={ord.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3 shadow-lg">
-                      <div className="flex justify-between items-start border-b border-gray-800 pb-2">
-                        <div>
-                          <span className="text-[10px] font-mono font-bold text-amber-400">{ord.id}</span>
-                          <h4 className="font-bold text-sm text-white">{ord.product}</h4>
-                          <p className="text-[11px] text-gray-400">Cliente: <strong className="text-gray-200">{ord.customer}</strong> ({ord.phone})</p>
-                        </div>
-                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${
-                          ord.status === 'Confermato & Pagato' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' :
-                          ord.status === 'In attesa di pagamento' ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' :
-                          'bg-red-500/20 text-red-400 border-red-500/40'
-                        }`}>
-                          {ord.status}
-                        </span>
-                      </div>
-
-                      <div className="text-xs text-gray-300 space-y-1 bg-gray-950 p-3 rounded-xl border border-gray-800/80">
-                        <p>📅 Ritiro previsto: <strong className="text-white">{ord.date}</strong> alle <strong className="text-white">{ord.time}</strong></p>
-                        <p>📝 Note: <span className="text-gray-400 italic">{ord.notes}</span></p>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-1">
-                        <div>
-                          <span className="text-xs text-gray-400">Prezzo:</span>
-                          <strong className="text-sm text-amber-300 ml-1">{ord.price ? `€ ${ord.price}` : 'Non ancora immesso'}</strong>
+                    <div key={ord.id} className="bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-3xl p-5 space-y-4 shadow-xl flex flex-col justify-between transition">
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">{ord.id}</span>
+                            <h3 className="font-extrabold text-base text-white mt-1">{ord.product}</h3>
+                            <p className="text-xs text-gray-300 mt-0.5">Cliente: <strong className="text-white">{ord.customer}</strong> ({ord.phone})</p>
+                          </div>
+                          <span className={`text-[10px] font-bold px-3 py-1 rounded-full border shrink-0 ${
+                            ord.status === 'Confermato & Pagato' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' :
+                            ord.status === 'In attesa di pagamento' ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' :
+                            'bg-red-500/20 text-red-400 border-red-500/40'
+                          }`}>
+                            {ord.status}
+                          </span>
                         </div>
 
-                        <div className="flex space-x-2">
+                        <div className="text-xs text-gray-300 space-y-1 bg-gray-950 p-3.5 rounded-2xl border border-gray-800/80">
+                          <p>📅 Ritiro: <strong className="text-white">{ord.date}</strong> alle <strong className="text-white">{ord.time}</strong></p>
+                          <p>📝 Note personalizzazione: <span className="text-gray-400 italic">{ord.notes}</span></p>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-gray-800 flex items-center justify-between">
+                        <div>
+                          <span className="text-[11px] text-gray-400 block">Prezzo concordato</span>
+                          <strong className="text-base text-amber-300">{ord.price ? `€ ${ord.price}` : 'Da calcolare'}</strong>
+                        </div>
+
+                        <div>
                           {!ord.price ? (
                             <button 
                               onClick={() => handleOpenQuoteModal(ord)}
-                              className="bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold px-3 py-1.5 rounded-xl text-xs shadow"
+                              className="bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold px-4 py-2 rounded-xl text-xs shadow-lg transition"
                             >
                               Imposta Prezzo 💶
                             </button>
                           ) : !ord.isPaid ? (
                             <button 
                               onClick={() => handleSimulatePayment(ord.id)}
-                              className="bg-teal-600 hover:bg-teal-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs shadow"
+                              className="bg-teal-600 hover:bg-teal-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-lg transition"
                             >
-                              Simula Incasso Cliente 💳
+                              Simula Incasso 💳
                             </button>
                           ) : (
-                            <span className="text-xs text-emerald-400 font-bold flex items-center space-x-1">
-                              <span>✅ Pagato in anticipo</span>
+                            <span className="text-xs text-emerald-400 font-bold flex items-center space-x-1 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20">
+                              <span>✅ Pagato Online</span>
                             </span>
                           )}
                         </div>
@@ -186,61 +226,72 @@
               </div>
             )}
 
-            {/* SEZIONE 2: AGENDA LABORATORIO (PRODUZIONE) */}
+            {/* SEZIONE 2: AGENDA LABORATORIO */}
             {activeTab === 'agenda' && (
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-amber-950/40 to-amber-900/20 border border-amber-800/50 p-4 rounded-3xl space-y-1">
-                  <h2 className="text-sm font-black text-amber-200">Agenda Produzione Laboratorio</h2>
-                  <p className="text-xs text-gray-300">Riepilogo giornaliero dei quantitativi confermati da preparare per i clienti.</p>
+              <div className="space-y-6">
+                <div className="border-b border-gray-800 pb-4">
+                  <h2 className="text-xl font-black text-white">Agenda Produzione Laboratorio</h2>
+                  <p className="text-xs text-gray-400">Pianifica i volumi giornalieri di pane, lievitati e pasticceria fresca in base ai preordini confermati.</p>
                 </div>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3">
-                  <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider">📅 Programma di Oggi & Domani</h3>
+                <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-4 shadow-xl">
+                  <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider">📅 Programma Giornaliero Forno</h3>
                   
-                  <div className="space-y-2 text-xs">
-                    <div className="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                  <div className="space-y-3">
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
                       <div>
-                        <strong className="text-white block">Pane Artigianale a Lievito Madre</strong>
-                        <span className="text-gray-400">3 pagnotte grandi (Ritiro ore 08:30)</span>
+                        <strong className="text-white text-sm block">Pane Artigianale a Lievito Madre</strong>
+                        <span className="text-xs text-gray-400">3 pagnotte grandi • Ritiro previsto ore 08:30</span>
                       </div>
-                      <span className="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-lg font-bold">In produzione</span>
+                      <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-xl font-bold text-xs w-fit">In produzione</span>
                     </div>
 
-                    <div className="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
                       <div>
-                        <strong className="text-white block">Torta di Compleanno Personalizzata</strong>
-                        <span className="text-gray-400">1 Torta cioccolato (Ritiro domani 16:00)</span>
+                        <strong className="text-white text-sm block">Torta di Compleanno Personalizzata</strong>
+                        <span className="text-xs text-gray-400">1 Torta cioccolato • Ritiro previsto domani ore 16:00</span>
                       </div>
-                      <span className="bg-amber-500/20 text-amber-400 px-2 py-1 rounded-lg font-bold">Da preparare</span>
+                      <span className="bg-amber-500/20 text-amber-400 px-3 py-1 rounded-xl font-bold text-xs w-fit">Da preparare</span>
                     </div>
 
-                    <div className="bg-gray-950 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                    <div className="bg-gray-950 p-4 rounded-2xl border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
                       <div>
-                        <strong className="text-white block">Vassoio Pasticceria Mista</strong>
-                        <span className="text-gray-400">1.5 kg misto (Ritiro domani 10:30)</span>
+                        <strong className="text-white text-sm block">Vassoio Pasticceria Mista</strong>
+                        <span className="text-xs text-gray-400">1.5 kg misto • Ritiro previsto domani ore 10:30</span>
                       </div>
-                      <span className="bg-amber-500/20 text-amber-400 px-2 py-1 rounded-lg font-bold">Da preparare</span>
+                      <span className="bg-amber-500/20 text-amber-400 px-3 py-1 rounded-xl font-bold text-xs w-fit">Da preparare</span>
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* SEZIONE 3: IMPOSTAZIONI ATTIVITÀ */}
+            {/* SEZIONE 3: IMPOSTAZIONI NEGOZIO */}
             {activeTab === 'settings' && (
-              <div className="space-y-4">
-                <div className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <h3 className="text-sm font-bold text-white">⚙️ Configurazione Negozio</h3>
-                  <p className="text-xs text-gray-300">Gestisci il link pubblico da inviare ai tuoi clienti per raccogliere i preordini online.</p>
-                  
-                  <div className="space-y-1 pt-2">
-                    <label className="text-[11px] font-bold text-gray-400">Il tuo Link Web Dedicato</label>
-                    <input 
-                      type="text" 
-                      readOnly 
-                      value="https://artisorder.app/pasticceria-centrale" 
-                      className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-amber-300 font-mono"
-                    />
+              <div className="space-y-6">
+                <div className="border-b border-gray-800 pb-4">
+                  <h2 className="text-xl font-black text-white">Configurazione Negozio & Link Vetrina</h2>
+                  <p className="text-xs text-gray-400">Condividi il tuo link univoco sui social o su WhatsApp per permettere ai clienti di preordinare.</p>
+                </div>
+
+                <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 space-y-4 shadow-xl max-w-xl">
+                  <h3 className="text-sm font-bold text-white">🌐 Link Dedicato per i Clienti</h3>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-400">Copia il link del tuo laboratorio:</label>
+                    <div className="flex gap-2">
+                      <input 
+                        type="text" 
+                        readOnly 
+                        value="https://artisorder.app/pasticceria-centrale" 
+                        className="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-xs text-amber-300 font-mono"
+                      />
+                      <button 
+                        onClick={() => alert("Link copiato negli appunti!")}
+                        className="bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold px-4 py-2.5 rounded-xl text-xs transition"
+                      >
+                        Copia
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -248,10 +299,10 @@
 
           </main>
 
-          {/* MODALE PER INSERIRE IL PREZZO / PREVENTIVO */}
+          {/* MODALE PREVENTIVO */}
           {selectedOrder && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl relative">
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl relative">
                 <button 
                   onClick={() => setSelectedOrder(null)}
                   className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-sm bg-gray-800 w-8 h-8 rounded-full flex items-center justify-center"
@@ -260,14 +311,14 @@
                 </button>
 
                 <div className="space-y-1">
-                  <span className="text-amber-400 text-[10px] font-bold uppercase">Inserisci Preventivo</span>
+                  <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider">Definizione Prezzo</span>
                   <h3 className="text-lg font-black text-white">{selectedOrder.product}</h3>
                   <p className="text-xs text-gray-400">Cliente: <strong className="text-white">{selectedOrder.customer}</strong></p>
                 </div>
 
-                <form onSubmit={handleSavePrice} className="space-y-3">
+                <form onSubmit={handleSavePrice} className="space-y-4">
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300">Prezzo Totale (€) *</label>
+                    <label className="text-xs font-semibold text-gray-300">Inserisci Prezzo Totale (€) *</label>
                     <input 
                       type="number" 
                       step="0.05"
@@ -275,49 +326,24 @@
                       placeholder="es. 35.00" 
                       value={priceInput}
                       onChange={(e) => setPriceInput(e.target.value)}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-bold"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 font-bold"
                     />
                   </div>
 
-                  <p className="text-[11px] text-gray-400 italic">
-                    💡 Cliccando su salva, il sistema invierà la notifica al cliente con il link per effettuare il pagamento online in anticipo.
+                  <p className="text-xs text-gray-400 italic bg-gray-950 p-3 rounded-xl border border-gray-800">
+                    💡 Salvando, il sistema invierà automaticamente il preventivo al cliente sbloccando il pulsante per il pagamento online sicuro.
                   </p>
 
                   <button 
                     type="submit" 
-                    className="w-full bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition"
+                    className="w-full bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold py-3 rounded-xl text-xs shadow-lg transition"
                   >
-                    Invia Prezzo e Richiedi Pagamento 🚀
+                    Invia Prezzo & Richiedi Pagamento 🚀
                   </button>
                 </form>
               </div>
             </div>
           )}
-
-          {/* Barra di Navigazione Inferiore */}
-          <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2.5 flex justify-around items-center z-40">
-            <button 
-              onClick={() => setActiveTab('orders')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'orders' ? 'text-amber-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">📥</span>
-              <span className="text-[10px] font-bold">Preordini</span>
-            </button>
-            <button 
-              onClick={() => setActiveTab('agenda')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'agenda' ? 'text-amber-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">📋</span>
-              <span className="text-[10px] font-bold">Laboratorio</span>
-            </button>
-            <button 
-              onClick={() => setActiveTab('settings')}
-              className={`flex flex-col items-center space-y-1 ${activeTab === 'settings' ? 'text-amber-400' : 'text-gray-400'}`}
-            >
-              <span className="text-xl">⚙️</span>
-              <span className="text-[10px] font-bold">Negozio</span>
-            </button>
-          </nav>
 
         </div>
       );
