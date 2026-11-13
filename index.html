@@ -8,9 +8,8 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
- <style>
+  <style>
     body { touch-action: manipulation; user-select: none; -webkit-user-select: none; background-color: #030712; }
-    /* Pattern campo tattico ultra-realistico ed elegante */
     .pitch-bg {
       background-color: #0d5c2f;
       background-image: 
@@ -18,13 +17,11 @@
         repeating-linear-gradient(0deg, #0d5c2f, #0d5c2f 50px, #0f6835 50px, #0f6835 100px);
       box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
     }
-    /* Sfumature e vetro scuro moderno */
     .glass-panel {
       background: rgba(17, 24, 39, 0.75);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    /* Animazioni fluide */
     button, input, select { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   </style>
 </head>
@@ -429,7 +426,6 @@
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
 
-      // Stati per la modifica del nome direttamente in campo
       const [editingPlayerId, setEditingPlayerId] = useState(null);
       const [tempPlayerName, setTempPlayerName] = useState('');
 
@@ -570,7 +566,6 @@
         setDrills(drills.filter(d => d.id !== id));
       };
 
-      // Funzione Esportazione PDF Lavagna collegata al modale di anteprima
       const handleExportBoardPDF = () => {
         if (!hasAccess) {
           setShowPaywallModal(true);
@@ -698,9 +693,9 @@
       if (!user) {
         return (
           <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4">
-            <div className="max-w-md w-full bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl">
+            <div className="max-w-md w-full glass-panel p-8 rounded-3xl shadow-2xl">
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center font-black text-2xl text-white mb-3 shadow-lg shadow-emerald-600/30">CP</div>
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl mx-auto flex items-center justify-center font-black text-2xl text-black mb-3 shadow-lg shadow-emerald-500/25">CP</div>
                 <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
                 <p className="text-xs text-gray-400 mt-1">{t('subtitle')}</p>
               </div>
@@ -714,7 +709,7 @@
                       placeholder={t('namePlaceholder')} 
                       value={authData.name} 
                       onChange={(e) => setAuthData({ ...authData, name: e.target.value })} 
-                      className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
+                      className="w-full bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                     />
                   </div>
                 )}
@@ -726,7 +721,7 @@
                     placeholder="mister@email.com" 
                     value={authData.email} 
                     onChange={(e) => setAuthData({ ...authData, email: e.target.value })} 
-                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
+                    className="w-full bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
                 <div>
@@ -737,10 +732,10 @@
                     placeholder="••••••••" 
                     value={authData.password} 
                     onChange={(e) => setAuthData({ ...authData, password: e.target.value })} 
-                    className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
+                    className="w-full bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
                   />
                 </div>
-                <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg shadow-emerald-600/20 transition-all">
+                <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-3.5 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition-all">
                   {authMode === 'login' ? t('loginButton') : t('registerButton')}
                 </button>
               </form>
@@ -760,59 +755,49 @@
 
       return (
         <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-          {/* Header Principale */}
-          <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center font-black text-white shadow">CP</div>
+          <header className="glass-panel border-b border-white/5 px-5 py-3.5 flex items-center justify-between sticky top-0 z-40">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center font-black text-black shadow-lg shadow-emerald-500/25 tracking-wider">CP</div>
               <div>
-                <h1 className="font-extrabold text-sm tracking-tight">{user.name}</h1>
-                <p className="text-[10px] text-emerald-400 font-semibold">{t('proActive')}</p>
+                <h1 className="font-bold text-sm tracking-wide text-white">{user.name}</h1>
+                <div className="flex items-center space-x-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <p className="text-[10px] text-emerald-400 font-semibold tracking-wide uppercase">{t('proActive')}</p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button onClick={() => setShowProfileDrawer(true)} className="p-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold">⚙️</button>
-              <button onClick={handleLogout} className="p-2 rounded-xl bg-red-900/30 border border-red-800/50 hover:bg-red-900/50 text-red-400 text-xs font-bold">{t('exitButton')}</button>
+            <div className="flex items-center space-x-2.5">
+              <button onClick={() => setShowProfileDrawer(true)} className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold border border-white/5">⚙️</button>
+              <button onClick={handleLogout} className="px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold">{t('exitButton')}</button>
             </div>
           </header>
 
-          {/* Barra di Navigazione Tab */}
-          <nav className="bg-gray-900/80 backdrop-blur border-b border-gray-800 flex justify-around p-2">
-            <button onClick={() => setActiveTab('board')} className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${activeTab === 'board' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
-              📋 {t('navBoard')}
+          <nav className="glass-panel border-b border-white/5 flex justify-around p-2.5 max-w-5xl w-full mx-auto my-3 rounded-2xl">
+            <button onClick={() => setActiveTab('board')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'board' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+              <span>📋</span><span>{t('navBoard')}</span>
             </button>
-            <button onClick={() => setActiveTab('drills')} className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${activeTab === 'drills' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
-              ⚽ {t('navDrills')}
+            <button onClick={() => setActiveTab('drills')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'drills' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+              <span>⚽</span><span>{t('navDrills')}</span>
             </button>
-            <button onClick={() => setActiveTab('squad')} className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${activeTab === 'squad' ? 'bg-emerald-600 text-white shadow' : 'text-gray-400 hover:text-white'}`}>
-              👥 {t('navSquad')}
+            <button onClick={() => setActiveTab('squad')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'squad' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+              <span>👥</span><span>{t('navSquad')}</span>
             </button>
           </nav>
 
-          {/* Contenuto Principale */}
-          <main className="flex-1 p-4 max-w-5xl w-full mx-auto">
+          <main className="flex-1 max-w-6xl w-full mx-auto p-4">
             {activeTab === 'board' && (
               <div className="space-y-4">
-                {/* Moduli rapidi & Pulsante Esporta PDF */}
-                <div className="bg-gray-900 border border-gray-800 p-3 rounded-2xl flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-3 glass-panel p-3 rounded-2xl">
                   <div className="flex items-center space-x-2">
                     <span className="text-xs font-bold text-gray-400">{t('quickFormations')}</span>
-                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl">4-4-2</button>
-                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl">3-5-2</button>
-                    <button onClick={() => presetFormation('4321')} className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl">4-3-2-1</button>
+                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-4-2</button>
+                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">3-5-2</button>
                   </div>
-
-                  <div className="flex items-center space-x-2">
-                    <button onClick={() => { setElements([]); setArrows([]); }} className="px-3 py-2 rounded-xl text-xs font-bold bg-gray-900 border border-gray-800 text-gray-400 hover:text-rose-400">🧹 {t('toolClear')}</button>
-                    <button onClick={handleExportBoardPDF} className="px-3 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow">
-                      📄 Esporta PDF Lavagna
-                    </button>
-                  </div>
+                  <button onClick={handleExportBoardPDF} className="px-4 py-2 bg-emerald-500 text-black text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-500/20">{t('exportPdf')}</button>
                 </div>
 
-                {/* Strumenti (Ripristinati al 100%) */}
-                {/* Strumenti Tattici Moderni */}
-                <div className="flex flex-wrap gap-2 bg-gray-900/60 backdrop-blur border border-white/5 p-3 rounded-2xl shadow-xl">
+                <div className="flex flex-wrap gap-2 glass-panel p-3 rounded-2xl">
                   <button onClick={() => setTool('move')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'move' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>✋</span><span>{t('toolMove')}</span></button>
                   <button onClick={() => setTool('red')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'red' ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔴</span><span>{t('toolRed')}</span></button>
                   <button onClick={() => setTool('blue')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'blue' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔵</span><span>{t('toolBlue')}</span></button>
@@ -822,305 +807,127 @@
                   <button onClick={() => setTool('ladder')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'ladder' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🪜</span><span>{t('toolLadder')}</span></button>
                   <button onClick={() => setTool('arrow')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'arrow' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>↗️</span><span>{t('toolArrow')}</span></button>
                   <button onClick={() => setTool('delete')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'delete' ? 'bg-rose-500 text-black shadow-lg shadow-rose-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🧹</span><span>{t('toolDelete')}</span></button>
+                  <button onClick={() => { setElements([]); setArrows([]); }} className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:text-white hover:bg-white/10">🗑️ {t('toolClear')}</button>
                 </div>
 
-                {/* Lavagna Campo */}
                 <div 
                   ref={svgRef}
                   onClick={handleBoardClick}
+                  onMouseMove={handleTouchMove}
                   onTouchMove={handleTouchMove}
-                  className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border-2 border-emerald-600 pitch-bg shadow-2xl cursor-crosshair select-none"
+                  className="relative w-full aspect-[4/3] max-w-4xl mx-auto pitch-bg rounded-3xl overflow-hidden border border-white/10 shadow-2xl cursor-crosshair"
                 >
                   <div className="absolute inset-4 border-2 border-white/30 pointer-events-none"></div>
-                  <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/30 transform -translate-y-1/2 pointer-events-none"></div>
-                  <div className="absolute top-1/2 left-1/2 w-28 h-28 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/30 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-1/2 w-24 h-24 border-2 border-white/30 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white/50 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
-                  {/* Frecce */}
-                  <svg className={`absolute inset-0 w-full h-full ${tool === 'delete' ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none'}`}>
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
                     {arrows.map(arr => (
-                      <g 
-                        key={arr.id} 
-                        onClick={(e) => {
-                          if (tool === 'delete') {
-                            e.stopPropagation();
-                            setArrows(arrows.filter(a => a.id !== arr.id));
-                          }
-                        }}
-                        className={tool === 'delete' ? 'cursor-pointer hover:opacity-50' : ''}
-                      >
-                        {/* Area di click allargata per facilitare la cancellazione */}
-                        <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="transparent" strokeWidth="16" />
-                        <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#facc15" strokeWidth="3" strokeDasharray="6,6" />
-                        <circle cx={`${arr.endX}%`} cy={`${arr.endY}%`} r="4" fill="#facc15" />
+                      <g key={arr.id}>
+                        <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#facc15" strokeWidth="3" strokeDasharray="6,4" />
                       </g>
                     ))}
                   </svg>
-                  {/* Elementi in campo */}
-                 {elements.map(el => {
-                      let tokenContent = '';
-                      let tokenStyle = "";
 
-                      if (el.type === 'player') {
-                        let baseColor = el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400';
-                        tokenStyle = `w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${baseColor} text-white`;
-                        tokenContent = el.number;
-                      } else if (el.type === 'ball') {
-                        // Sfera pulita, tonda e realistica senza sbavature
-                        tokenStyle = "w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-2xl bg-white border border-gray-400";
-                        tokenContent = '⚽';
-                      } else if (el.type === 'cone') {
-                        // Cono professionale pulito (stile paletto/cono tecnico)
-                        tokenStyle = "w-7 h-7 bg-orange-600 border border-orange-300 rounded-lg shadow-lg flex items-center justify-center font-bold text-xs text-white transform rotate-45";
-                        tokenContent = '▲';
-                      } else if (el.type === 'cinesina') {
-                        // Cinesina a piattino piatto ed elegante
-                        tokenStyle = "w-7 h-7 bg-amber-400 border border-amber-200 rounded-full shadow-md flex items-center justify-center text-[10px] font-black text-amber-950";
-                        tokenContent = '⏺';
-                      } else if (el.type === 'ladder') {
-                        // Scaletta di agilità elegante a griglia
-                        tokenStyle = "w-11 h-6 bg-yellow-400 border border-yellow-200 rounded shadow-lg flex items-center justify-around px-1";
-                        tokenContent = (
-                          <>
-                            <div className="w-0.5 h-full bg-yellow-700 opacity-60"></div>
-                            <div className="w-0.5 h-full bg-yellow-700 opacity-60"></div>
-                            <div className="w-0.5 h-full bg-yellow-700 opacity-60"></div>
-                          </>
-                        );
-                      }
-
-                      return (
-                        <div
-                          key={el.id}
-                          onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
-                          onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
-                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                          className="absolute flex flex-col items-center cursor-pointer select-none z-10"
-                        >
-                          <div className={tokenStyle}>
-                            {tokenContent}
+                  {elements.map(el => {
+                    return (
+                      <div
+                        key={el.id}
+                        onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); setArrows(arrows.filter(a => a.id !== el.id)); } else { setDraggedId(el.id); } } }}
+                        onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); } else { setDraggedId(el.id); } } }}
+                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                        className="absolute flex flex-col items-center cursor-pointer select-none z-10"
+                      >
+                        {el.type === 'player' && (
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400'} text-white`}>
+                            {el.number}
                           </div>
-                          {el.type === 'player' && (
-                            editingPlayerId === el.id ? (
-                              <input 
-                                autoFocus
-                                type="text"
-                                value={tempPlayerName}
-                                onChange={(e) => setTempPlayerName(e.target.value)}
-                                onBlur={() => {
+                        )}
+                        {el.type === 'ball' && <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-2xl bg-white border border-gray-400">⚽</div>}
+                        {el.type === 'cone' && <div className="w-7 h-7 bg-orange-600 border border-orange-300 rounded-lg shadow-lg flex items-center justify-center font-bold text-xs text-white transform rotate-45">▲</div>}
+                        {el.type === 'cinesina' && <div className="w-7 h-7 bg-amber-400 border border-amber-200 rounded-full shadow-md flex items-center justify-center text-[10px] font-black text-amber-950">⏺</div>}
+                        {el.type === 'ladder' && <div className="w-11 h-6 bg-yellow-400 border border-yellow-200 rounded shadow-lg flex items-center justify-around px-1"><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div></div>}
+
+                        {el.type === 'player' && (
+                          editingPlayerId === el.id ? (
+                            <input 
+                              autoFocus
+                              type="text"
+                              value={tempPlayerName}
+                              onChange={(e) => setTempPlayerName(e.target.value)}
+                              onBlur={() => {
+                                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                setEditingPlayerId(null);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
                                   setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
                                   setEditingPlayerId(null);
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                                    setEditingPlayerId(null);
-                                  }
-                                }}
-                                className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
-                              />
-                            ) : (
-                              <span 
-                                onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                                onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                                className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
-                              >
-                                {el.name || 'Nome'}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      );
-                    })}
+                                }
+                              }}
+                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
+                            />
+                          ) : (
+                            <span 
+                              onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                              onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
+                            >
+                              {el.name || 'Nome'}
+                            </span>
+                          )
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {activeTab === 'drills' && (
-              <div className="space-y-4">
-                <form onSubmit={addDrill} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <h2 className="font-bold text-sm text-emerald-400">{t('newDrill')}</h2>
-                  <input type="text" placeholder={t('drillTitlePlaceholder')} value={newDrillTitle} onChange={(e) => setNewDrillTitle(e.target.value)} className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
-                  <div className="grid grid-cols-2 gap-2">
-                    <select value={newDrillCat} onChange={(e) => setNewDrillCat(e.target.value)} className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                      <option>{t('categoryPossesso')}</option>
-                      <option>{t('categoryTactics')}</option>
-                      <option>{t('categoryFitness')}</option>
-                      <option>{t('categoryFinishing')}</option>
-                    </select>
-                    <input type="text" placeholder={t('drillDurationPlaceholder')} value={newDrillDur} onChange={(e) => setNewDrillDur(e.target.value)} className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
-                  </div>
-                  <textarea placeholder={t('drillDescPlaceholder')} value={newDrillDesc} onChange={(e) => setNewDrillDesc(e.target.value)} className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white h-20"></textarea>
-                  <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 font-bold text-xs py-2.5 rounded-xl shadow">{t('saveDrill')}</button>
+              <div className="glass-panel p-6 rounded-3xl shadow-xl space-y-6 max-w-2xl mx-auto">
+                <h2 className="text-lg font-black text-white">{t('newDrill')}</h2>
+                <form onSubmit={addDrill} className="space-y-3">
+                  <input type="text" placeholder={t('drillTitlePlaceholder')} value={newDrillTitle} onChange={(e)=>setNewDrillTitle(e.target.value)} className="w-full bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500" />
+                  <textarea placeholder={t('drillDescPlaceholder')} value={newDrillDesc} onChange={(e)=>setNewDrillDesc(e.target.value)} className="w-full bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 h-24"></textarea>
+                  <button type="submit" className="w-full bg-emerald-500 text-black font-extrabold py-3 rounded-xl text-xs">{t('saveDrill')}</button>
                 </form>
-
-                <div className="space-y-3">
-                  {drills.length === 0 ? (
-                    <p className="text-center text-xs text-gray-500 py-8">{t('noDrills')}</p>
-                  ) : (
-                    drills.map(d => (
-                      <div key={d.id} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl flex justify-between items-start">
-                        <div>
-                          <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800/50 px-2 py-0.5 rounded-full font-bold">{d.category} - {d.duration}</span>
-                          <h3 className="font-bold text-sm mt-1">{d.title}</h3>
-                          <p className="text-xs text-gray-400 mt-1 whitespace-pre-wrap">{d.description}</p>
-                        </div>
-                        <button onClick={() => removeDrill(d.id)} className="text-red-400 hover:text-red-300 text-xs font-bold">🗑️</button>
-                      </div>
-                    ))
-                  )}
+                <div className="space-y-2">
+                  {drills.length === 0 ? <p className="text-xs text-gray-400 text-center py-4">{t('noDrills')}</p> : drills.map(d => (
+                    <div key={d.id} className="p-3 bg-white/5 border border-white/5 rounded-xl flex justify-between items-center text-xs">
+                      <span className="font-bold">{d.title}</span>
+                      <button onClick={()=>removeDrill(d.id)} className="text-rose-400 font-bold">Elimina</button>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
             {activeTab === 'squad' && (
-              <div className="space-y-4">
-                <form onSubmit={addPlayer} className="bg-gray-900 border border-gray-800 p-4 rounded-2xl space-y-3">
-                  <h2 className="font-bold text-sm text-emerald-400">Aggiungi Giocatore in Rosa</h2>
-                  <div className="grid grid-cols-3 gap-2">
-                    <input type="text" placeholder={t('playerPlaceholder')} value={newPlayerName} onChange={(e) => setNewPlayerName(e.target.value)} className="col-span-2 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white" />
-                    <input type="number" placeholder="N°" value={newPlayerNumber} onChange={(e) => setNewPlayerNumber(e.target.value)} className="bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white text-center" />
-                  </div>
-                  <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 font-bold text-xs py-2.5 rounded-xl shadow">{t('addPlayer')}</button>
+              <div className="glass-panel p-6 rounded-3xl shadow-xl space-y-6 max-w-2xl mx-auto">
+                <h2 className="text-lg font-black text-white">Rosa Giocatori</h2>
+                <form onSubmit={addPlayer} className="flex gap-2">
+                  <input type="text" placeholder="N." value={newPlayerNumber} onChange={(e)=>setNewPlayerNumber(e.target.value)} className="w-16 bg-gray-950/50 border border-white/10 rounded-xl px-3 py-3 text-sm text-white text-center" />
+                  <input type="text" placeholder={t('playerPlaceholder')} value={newPlayerName} onChange={(e)=>setNewPlayerName(e.target.value)} className="flex-1 bg-gray-950/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500" />
+                  <button type="submit" className="bg-emerald-500 text-black px-5 font-extrabold rounded-xl text-xs">{t('addPlayer')}</button>
                 </form>
-
                 <div className="space-y-2">
-                  {players.length === 0 ? (
-                    <p className="text-center text-xs text-gray-500 py-8">{t('noPlayers')}</p>
-                  ) : (
-                    players.map(p => (
-                      <div key={p.id} className="bg-gray-900 border border-gray-800 p-3 rounded-2xl flex justify-between items-center">
-                        <div className="flex items-center space-x-3">
-                          <span className="w-7 h-7 bg-emerald-600/20 border border-emerald-500 text-emerald-400 rounded-lg flex items-center justify-center font-bold text-xs">{p.number}</span>
-                          <div>
-                            <h4 className="font-bold text-xs">{p.name}</h4>
-                            <button onClick={() => togglePlayerStatus(p.id)} className={`text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5 inline-block ${p.status === 'presente' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : p.status === 'assente' ? 'bg-amber-950 text-amber-400 border border-amber-800' : 'bg-red-950 text-red-400 border border-red-800'}`}>
-                              {p.status.toUpperCase()}
-                            </button>
-                          </div>
-                        </div>
-                        <button onClick={() => removePlayer(p.id)} className="text-red-400 hover:text-red-300 text-xs font-bold">🗑️</button>
-                      </div>
-                    ))
-                  )}
+                  {players.length === 0 ? <p className="text-xs text-gray-400 text-center py-4">{t('noPlayers')}</p> : players.map(p => (
+                    <div key={p.id} className="p-3 bg-white/5 border border-white/5 rounded-xl flex justify-between items-center text-xs">
+                      <span className="font-bold">#{p.number} - {p.name} ({p.role})</span>
+                      <button onClick={()=>removePlayer(p.id)} className="text-rose-400 font-bold">Elimina</button>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
           </main>
-
-          {/* Drawer Profilo e Impostazioni */}
-          {showProfileDrawer && (
-            <div className="fixed inset-0 bg-black/80 flex justify-end z-50">
-              <div className="bg-gray-900 w-80 h-full p-6 space-y-6 overflow-y-auto border-l border-gray-800">
-                <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-                  <h3 className="font-bold text-sm text-emerald-400">{t('profileSettings')}</h3>
-                  <button onClick={() => setShowProfileDrawer(false)} className="text-gray-400 hover:text-white font-bold text-sm">✕</button>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-gray-400">{t('uploadPhoto')}</label>
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500" />
-                  {profileImage && <img src={profileImage} alt="Logo" className="w-16 h-16 rounded-xl object-cover mt-2 border border-emerald-500" />}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-gray-400">{t('languageLabel')}</label>
-                  <select value={language} onChange={(e) => setLanguage(e.target.value)} className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-white">
-                    <option value="it">Italiano</option>
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                  </select>
-                </div>
-
-                <div className="pt-4 border-t border-gray-800">
-                  <button onClick={handleLogout} className="w-full bg-red-950/50 border border-red-800 text-red-400 font-bold text-xs py-3 rounded-xl">{t('logoutAccount')}</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Modale Anteprima PDF Lavagna */}
-          {showBoardPdfModal && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-y-auto">
-              <div className="bg-white text-gray-900 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
-                <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-bold text-lg text-emerald-700">📄 Anteprima Stampa / PDF Lavagna</h3>
-                  <button onClick={() => setShowBoardPdfModal(false)} className="text-gray-500 hover:text-black font-bold text-lg px-2">✕</button>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200">
-                  <div className="flex items-center justify-between border-b-2 border-emerald-700 pb-3 mb-4">
-                    <div>
-                      <h1 className="m-0 text-emerald-800 font-bold text-base">COACHPRO - LAVAGNA TATTICA</h1>
-                      <p className="m-0 text-xs text-gray-600 mt-1">Mister: <strong>{user.name}</strong> | Data: {new Date().toLocaleDateString()}</p>
-                    </div>
-                    <div>
-                      {profileImage ? <img src={profileImage} className="w-12 h-12 rounded-xl object-cover border border-emerald-700" /> : <div className="bg-emerald-700 text-white font-bold w-10 h-10 flex items-center justify-center rounded-xl text-xs">CP</div>}
-                    </div>
-                  </div>
-
-                  {/* Miniatura campo */}
-                  <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border-2 border-emerald-700 pitch-bg shadow-inner">
-                    <div className="absolute inset-3 border-2 border-white/30 pointer-events-none"></div>
-                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/30 transform -translate-y-1/2 pointer-events-none"></div>
-                    <div className="absolute top-1/2 left-1/2 w-20 h-20 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-
-                    {elements.map(el => {
-                      let bg = "bg-rose-600 border-rose-400";
-                      if (el.color === 'blue') bg = "bg-blue-600 border-blue-400";
-                      if (el.type === 'ball') bg = "bg-white text-black border-gray-300";
-                      if (el.type === 'cone') bg = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
-                      if (el.type === 'cinesina') bg = "bg-amber-400 border-amber-200 rounded-full w-4 h-4";
-                      if (el.type === 'ladder') bg = "bg-yellow-600 border-yellow-400 rounded-none w-8 h-3";
-
-                      return (
-                        <div
-                          key={el.id}
-                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                          className="absolute flex flex-col items-center select-none"
-                        >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-md border-2 ${bg}`}>
-                            {el.type === 'player' && el.number}
-                            {el.type === 'ball' && '⚽'}
-                          </div>
-                          {el.type === 'player' && el.name && (
-                            <span className="mt-0.5 bg-black/90 text-white px-1 py-0.5 rounded text-[8px] font-bold whitespace-nowrap shadow">
-                              {el.name}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="text-center text-[10px] text-gray-400 mt-4 border-t pt-2">
-                    Generato con CoachPro App - Piattaforma Tattica Professionale
-                  </div>
-                </div>
-
-                <div className="flex space-x-3 pt-2">
-                  <button 
-                    onClick={() => { window.print(); }} 
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all"
-                  >
-                    🖨️ Stampa / Salva in PDF
-                  </button>
-                  <button 
-                    onClick={() => setShowBoardPdfModal(false)} 
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold px-5 py-3 rounded-xl text-sm"
-                  >
-                    Chiudi
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<CoachProApp />);
+    ReactDOM.render(<CoachProApp />, document.getElementById('root'));
   </script>
 </body>
 </html>
