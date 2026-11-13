@@ -823,15 +823,25 @@
                   <div className="absolute top-1/2 left-1/2 w-28 h-28 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
                   {/* Frecce */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  <svg className={`absolute inset-0 w-full h-full ${tool === 'delete' ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none'}`}>
                     {arrows.map(arr => (
-                      <g key={arr.id}>
+                      <g 
+                        key={arr.id} 
+                        onClick={(e) => {
+                          if (tool === 'delete') {
+                            e.stopPropagation();
+                            setArrows(arrows.filter(a => a.id !== arr.id));
+                          }
+                        }}
+                        className={tool === 'delete' ? 'cursor-pointer hover:opacity-50' : ''}
+                      >
+                        {/* Area di click allargata per facilitare la cancellazione */}
+                        <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="transparent" strokeWidth="16" />
                         <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#facc15" strokeWidth="3" strokeDasharray="6,6" />
                         <circle cx={`${arr.endX}%`} cy={`${arr.endY}%`} r="4" fill="#facc15" />
                       </g>
                     ))}
                   </svg>
-
                   {/* Elementi in campo */}
                   {elements.map(el => {
                     let bg = "bg-rose-600 border-rose-400";
