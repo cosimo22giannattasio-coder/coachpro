@@ -790,11 +790,12 @@
                 <div className="flex flex-wrap items-center justify-between gap-3 glass-panel p-3 rounded-2xl">
                   <div className="flex items-center space-x-2">
                     <span className="text-xs font-bold text-gray-400">{t('quickFormations')}</span>
-                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-4-2</button>
-                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">3-5-2</button>
+                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-4-2</button>
+                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">3-5-2</button>
+                    <button onClick={() => presetFormation('4321')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-3-2-1</button>
                   </div>
-                  <button onClick={handleExportBoardPDF} className="px-4 py-2 bg-emerald-500 text-black text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-500/20">{t('exportPdf')}</button>
+                  <button onClick={handleExportBoardPDF} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-500/20 transition-all">{t('exportPdf')}</button>
                 </div>
 
                 <div className="flex flex-wrap gap-2 glass-panel p-3 rounded-2xl">
