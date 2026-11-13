@@ -609,7 +609,7 @@
         printWindow.document.close();
       };
 
-      const handleExportSingleDrillPDF = (drill) => {
+      const handleExportBoardPDF = () => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
@@ -621,27 +621,30 @@
           return;
         }
 
+        // Catturiamo l'HTML dell'SVG della lavagna attuale
+        const svgContent = svgRef.current ? svgRef.current.outerHTML : '';
+
         printWindow.document.write(`
           <!DOCTYPE html>
           <html>
           <head>
             <meta charset="UTF-8" />
-            <title>CoachPro - Esercizio: ${drill.title}</title>
+            <title>CoachPro - Lavagna Tattica</title>
             <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
+              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; text-align: center; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; text-align: left; }
               .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
               .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
               .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              .card { padding: 20px; border: 1px solid #ddd; border-radius: 12px; background: #fafafa; margin-top: 20px; }
-              .badge { display: inline-block; background: #15803d; color: white; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+              .pitch-container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #15803d; border-radius: 12px; overflow: hidden; border: 4px solid #1f2937; padding: 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.2); }
+              .pitch-container svg { width: 100%; height: auto; display: block; }
               .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
             </style>
           </head>
           <body>
             <div class="header">
               <div class="title-box">
-                <h1>COACHPRO - SCHEDA ESERCIZIO</h1>
+                <h1>COACHPRO - LAVAGNA TATTICA</h1>
                 <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
               </div>
               <div>
@@ -649,13 +652,8 @@
               </div>
             </div>
 
-            <div class="card">
-              <span class="badge">${drill.category}</span>
-              <h2 style="margin: 5px 0 10px 0; color: #1f2937; font-size: 20px;">${drill.title}</h2>
-              <p style="margin: 0 0 15px 0; font-size: 13px; color: #555;">⏱️ <strong>Durata:</strong> ${drill.duration}</p>
-              <hr style="border:0; border-top:1px solid #e5e7eb; margin: 15px 0;" />
-              <h4 style="margin: 0 0 8px 0; color: #374151; font-size: 14px;">Descrizione e Obiettivi:</h4>
-              <p style="margin: 0; font-size: 14px; color: #333; white-space: pre-line; line-height: 1.5;">${drill.description || 'Nessuna descrizione.'}</p>
+            <div class="pitch-container">
+              ${svgContent}
             </div>
 
             <div class="footer">
@@ -1061,9 +1059,9 @@
                   <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ {t('toolDelete')}</button>
                   <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
                 </div>
-
-                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
-                  {!hasAccess && (
+                  <button onClick={handleExportBoardPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-lg transition">
+                   <span>📄 Esporta Lavagna in PDF</span>
+                 </button>
                     <div 
                       onClick={() => setShowPaywallModal(true)}
                       className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
