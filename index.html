@@ -416,13 +416,15 @@
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
 
+      // Stati per la modifica del nome direttamente in campo
+      const [editingPlayerId, setEditingPlayerId] = useState(null);
+      const [tempPlayerName, setTempPlayerName] = useState('');
+
       const [clubCodeInput, setClubCodeInput] = useState('');
       const [clubCodeMsg, setClubCodeMsg] = useState('');
 
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
-      const [editingPlayerId, setEditingPlayerId] = useState(null);
-      const [tempPlayerName, setTempPlayerName] = useState('');
       const [newPlayerName, setNewPlayerName] = useState('');
       const [newPlayerNumber, setNewPlayerNumber] = useState('');
       const [newPlayerRole, setNewPlayerRole] = useState('Centrocampista');
@@ -555,111 +557,70 @@
         setDrills(drills.filter(d => d.id !== id));
       };
 
-     const presetFormation = (type) => {
+      const presetFormation = (type) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
-
         let formationElements = [];
-
-        // Separiamo i giocatori per ruolo presi dalla rosa
-        const goalkeepers = players.filter(p => p.role === 'Portiere');
-        const defenders = players.filter(p => p.role === 'Difensore');
-        const midfielders = players.filter(p => p.role === 'Centrocampista');
-        const forwards = players.filter(p => p.role === 'Attaccante');
-        
-        // Unione di riserva se mancano ruoli specifici
-        const allPlayers = [...players];
-
-        // Funzione per estrarre il giocatore migliore (per ruolo o per ordine)
-        let playerIndex = 0;
-        const getNextPlayer = (preferredRole, defaultName, defaultNum) => {
-          // 1. Cerca prima tra i ruoli specifici se disponibili
-          let found = null;
-          if (preferredRole === 'Portiere' && goalkeepers.length > 0) found = goalkeepers.shift();
-          else if (preferredRole === 'Difensore' && defenders.length > 0) found = defenders.shift();
-          else if (preferredRole === 'Centrocampista' && midfielders.length > 0) found = midfielders.shift();
-          else if (preferredRole === 'Attaccante' && forwards.length > 0) found = forwards.shift();
-          
-          // 2. Altrimenti prende dal pool generale
-          if (!found && allPlayers.length > playerIndex) {
-            found = allPlayers[playerIndex];
-            playerIndex++;
-          }
-
-          if (found) {
-            return {
-              name: found.name,
-              number: found.number || defaultNum
-            };
-          }
-          return {
-            name: defaultName,
-            number: defaultNum
-          };
-        };
-
-        // Posizionamento Portiere (sempre in porta)
-        const gk = getNextPlayer('Portiere', 'Portiere', '1');
-        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: gk.number, name: gk.name, x: 50, y: 90 });
+        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: '1', name: 'Portiere', x: 50, y: 90 });
 
         if (type === '433') {
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 35, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mezzala', '10'), x: 65, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Ala Dx', '7'), x: 20, y: 25 },
-            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Punta', '9'), x: 50, y: 20 },
-            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Ala Sx', '11'), x: 80, y: 25 }
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 65, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '7', name: 'Ala Dx', x: 20, y: 25 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 },
+            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Ala Sx', x: 80, y: 25 }
           );
         } else if (type === '442') {
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Esterno', '7'), x: 20, y: 45 },
-            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Centrale', '4'), x: 40, y: 50 },
-            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Centrale', '8'), x: 60, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Esterno', '11'), x: 80, y: 45 },
-            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Prima Punta', '9'), x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Seconda Punta', '10'), x: 60, y: 22 }
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '7', name: 'Est. Dx', x: 20, y: 45 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Centr.', x: 40, y: 50 },
+            { id: 'p8', type: 'player', color: 'red', number: '8', name: 'Centr.', x: 60, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Est. Sx', x: 80, y: 45 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Prima P.', x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: '10', name: 'Seconda P.', x: 60, y: 22 }
           );
         } else if (type === '352') {
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Braccetto', '2'), x: 30, y: 75 },
-            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Libero', '5'), x: 50, y: 80 },
-            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Braccetto', '3'), x: 70, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Tornante', '7'), x: 15, y: 50 },
-            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 38, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mezzala', '10'), x: 62, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Tornante', '11'), x: 85, y: 50 },
-            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Attaccante', '9'), x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Attaccante', '11'), x: 60, y: 22 }
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Bracc. Dx', x: 30, y: 75 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Libero', x: 50, y: 80 },
+            { id: 'p4', type: 'player', color: 'red', number: '3', name: 'Bracc. Sx', x: 70, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '7', name: 'Torn. Dx', x: 15, y: 50 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 38, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 62, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Torn. Sx', x: 85, y: 50 },
+            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Attaccante', x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Attaccante', x: 60, y: 22 }
           );
         } else if (type === '4321') {
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 35, y: 55 },
-            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 60 },
-            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '14'), x: 65, y: 55 },
-            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Trequartista', '10'), x: 40, y: 35 },
-            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Trequartista', '11'), x: 60, y: 35 },
-            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Punta', '9'), x: 50, y: 20 }
+            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 55 },
+            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 60 },
+            { id: 'p8', type: 'player', color: 'red', number: '14', name: 'Mediano', x: 65, y: 55 },
+            { id: 'p9', type: 'player', color: 'red', number: '10', name: 'Trequart.', x: 40, y: 35 },
+            { id: 'p10', type: 'player', color: 'red', number: '11', name: 'Trequart.', x: 60, y: 35 },
+            { id: 'p11', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 }
           );
         }
-
         setElements(formationElements);
       };
+
       const getCoords = (evt) => {
         if (!svgRef.current) return { x: 50, y: 50 };
         const rect = svgRef.current.getBoundingClientRect();
@@ -682,9 +643,9 @@
         const { x, y } = getCoords(evt);
 
         if (tool === 'player-red') {
-          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), x, y }]);
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), name: 'Giocatore', x, y }]);
         } else if (tool === 'player-blue') {
-          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), x, y }]);
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), name: 'Giocatore', x, y }]);
         } else if (tool === 'ball') {
           setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
         } else if (tool === 'cone') {
@@ -710,19 +671,6 @@
         if (!draggedId || tool !== 'move') return;
         const { x, y } = getCoords(evt);
         setElements(elements.map(el => el.id === draggedId ? { ...el, x, y } : el));
-      };
-
-      const handleElementClick = (id, evt) => {
-        evt.stopPropagation();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        if (tool === 'delete') {
-          setElements(elements.filter(el => el.id !== id));
-        } else if (tool === 'move') {
-          setDraggedId(draggedId === id ? null : id);
-        }
       };
 
       if (!user) {
@@ -866,87 +814,81 @@
                   onTouchMove={handleTouchMove}
                   className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-emerald-600/50 pitch-bg shadow-2xl cursor-crosshair select-none"
                 >
-                  {/* Linee campo */}
                   <div className="absolute inset-4 border-2 border-white/30 pointer-events-none"></div>
                   <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/30 transform -translate-y-1/2 pointer-events-none"></div>
                   <div className="absolute top-1/2 left-1/2 w-24 h-24 border-2 border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
                   <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
-                  {/* Elementi in campo */}
                   {elements.map(el => {
-  let bgClass = "bg-rose-600 border-rose-400";
-  if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
-  if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
-  if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
-  if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
-  if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
+                    let bgClass = "bg-rose-600 border-rose-400";
+                    if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
+                    if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
+                    if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+                    if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
+                    if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
 
-  return (
-    <div
-      key={el.id}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (tool === 'delete') {
-          setElements(elements.filter(item => item.id !== el.id));
-        } else if (tool === 'move') {
-          setDraggedId(draggedId === el.id ? null : el.id);
-        }
-      }}
-      onDoubleClick={(e) => {
-        e.stopPropagation();
-        if (el.type === 'player') {
-          setEditingPlayerId(el.id);
-          setTempPlayerName(el.name || '');
-        }
-      }}
-      style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-      className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
-    >
-      <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
-        {el.type === 'player' && el.number}
-        {el.type === 'ball' && '⚽'}
-        {el.type === 'cone' && ''}
-        {el.type === 'cinesina' && '•'}
-        {el.type === 'ladder' && '☷'}
-      </div>
-      
-      {/* Nome sotto il cerchietto o input per modificarlo */}
-      {el.type === 'player' && (
-        editingPlayerId === el.id ? (
-          <input
-            type="text"
-            autoFocus
-            value={tempPlayerName}
-            onChange={(e) => setTempPlayerName(e.target.value)}
-            onBlur={() => {
-              setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-              setEditingPlayerId(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                setEditingPlayerId(null);
-              }
-            }}
-            className="mt-1 bg-gray-900 text-white border border-emerald-500 px-1 py-0.5 rounded text-[10px] w-20 text-center font-bold outline-none shadow-lg"
-          />
-        ) : (
-          <span 
-            title="Doppio click per modificare il nome"
-            onClick={(e) => {
-              e.stopPropagation();
-              setEditingPlayerId(el.id);
-              setTempPlayerName(el.name || '');
-            }}
-            className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md hover:border-emerald-500 transition-colors"
-          >
-            {el.name || 'Modifica'}
-          </span>
-        )
-      )}
-    </div>
-  );
-})}
+                    return (
+                      <div
+                        key={el.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (tool === 'delete') {
+                            setElements(elements.filter(item => item.id !== el.id));
+                          } else if (tool === 'move') {
+                            setDraggedId(draggedId === el.id ? null : el.id);
+                          }
+                        }}
+                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                        className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
+                      >
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
+                          {el.type === 'player' && el.number}
+                          {el.type === 'ball' && '⚽'}
+                          {el.type === 'cone' && ''}
+                          {el.type === 'cinesina' && '•'}
+                          {el.type === 'ladder' && '☷'}
+                        </div>
+                        
+                        {el.type === 'player' && (
+                          editingPlayerId === el.id ? (
+                            <input
+                              type="text"
+                              autoFocus
+                              value={tempPlayerName}
+                              onChange={(e) => setTempPlayerName(e.target.value)}
+                              onBlur={() => {
+                                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                setEditingPlayerId(null);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                  setEditingPlayerId(null);
+                                }
+                              }}
+                              className="mt-1 bg-gray-900 text-white border border-emerald-500 px-1 py-0.5 rounded text-[10px] w-20 text-center font-bold outline-none shadow-lg"
+                            />
+                          ) : (
+                            <span 
+                              title="Clicca per modificare il nome"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingPlayerId(el.id);
+                                setTempPlayerName(el.name || '');
+                              }}
+                              className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md hover:border-emerald-500 transition-colors"
+                            >
+                              {el.name || 'Modifica'}
+                            </span>
+                          )
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* TAB: DRILLS */}
             {activeTab === 'drills' && (
               <div className="space-y-4">
@@ -1003,16 +945,12 @@
                             <p className="text-xs text-gray-400">⏱️ {d.duration}</p>
                           </div>
                           <div className="flex space-x-2">
-                            <button onClick={() => handleExportSingleDrillPDF(d)} className="text-xs bg-gray-800 hover:bg-gray-700 px-2.5 py-1 rounded-xl text-emerald-400 font-semibold">PDF</button>
                             <button onClick={() => removeDrill(d.id)} className="text-gray-500 hover:text-rose-400">✕</button>
                           </div>
                         </div>
                         {d.description && <p className="text-xs text-gray-300 bg-gray-950/50 p-2 rounded-xl">{d.description}</p>}
                       </div>
                     ))}
-                    <button onClick={handleExportPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs shadow-lg">
-                      {t('exportPdf')}
-                    </button>
                   </div>
                 )}
               </div>
