@@ -561,81 +561,103 @@
 
         let formationElements = [];
 
-        // Funzione per prendere il giocatore dalla rosa in ordine o usare un fallback
-        const getPl = (index, fallbackNum) => {
-          if (players && players.length > index) {
+        // Separiamo i giocatori per ruolo presi dalla rosa
+        const goalkeepers = players.filter(p => p.role === 'Portiere');
+        const defenders = players.filter(p => p.role === 'Difensore');
+        const midfielders = players.filter(p => p.role === 'Centrocampista');
+        const forwards = players.filter(p => p.role === 'Attaccante');
+        
+        // Unione di riserva se mancano ruoli specifici
+        const allPlayers = [...players];
+
+        // Funzione per estrarre il giocatore migliore (per ruolo o per ordine)
+        let playerIndex = 0;
+        const getNextPlayer = (preferredRole, defaultName, defaultNum) => {
+          // 1. Cerca prima tra i ruoli specifici se disponibili
+          let found = null;
+          if (preferredRole === 'Portiere' && goalkeepers.length > 0) found = goalkeepers.shift();
+          else if (preferredRole === 'Difensore' && defenders.length > 0) found = defenders.shift();
+          else if (preferredRole === 'Centrocampista' && midfielders.length > 0) found = midfielders.shift();
+          else if (preferredRole === 'Attaccante' && forwards.length > 0) found = forwards.shift();
+          
+          // 2. Altrimenti prende dal pool generale
+          if (!found && allPlayers.length > playerIndex) {
+            found = allPlayers[playerIndex];
+            playerIndex++;
+          }
+
+          if (found) {
             return {
-              name: players[index].name,
-              number: players[index].number || fallbackNum
+              name: found.name,
+              number: found.number || defaultNum
             };
           }
           return {
-            name: `Giocatore ${index + 1}`,
-            number: fallbackNum
+            name: defaultName,
+            number: defaultNum
           };
         };
 
+        // Posizionamento Portiere (sempre in porta)
+        const gk = getNextPlayer('Portiere', 'Portiere', '1');
+        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: gk.number, name: gk.name, x: 50, y: 90 });
+
         if (type === '433') {
-          formationElements = [
-            { id: 'p1', type: 'player', color: 'red', ...getPl(0, '1'), x: 50, y: 90 },
-            { id: 'p2', type: 'player', color: 'red', ...getPl(1, '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getPl(2, '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getPl(3, '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getPl(4, '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getPl(5, '8'), x: 35, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', ...getPl(6, '4'), x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', ...getPl(7, '10'), x: 65, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getPl(8, '7'), x: 20, y: 25 },
-            { id: 'p10', type: 'player', color: 'red', ...getPl(9, '9'), x: 50, y: 20 },
-            { id: 'p11', type: 'player', color: 'red', ...getPl(10, '11'), x: 80, y: 25 }
-          ];
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 35, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mezzala', '10'), x: 65, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Ala Dx', '7'), x: 20, y: 25 },
+            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Punta', '9'), x: 50, y: 20 },
+            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Ala Sx', '11'), x: 80, y: 25 }
+          );
         } else if (type === '442') {
-          formationElements = [
-            { id: 'p1', type: 'player', color: 'red', ...getPl(0, '1'), x: 50, y: 90 },
-            { id: 'p2', type: 'player', color: 'red', ...getPl(1, '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getPl(2, '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getPl(3, '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getPl(4, '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getPl(5, '7'), x: 20, y: 45 },
-            { id: 'p7', type: 'player', color: 'red', ...getPl(6, '4'), x: 40, y: 50 },
-            { id: 'p8', type: 'player', color: 'red', ...getPl(7, '8'), x: 60, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getPl(8, '11'), x: 80, y: 45 },
-            { id: 'p10', type: 'player', color: 'red', ...getPl(9, '9'), x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', ...getPl(10, '10'), x: 60, y: 22 }
-          ];
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Esterno', '7'), x: 20, y: 45 },
+            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Centrale', '4'), x: 40, y: 50 },
+            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Centrale', '8'), x: 60, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Esterno', '11'), x: 80, y: 45 },
+            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Prima Punta', '9'), x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Seconda Punta', '10'), x: 60, y: 22 }
+          );
         } else if (type === '352') {
-          formationElements = [
-            { id: 'p1', type: 'player', color: 'red', ...getPl(0, '1'), x: 50, y: 90 },
-            { id: 'p2', type: 'player', color: 'red', ...getPl(1, '2'), x: 30, y: 75 },
-            { id: 'p3', type: 'player', color: 'red', ...getPl(2, '5'), x: 50, y: 80 },
-            { id: 'p4', type: 'player', color: 'red', ...getPl(3, '3'), x: 70, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getPl(4, '7'), x: 15, y: 50 },
-            { id: 'p6', type: 'player', color: 'red', ...getPl(5, '8'), x: 38, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', ...getPl(6, '4'), x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', ...getPl(7, '10'), x: 62, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', ...getPl(8, '11'), x: 85, y: 50 },
-            { id: 'p10', type: 'player', color: 'red', ...getPl(9, '9'), x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', ...getPl(10, '12'), x: 60, y: 22 }
-          ];
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Braccetto', '2'), x: 30, y: 75 },
+            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Libero', '5'), x: 50, y: 80 },
+            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Braccetto', '3'), x: 70, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Tornante', '7'), x: 15, y: 50 },
+            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 38, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mezzala', '10'), x: 62, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Tornante', '11'), x: 85, y: 50 },
+            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Attaccante', '9'), x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Attaccante', '11'), x: 60, y: 22 }
+          );
         } else if (type === '4321') {
-          formationElements = [
-            { id: 'p1', type: 'player', color: 'red', ...getPl(0, '1'), x: 50, y: 90 },
-            { id: 'p2', type: 'player', color: 'red', ...getPl(1, '2'), x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', ...getPl(2, '5'), x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', ...getPl(3, '6'), x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', ...getPl(4, '3'), x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', ...getPl(5, '8'), x: 35, y: 55 },
-            { id: 'p7', type: 'player', color: 'red', ...getPl(6, '4'), x: 50, y: 60 },
-            { id: 'p8', type: 'player', color: 'red', ...getPl(7, '14'), x: 65, y: 55 },
-            { id: 'p9', type: 'player', color: 'red', ...getPl(8, '10'), x: 40, y: 35 },
-            { id: 'p10', type: 'player', color: 'red', ...getPl(9, '11'), x: 60, y: 35 },
-            { id: 'p11', type: 'player', color: 'red', ...getPl(10, '9'), x: 50, y: 20 }
-          ];
+          formationElements.push(
+            { id: 'p2', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '2'), x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '5'), x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Dif. Cen', '6'), x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', ...getNextPlayer('Difensore', 'Terzino', '3'), x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '8'), x: 35, y: 55 },
+            { id: 'p7', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Regista', '4'), x: 50, y: 60 },
+            { id: 'p8', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Mediano', '14'), x: 65, y: 55 },
+            { id: 'p9', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Trequartista', '10'), x: 40, y: 35 },
+            { id: 'p10', type: 'player', color: 'red', ...getNextPlayer('Centrocampista', 'Trequartista', '11'), x: 60, y: 35 },
+            { id: 'p11', type: 'player', color: 'red', ...getNextPlayer('Attaccante', 'Punta', '9'), x: 50, y: 20 }
+          );
         }
 
         setElements(formationElements);
       };
-
       const getCoords = (evt) => {
         if (!svgRef.current) return { x: 50, y: 50 };
         const rect = svgRef.current.getBoundingClientRect();
