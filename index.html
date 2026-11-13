@@ -843,13 +843,13 @@
                     ))}
                   </svg>
                   {/* Elementi in campo */}
-                  {elements.map(el => {
-                    let bg = "bg-rose-600 border-rose-400";
-                    if (el.color === 'blue') bg = "bg-blue-600 border-blue-400";
-                    if (el.type === 'ball') bg = "bg-white text-black border-gray-300";
-                    if (el.type === 'cone') bg = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
-                    if (el.type === 'cinesina') bg = "bg-amber-400 border-amber-200 rounded-full w-5 h-5";
-                    if (el.type === 'ladder') bg = "bg-yellow-600 border-yellow-400 rounded-none w-10 h-4";
+                 {elements.map(el => {
+                    let tokenStyle = "bg-gradient-to-br from-rose-500 to-rose-700 border-rose-300 shadow-rose-900/50";
+                    if (el.color === 'blue') tokenStyle = "bg-gradient-to-br from-blue-500 to-blue-700 border-blue-300 shadow-blue-900/50";
+                    if (el.type === 'ball') tokenStyle = "bg-gradient-to-br from-white to-gray-200 text-black border-white shadow-black/50";
+                    if (el.type === 'cone') tokenStyle = "bg-gradient-to-br from-orange-400 to-orange-600 border-orange-200 rounded-none transform rotate-45 shadow-orange-900/50";
+                    if (el.type === 'cinesina') tokenStyle = "bg-gradient-to-br from-amber-300 to-amber-500 border-amber-100 rounded-full w-5 h-5 shadow-amber-900/50";
+                    if (el.type === 'ladder') tokenStyle = "bg-gradient-to-br from-yellow-500 to-yellow-700 border-yellow-300 rounded-md w-12 h-4 shadow-yellow-900/50";
 
                     return (
                       <div
@@ -859,7 +859,7 @@
                         style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
                         className="absolute flex flex-col items-center cursor-pointer select-none z-10"
                       >
-                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-xs shadow-lg border-2 ${bg}`}>
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 ${tokenStyle}`}>
                           {el.type === 'player' && el.number}
                           {el.type === 'ball' && '⚽'}
                         </div>
@@ -880,13 +880,13 @@
                                   setEditingPlayerId(null);
                                 }
                               }}
-                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16"
+                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
                             />
                           ) : (
                             <span 
                               onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
                               onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow cursor-pointer border border-transparent hover:border-emerald-400"
+                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
                             >
                               {el.name || 'Nome'}
                             </span>
