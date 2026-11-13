@@ -652,9 +652,9 @@
         }
         const { x, y } = getCoords(evt);
 
-        if (tool === 'player-red') {
+        if (tool === 'red') {
           setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), name: 'Giocatore', x, y }]);
-        } else if (tool === 'player-blue') {
+        } else if (tool === 'blue') {
           setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), name: 'Giocatore', x, y }]);
         } else if (tool === 'ball') {
           setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
@@ -798,13 +798,15 @@
                   </div>
                 </div>
 
-                {/* Strumenti */}
+                {/* Strumenti (Ripristinati al 100%) */}
                 <div className="flex flex-wrap gap-2 bg-gray-900 border border-gray-800 p-3 rounded-2xl">
                   <button onClick={() => setTool('move')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'move' ? 'bg-emerald-600 text-white' : 'bg-gray-800 text-gray-300'}`}>✋ {t('toolMove')}</button>
-                  <button onClick={() => setTool('player-red')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'player-red' ? 'bg-rose-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
-                  <button onClick={() => setTool('player-blue')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'player-blue' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
+                  <button onClick={() => setTool('red')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'red' ? 'bg-rose-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🔴 {t('toolRed')}</button>
+                  <button onClick={() => setTool('blue')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'blue' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🔵 {t('toolBlue')}</button>
                   <button onClick={() => setTool('ball')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'ball' ? 'bg-white text-black' : 'bg-gray-800 text-gray-300'}`}>⚽ {t('toolBall')}</button>
                   <button onClick={() => setTool('cone')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'cone' ? 'bg-orange-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🔺 {t('toolCone')}</button>
+                  <button onClick={() => setTool('cinesina')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'cinesina' ? 'bg-amber-500 text-black' : 'bg-gray-800 text-gray-300'}`}>🔘 {t('toolCinesina')}</button>
+                  <button onClick={() => setTool('ladder')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'ladder' ? 'bg-yellow-600 text-white' : 'bg-gray-800 text-gray-300'}`}>🪜 {t('toolLadder')}</button>
                   <button onClick={() => setTool('arrow')} className={`px-3 py-2 rounded-xl text-xs font-bold ${tool === 'arrow' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'}`}>↗️ {t('toolArrow')}</button>
                 </div>
 
@@ -835,6 +837,8 @@
                     if (el.color === 'blue') bg = "bg-blue-600 border-blue-400";
                     if (el.type === 'ball') bg = "bg-white text-black border-gray-300";
                     if (el.type === 'cone') bg = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+                    if (el.type === 'cinesina') bg = "bg-amber-400 border-amber-200 rounded-full w-5 h-5";
+                    if (el.type === 'ladder') bg = "bg-yellow-600 border-yellow-400 rounded-none w-10 h-4";
 
                     return (
                       <div
@@ -847,7 +851,6 @@
                         <div className={`w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-xs shadow-lg border-2 ${bg}`}>
                           {el.type === 'player' && el.number}
                           {el.type === 'ball' && '⚽'}
-                          {el.type === 'cone' && ''}
                         </div>
                         {el.type === 'player' && (
                           editingPlayerId === el.id ? (
@@ -1021,6 +1024,8 @@
                       if (el.color === 'blue') bg = "bg-blue-600 border-blue-400";
                       if (el.type === 'ball') bg = "bg-white text-black border-gray-300";
                       if (el.type === 'cone') bg = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+                      if (el.type === 'cinesina') bg = "bg-amber-400 border-amber-200 rounded-full w-4 h-4";
+                      if (el.type === 'ladder') bg = "bg-yellow-600 border-yellow-400 rounded-none w-8 h-3";
 
                       return (
                         <div
@@ -1031,7 +1036,6 @@
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-md border-2 ${bg}`}>
                             {el.type === 'player' && el.number}
                             {el.type === 'ball' && '⚽'}
-                            {el.type === 'cone' && ''}
                           </div>
                           {el.type === 'player' && el.name && (
                             <span className="mt-0.5 bg-black/90 text-white px-1 py-0.5 rounded text-[8px] font-bold whitespace-nowrap shadow">
