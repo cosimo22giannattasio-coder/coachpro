@@ -14,11 +14,6 @@
       background-color: #15803d;
       background-image: repeating-linear-gradient(0deg, #15803d, #15803d 40px, #166534 40px, #166534 80px);
     }
-    /* Adattamento mobile fluido per la lavagna e i contenitori */
-    @media (max-width: 640px) {
-      main { padding: 8px !important; }
-      .pitch-container { width: 100% !important; }
-    }
   </style>
 </head>
 <body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
@@ -605,7 +600,6 @@
                   <span>📄 Esporta Lavagna in PDF (Alta Qualità)</span>
                 </button>
 
-                <!-- VECCHIO SISTEMA VETTORIALE FISSO 800x600 -->
                 <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
                   {!hasAccess && (
                     <div onClick={() => setShowPaywallModal(true)} className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer">
@@ -622,26 +616,21 @@
                     onClick={handleBoardClick}
                     onTouchMove={handleTouchMove}
                   >
-                    {/* Campo da calcio vettoriale proporzionato */}
                     <rect x="40" y="30" width="720" height="540" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <line x1="40" y1="300" x2="760" y2="300" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <circle cx="400" cy="300" r="90" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <circle cx="400" cy="300" r="4" fill="white" />
                     
-                    {/* Area di rigore superiore */}
                     <rect x="240" y="30" width="320" height="110" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <rect x="320" y="30" width="160" height="40" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     
-                    {/* Area di rigore inferiore */}
                     <rect x="240" y="460" width="320" height="110" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <rect x="320" y="530" width="160" height="40" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
 
-                    {/* Frecce tattiche */}
                     {arrows.map(arr => (
                       <line key={arr.id} x1={arr.startX * 8} y1={arr.startY * 6} x2={arr.endX * 8} y2={arr.endY * 6} stroke="#34d399" strokeWidth="5" strokeDasharray="8,8" strokeLinecap="round" />
                     ))}
 
-                    {/* Elementi (Giocatori, Palla, Coni, Cinesine, Scalette) */}
                     {elements.map(el => {
                       const cx = el.x * 8;
                       const cy = el.y * 6;
