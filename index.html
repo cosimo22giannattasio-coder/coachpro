@@ -123,7 +123,47 @@
       const [isDrawingArrow, setIsDrawingArrow] = useState(false);
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
+      // Calcola la distanza tra due dita per il pinch-to-zoom
+      const getTouchDistance = (touches) => {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+      };
 
+      const handleTouchStartBoard = (e) => {
+        if (e.touches.length === 2) {
+          // Inizia il pinch con 2 dita
+          setLastTouchDist(getTouchDistance(e.touches));
+        } else if (e.touches.length === 1 && tool === 'move' && !draggedId) {
+          // Spostamento del campo (pan) se non stiamo muovendo un giocatore
+          setIsDraggingBoard(true);
+          setDragStart({ x: e.touches[0].clientX - pan.x, y: e.touches[0].clientY - pan.y });
+        }
+      };
+
+      const handleTouchMoveBoard = (e) => {
+        if (e.touches.length === 2 && lastTouchDist !== null) {
+          // Gestione Zoom con 2 dita
+          const dist = getTouchDistance(e.touches);
+          const factor = dist / lastTouchDist;
+          setScale(prev => Math.min(Math.max(prev * factor, 0.8), 3)); // Zoom da 0.8x a 3x
+          setLastTouchDist(dist);
+        } else if (e.touches.length === 1 && isDraggingBoard) {
+          // Gestione Pan (spostamento campo)
+          setPan({
+            x: e.touches[0].clientX - dragStart.x,
+            y: e.touches[0].clientY - dragStart.y
+          });
+        } else {
+          // Se stiamo muovendo un giocatore, usiamo la normale funzione di movimento
+          handleTouchMove(e);
+        }
+      };
+
+      const handleTouchEndBoard = () => {
+        setLastTouchDist(null);
+        setIsDraggingBoard(false);
+      };
       const [clubCodeInput, setClubCodeInput] = useState('');
       const [clubCodeMsg, setClubCodeMsg] = useState('');
 
@@ -611,7 +651,12 @@
                   <span>📄 Esporta Lavagna in PDF (Alta Qualità)</span>
                 </button>
 
-                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                <div 
+                  className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800 touch-none"
+                  onTouchStart={handleTouchStartBoard}
+                  onTouchMove={handleTouchMoveBoard}
+                  onTouchEnd={handleTouchEndBoard}
+                >
                   {!hasAccess && (
                     <div onClick={() => setShowPaywallModal(true)} className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer">
                       <div className="bg-emerald-500 text-gray-950 p-3 rounded-full text-2xl mb-2 font-bold">🔒</div>
@@ -623,10 +668,16 @@
                     ref={svgRef}
                     viewBox="0 0 800 600"
                     preserveAspectRatio="xMidYMid meet"
-                    className="w-full h-full cursor-pointer touch-none"
+                    className="w-full h-full cursor-pointer"
+                    style={{
+                      transform: `scale(${scale}) translate(${pan.x / scale}px, ${pan.y / scale}px)`,
+                      transformOrigin: 'center center',
+                      transition: lastTouchDist ? 'none' : 'transform 0.1s ease-out'
+                    }}
                     onClick={handleBoardClick}
-                    onTouchMove={handleTouchMove}
                   >
+                    {/* Contenuto SVG esistente (campo, giocatori, ecc.) */}
+              
                     <rect x="40" y="30" width="720" height="540" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <line x1="40" y1="300" x2="760" y2="300" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
                     <circle cx="400" cy="300" r="90" fill="none" stroke="white" strokeWidth="3" strokeOpacity="0.8" />
