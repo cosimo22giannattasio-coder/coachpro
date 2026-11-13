@@ -896,15 +896,17 @@
         setNewPlayerName('');
       };
 
-      const togglePlayerStatus = (id) => {
+     const togglePlayerStatus = (id) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
         setPlayers(players.map(p => {
-          if (p.id !== id) return p;
-          const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
-          return { ...p, status: nextStatus };
+          if (p.id === id) {
+            const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
+            return { ...p, status: nextStatus };
+          }
+          return p;
         }));
       };
 
