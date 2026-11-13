@@ -844,57 +844,80 @@
                   </svg>
                   {/* Elementi in campo */}
                  {elements.map(el => {
-                    let tokenStyle = "bg-gradient-to-br from-rose-500 to-rose-700 border-rose-300 shadow-rose-900/50";
-                    if (el.color === 'blue') tokenStyle = "bg-gradient-to-br from-blue-500 to-blue-700 border-blue-300 shadow-blue-900/50";
-                    if (el.type === 'ball') tokenStyle = "bg-gradient-to-br from-white to-gray-200 text-black border-white shadow-black/50";
-                    if (el.type === 'cone') tokenStyle = "bg-gradient-to-br from-orange-400 to-orange-600 border-orange-200 rounded-none transform rotate-45 shadow-orange-900/50";
-                    if (el.type === 'cinesina') tokenStyle = "bg-gradient-to-br from-amber-300 to-amber-500 border-amber-100 rounded-full w-5 h-5 shadow-amber-900/50";
-                    if (el.type === 'ladder') tokenStyle = "bg-gradient-to-br from-yellow-500 to-yellow-700 border-yellow-300 rounded-md w-12 h-4 shadow-yellow-900/50";
+                      let tokenContent = '';
+                      let tokenStyle = "";
 
-                    return (
-                      <div
-                        key={el.id}
-                        onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
-                        onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
-                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                        className="absolute flex flex-col items-center cursor-pointer select-none z-10"
-                      >
-                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 ${tokenStyle}`}>
-                          {el.type === 'player' && el.number}
-                          {el.type === 'ball' && '⚽'}
-                        </div>
-                        {el.type === 'player' && (
-                          editingPlayerId === el.id ? (
-                            <input 
-                              autoFocus
-                              type="text"
-                              value={tempPlayerName}
-                              onChange={(e) => setTempPlayerName(e.target.value)}
-                              onBlur={() => {
-                                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                                setEditingPlayerId(null);
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
+                      if (el.type === 'player') {
+                        let baseColor = el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-300' : 'from-rose-600 to-rose-800 border-rose-300';
+                        tokenStyle = `w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${baseColor} text-white`;
+                        tokenContent = el.number;
+                      } else if (el.type === 'ball') {
+                        // Classico pallone da calcio bianco e nero con motivo geometrico
+                        tokenStyle = "w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shadow-2xl bg-gradient-to-tr from-gray-300 via-white to-gray-200 text-black border-2 border-gray-800 scale-110";
+                        tokenContent = '⚽';
+                      } else if (el.type === 'cone') {
+                        // Cono d'allenamento arancione sagomato a trapezio con base
+                        tokenStyle = "w-8 h-7 flex flex-col items-center justify-center filter drop-shadow-[0_4px_3px_rgba(0,0,0,0.6)]";
+                        tokenContent = <div style={{width: 0, height: 0, borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '22px solid #f97316', filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.5))'}} />;
+                      } else if (el.type === 'cinesina') {
+                        // Cinesina / piattino basso circolare
+                        tokenStyle = "w-7 h-3 rounded-full bg-gradient-to-t from-amber-600 to-amber-400 border border-amber-200 shadow-lg flex items-center justify-center filter drop-shadow-[0_3px_2px_rgba(0,0,0,0.5)]";
+                        tokenContent = <div className="w-3 h-1 rounded-full bg-amber-200 opacity-60"></div>;
+                      } else if (el.type === 'ladder') {
+                        // Scaletta di agilità a pioli rettangolari
+                        tokenStyle = "w-12 h-6 bg-yellow-500 border-2 border-yellow-300 rounded-sm shadow-xl flex flex-col justify-between p-1 filter drop-shadow-[0_4px_3px_rgba(0,0,0,0.6)]";
+                        tokenContent = (
+                          <>
+                            <div className="w-full h-1 bg-yellow-200 rounded-full"></div>
+                            <div className="w-full h-1 bg-yellow-200 rounded-full"></div>
+                            <div className="w-full h-1 bg-yellow-200 rounded-full"></div>
+                          </>
+                        );
+                      }
+
+                      return (
+                        <div
+                          key={el.id}
+                          onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
+                          onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move') setDraggedId(el.id); else setElements(elements.filter(item => item.id !== el.id)); }}
+                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                          className="absolute flex flex-col items-center cursor-pointer select-none z-10"
+                        >
+                          <div className={tokenStyle}>
+                            {tokenContent}
+                          </div>
+                          {el.type === 'player' && (
+                            editingPlayerId === el.id ? (
+                              <input 
+                                autoFocus
+                                type="text"
+                                value={tempPlayerName}
+                                onChange={(e) => setTempPlayerName(e.target.value)}
+                                onBlur={() => {
                                   setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
                                   setEditingPlayerId(null);
-                                }
-                              }}
-                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
-                            />
-                          ) : (
-                            <span 
-                              onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                              onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
-                            >
-                              {el.name || 'Nome'}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    );
-                  })}
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                    setEditingPlayerId(null);
+                                  }
+                                }}
+                                className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
+                              />
+                            ) : (
+                              <span 
+                                onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                                onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                                className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
+                              >
+                                {el.name || 'Nome'}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             )}
