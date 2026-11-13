@@ -450,10 +450,7 @@
       };
 
       const checkAccess = () => {
-        if (!user) return false;
-        if (user.isPro) return true;
-        if (user.trialEndsAt && new Date().getTime() < user.trialEndsAt) return true;
-        return false;
+       return true;
       };
 
       const hasAccess = checkAccess();
