@@ -830,57 +830,96 @@
                     ))}
                   </svg>
 
-                  {elements.map(el => {
-                    return (
-                      <div
-                        key={el.id}
-                        onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); setArrows(arrows.filter(a => a.id !== el.id)); } else { setDraggedId(el.id); } } }}
-                        onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); } else { setDraggedId(el.id); } } }}
-                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                        className="absolute flex flex-col items-center cursor-pointer select-none z-10"
-                      >
-                        {el.type === 'player' && (
-                          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400'} text-white`}>
-                            {el.number}
-                          </div>
-                        )}
-                        {el.type === 'ball' && <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-2xl bg-white border border-gray-400">⚽</div>}
-                        {el.type === 'cone' && <div className="w-7 h-7 bg-orange-600 border border-orange-300 rounded-lg shadow-lg flex items-center justify-center font-bold text-xs text-white transform rotate-45">▲</div>}
-                        {el.type === 'cinesina' && <div className="w-7 h-7 bg-amber-400 border border-amber-200 rounded-full shadow-md flex items-center justify-center text-[10px] font-black text-amber-950">⏺</div>}
-                        {el.type === 'ladder' && <div className="w-11 h-6 bg-yellow-400 border border-yellow-200 rounded shadow-lg flex items-center justify-around px-1"><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div><div className="w-0.5 h-full bg-yellow-700 opacity-60"></div></div>}
+                 {elements.map(el => {
+                      let tokenContent = '';
+                      let tokenStyle = "";
 
-                        {el.type === 'player' && (
-                          editingPlayerId === el.id ? (
-                            <input 
-                              autoFocus
-                              type="text"
-                              value={tempPlayerName}
-                              onChange={(e) => setTempPlayerName(e.target.value)}
-                              onBlur={() => {
-                                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                                setEditingPlayerId(null);
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
+                      if (el.type === 'player') {
+                        let baseColor = el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400';
+                        tokenStyle = `w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${baseColor} text-white`;
+                        tokenContent = el.number;
+                      } else if (el.type === 'ball') {
+                        // Pallone da calcio geometrico e lucido
+                        tokenStyle = "w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-2xl bg-gradient-to-br from-white via-gray-100 to-gray-300 border-2 border-gray-900";
+                        tokenContent = '⚽';
+                      } else if (el.type === 'cone') {
+                        // Cono d'allenamento tridimensionale con base trapezoidale e striature
+                        tokenStyle = "w-8 h-7 flex flex-col items-center justify-center filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)] relative";
+                        tokenContent = (
+                          <div className="relative flex flex-col items-center">
+                            <div className="w-0.5 h-1 bg-white/80 absolute -top-1 z-10"></div>
+                            <div style={{
+                              width: 0, 
+                              height: 0, 
+                              borderLeft: '11px solid transparent', 
+                              borderRight: '11px solid transparent', 
+                              borderBottom: '22px solid #ea580c',
+                              filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.4))'
+                            }}></div>
+                            <div className="w-5 h-1.5 bg-orange-800 rounded-full -mt-0.5 shadow-md"></div>
+                          </div>
+                        );
+                      } else if (el.type === 'cinesina') {
+                        // Cinesina / piattino basso con effetto cupola professionale
+                        tokenStyle = "w-7 h-4 rounded-full bg-gradient-to-t from-amber-600 via-amber-400 to-amber-300 border border-amber-200 shadow-xl flex items-center justify-center filter drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] relative";
+                        tokenContent = (
+                          <div className="w-3.5 h-1.5 rounded-full bg-white/40 absolute top-0.5 shadow-inner"></div>
+                        );
+                      } else if (el.type === 'ladder') {
+                        // Scaletta di agilità a pioli rettangolari rigidi con texture in rilievo
+                        tokenStyle = "w-12 h-6 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 border border-yellow-200 rounded-sm shadow-2xl flex flex-col justify-around p-0.5 filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]";
+                        tokenContent = (
+                          <>
+                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
+                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
+                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
+                          </>
+                        );
+                      }
+
+                      return (
+                        <div
+                          key={el.id}
+                          onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); setArrows(arrows.filter(a => a.id !== el.id)); } else { setDraggedId(el.id); } } }}
+                          onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); } else { setDraggedId(el.id); } } }}
+                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                          className="absolute flex flex-col items-center cursor-pointer select-none z-10"
+                        >
+                          <div className={tokenStyle}>
+                            {tokenContent}
+                          </div>
+                          {el.type === 'player' && (
+                            editingPlayerId === el.id ? (
+                              <input 
+                                autoFocus
+                                type="text"
+                                value={tempPlayerName}
+                                onChange={(e) => setTempPlayerName(e.target.value)}
+                                onBlur={() => {
                                   setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
                                   setEditingPlayerId(null);
-                                }
-                              }}
-                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
-                            />
-                          ) : (
-                            <span 
-                              onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                              onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
-                            >
-                              {el.name || 'Nome'}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    );
-                  })}
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                    setEditingPlayerId(null);
+                                  }
+                                }}
+                                className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
+                              />
+                            ) : (
+                              <span 
+                                onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                                onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                                className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
+                              >
+                                {el.name || 'Nome'}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             )}
