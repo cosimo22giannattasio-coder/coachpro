@@ -881,21 +881,22 @@
         setNewDrillDesc('');
       };
 
-      const addPlayer = (evt) => {
-        evt.preventDefault();
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        if (!newPlayerName) return;
-        setPlayers([...players, {
-          id: Date.now().toString(),
-          name: newPlayerName,
-          role: newPlayerRole,
-          status: 'presente'
-        }]);
-        setNewPlayerName('');
-      };
+      const addPlayer = (e) => {
+    e.preventDefault();
+    if (!newPlayerName.trim()) return;
+    
+    const newPlayer = {
+      id: Date.now().toString(),
+      name: newPlayerName.trim(),
+      number: newPlayerNumber || '1',
+      role: newPlayerRole || 'Centrocampista',
+      status: 'presente'
+    };
+
+    setPlayers([...players, newPlayer]);
+    setNewPlayerName('');
+    setNewPlayerNumber('');
+  };
 
      const togglePlayerStatus = (id) => {
         if (!hasAccess) {
