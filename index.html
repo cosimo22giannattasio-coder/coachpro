@@ -1168,33 +1168,37 @@
                       <line key={arr.id} x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#34d399" strokeWidth="4" strokeDasharray="6,6" />
                     ))}
 
-                    {elements.map(el => (
-                      <g key={el.id} onClick={(evt) => handleElementClick(el.id, evt)} className="cursor-pointer">
-                        {el.type === 'player' && (
-                          <>
-                            <circle cx={`${el.x}%`} cy={`${el.y}%`} r="14" fill={el.color === 'red' ? '#ef4444' : '#3b82f6'} stroke="white" strokeWidth="2.5" />
-                            <text x={`${el.x}%`} y={`${el.y}%`} dy="4" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">{el.number}</text>
-                          </>
-                        )}
-                        {el.type === 'ball' && <circle cx={`${el.x}%`} cy={`${el.y}%`} r="7" fill="white" stroke="black" strokeWidth="2" />}
-                        {el.type === 'cone' && <polygon points={`${el.x}%,${el.y - 2.5}% ${el.x - 2}%,${el.y + 2}% ${el.x + 2}%,${el.y + 2}%`} fill="#f97316" />}
-                        {el.type === 'cinesina' && <ellipse cx={`${el.x}%`} cy={`${el.y}%`} rx="8" ry="4" fill="#facc15" stroke="#eab308" strokeWidth="1.5" />}
-                        {el.type === 'ladder' && (
-                          <g transform={`translate(${el.x * 3.5}, ${el.y * 2.5})`}>
-                            <rect x="-6" y="-30" width="12" height="60" fill="none" stroke="#e2e8f0" strokeWidth="2" rx="1" />
-                            <line x1="-6" y1="-20" x2="6" y2="-20" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="-10" x2="6" y2="-10" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="0" x2="6" y2="0" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="10" x2="6" y2="10" stroke="#facc15" strokeWidth="2" />
-                            <line x1="-6" y1="20" x2="6" y2="20" stroke="#facc15" strokeWidth="2" />
-                          </g>
-                        )}
-                      </g>
-                    ))}
-                  </svg>
-                </div>
-              </div>
-            )}
+                    {elements.map(el => {
+  let bgClass = "bg-rose-600 border-rose-400";
+  if (el.color === 'blue') bgClass = "bg-blue-600 border-blue-400";
+  if (el.type === 'ball') bgClass = "bg-white text-gray-950 border-gray-300";
+  if (el.type === 'cone') bgClass = "bg-orange-500 border-orange-300 rounded-none transform rotate-45";
+  if (el.type === 'cinesina') bgClass = "bg-yellow-400 text-gray-950 border-yellow-200 rounded-full w-6 h-6 text-[10px]";
+  if (el.type === 'ladder') bgClass = "bg-purple-600 border-purple-400 rounded-md w-8 h-5 text-[10px]";
+
+  return (
+    <div
+      key={el.id}
+      onClick={(e) => handleElementClick(el.id, e)}
+      style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+      className={`absolute flex flex-col items-center cursor-pointer select-none ${draggedId === el.id ? 'scale-110 z-20' : 'z-10'}`}
+    >
+      <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-xl border-2 transition-all ${bgClass}`}>
+        {el.type === 'player' && el.number}
+        {el.type === 'ball' && '⚽'}
+        {el.type === 'cone' && ''}
+        {el.type === 'cinesina' && '•'}
+        {el.type === 'ladder' && '☷'}
+      </div>
+      
+      {el.type === 'player' && el.name && (
+        <span className="mt-1 bg-gray-950/90 text-white border border-gray-800 px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap shadow-md">
+          {el.name}
+        </span>
+      )}
+    </div>
+  );
+})})}
 
             {activeTab === 'drills' && (
               <div className="space-y-4">
