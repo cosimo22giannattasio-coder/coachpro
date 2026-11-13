@@ -8,7 +8,8 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
- <style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
     body { touch-action: manipulation; user-select: none; -webkit-user-select: none; background-color: #030712; }
     .pitch-bg {
       background-color: #0d5c2f;
@@ -24,25 +25,19 @@
     }
     button, input, select { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
-    /* INCOLLA QUI IL CSS PER LA STAMPA */
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      .pitch-bg, .pitch-bg * {
-        visibility: visible;
-      }
-      .pitch-bg {
-        position: absolute;
+      body * { visibility: hidden; }
+      #tactical-pitch-area, #tactical-pitch-area * { visibility: visible; }
+      #tactical-pitch-area {
+        position: fixed;
         left: 0;
         top: 0;
-        width: 100% !important;
+        width: 100vw !important;
         height: 100vh !important;
-        border: none !important;
-        box-shadow: none !important;
+        border-radius: 0 !important;
       }
     }
-</style>
+  </style>
 </head>
 <body class="bg-gray-950 text-white font-sans antialiased selection:bg-emerald-500 selection:text-black">
   <div id="root"></div>
@@ -68,11 +63,8 @@
         noAccount: "Non hai un account? Registrati ora",
         hasAccount: "Hai già un account? Accedi",
         proActive: "Piano PRO Attivo",
-        trialActive: "Prova Gratuita Attiva",
-        freeLocked: "Account Free (Bloccato)",
-        subButton: "Abbonamento",
         exitButton: "Esci",
-        quickFormations: "Moduli rapidi:",
+        quickFormations: "Moduli:",
         toolMove: "Sposta",
         toolRed: "Rosso",
         toolBlue: "Blu",
@@ -82,51 +74,22 @@
         toolLadder: "Scaletta",
         toolArrow: "Freccia",
         toolDelete: "Gomma",
-        toolClear: "Pulisci Tutto",
-        lockedTitle: "Funzionalità Bloccata",
-        lockedDesc: "Abbonati o attiva la prova di 3 giorni per usare la lavagna tattica interattiva.",
+        toolClear: "Pulisci",
         newDrill: "Nuovo Esercizio",
         drillTitlePlaceholder: "Titolo esercitazione...",
-        categoryPossesso: "Possesso Palla",
-        categoryTactics: "Tattica",
-        categoryFitness: "Atletico",
-        categoryFinishing: "Rifinitura",
-        drillDurationPlaceholder: "Durata (es. 15 min)",
         drillDescPlaceholder: "Descrizione ed obbiettivi...",
         saveDrill: "+ Salva Esercizio",
         noDrills: "Nessun esercizio salvato. Creane uno sopra!",
-        shareWhatsapp: "Condividi WhatsApp",
-        exportPdf: "📄 Esporta PDF Sessione",
-        exportDrillPdf: "📄 Esporta PDF Esercizio",
+        exportPdf: "📥 Esporta Lavagna",
+        exporting: "⏳ Generazione...",
         playerPlaceholder: "Nome giocatore...",
-        roleGoalkeeper: "Portiere",
-        roleDefender: "Difensore",
-        roleMidfielder: "Centrocampista",
-        roleForward: "Attaccante",
         addPlayer: "Aggiungi",
         noPlayers: "Nessun giocatore in rosa. Aggiungi il primo sopra!",
-        statusPresent: "PRESENTE",
-        statusAbsent: "ASSENTE",
-        statusInjured: "INFORTUNATO",
-        paywallHeader: "Scegli il Piano CoachPro",
-        paywallDesc: "Sblocca tutte le funzionalità avanzate per te o per la tua società.",
-        indProBtn: "PRO Individuale - 29,99€/anno",
-        clubBtn: "Pacchetto Società (10 Account)",
-        clubSubBtn: "Sconto 15% - Ricevi subito il Codice Invito",
-        haveClubCode: "Hai un Codice Invito Società?",
-        activate: "Attiva",
-        trialBtn: "Attiva 3 Giorni di Prova Gratuita",
         navBoard: "Lavagna",
         navDrills: "Esercizi",
         navSquad: "Rosa",
         profileSettings: "Profilo & Impostazioni",
-        uploadPhoto: "📷 Carica Foto / Logo",
-        languageLabel: "Lingua / Language",
-        accountStatus: "Stato Account:",
-        clubLicenseActive: "🛡️ Licenza di squadra attiva",
-        logoutAccount: "Esci dall'Account",
-        clubInviteBanner: "Licenza Società",
-        inviteCoach: "📲 Invita Allenatore"
+        languageLabel: "Lingua / Language"
       },
       en: {
         appTitle: "CoachPro",
@@ -141,11 +104,8 @@
         noAccount: "Don't have an account? Sign up",
         hasAccount: "Already have an account? Log in",
         proActive: "PRO Plan Active",
-        trialActive: "Free Trial Active",
-        freeLocked: "Free Account (Locked)",
-        subButton: "Subscription",
         exitButton: "Logout",
-        quickFormations: "Quick formations:",
+        quickFormations: "Formations:",
         toolMove: "Move",
         toolRed: "Red",
         toolBlue: "Blue",
@@ -155,270 +115,22 @@
         toolLadder: "Ladder",
         toolArrow: "Arrow",
         toolDelete: "Eraser",
-        toolClear: "Clear All",
-        lockedTitle: "Feature Locked",
-        lockedDesc: "Subscribe or activate the 3-day trial to use the interactive tactical board.",
+        toolClear: "Clear",
         newDrill: "New Drill",
         drillTitlePlaceholder: "Drill title...",
-        categoryPossesso: "Ball Possession",
-        categoryTactics: "Tactics",
-        categoryFitness: "Fitness",
-        categoryFinishing: "Finishing",
-        drillDurationPlaceholder: "Duration (e.g. 15 min)",
         drillDescPlaceholder: "Description and objectives...",
         saveDrill: "+ Save Drill",
         noDrills: "No drills saved. Create one above!",
-        shareWhatsapp: "Share WhatsApp",
-        exportPdf: "📄 Export Session PDF",
-        exportDrillPdf: "📄 Export Drill PDF",
+        exportPdf: "📥 Export Board",
+        exporting: "⏳ Exporting...",
         playerPlaceholder: "Player name...",
-        roleGoalkeeper: "Goalkeeper",
-        roleDefender: "Defender",
-        roleMidfielder: "Midfielder",
-        roleForward: "Forward",
         addPlayer: "Add",
         noPlayers: "No players in squad. Add the first one above!",
-        statusPresent: "PRESENT",
-        statusAbsent: "ABSENT",
-        statusInjured: "INJURED",
-        paywallHeader: "Choose CoachPro Plan",
-        paywallDesc: "Unlock all advanced features for yourself or your club.",
-        indProBtn: "Individual PRO - €29.99/year",
-        clubBtn: "Club Package (10 Accounts)",
-        clubSubBtn: "15% Discount - Get Invitation Code",
-        haveClubCode: "Have a Club Invitation Code?",
-        activate: "Activate",
-        trialBtn: "Activate 3-Day Free Trial",
         navBoard: "Board",
         navDrills: "Drills",
         navSquad: "Squad",
         profileSettings: "Profile & Settings",
-        uploadPhoto: "📷 Upload Photo / Logo",
-        languageLabel: "Language",
-        accountStatus: "Account Status:",
-        clubLicenseActive: "🛡️ Active club license",
-        logoutAccount: "Log out",
-        clubInviteBanner: "Club License",
-        inviteCoach: "📲 Invite Coach"
-      },
-      es: {
-        appTitle: "CoachPro",
-        subtitle: "Plataforma táctica profesional para entrenadores",
-        loginTitle: "Iniciar sesión en CoachPro",
-        registerTitle: "Crear cuenta (3 días gratis)",
-        namePlaceholder: "ej. Míster Pérez",
-        emailLabel: "Correo electrónico",
-        passwordLabel: "Contraseña",
-        loginButton: "Iniciar sesión",
-        registerButton: "Crear cuenta (3 días gratis)",
-        noAccount: "¿No tienes cuenta? Regístrate",
-        hasAccount: "¿Ya tienes cuenta? Inicia sesión",
-        proActive: "Plan PRO Activo",
-        trialActive: "Prueba Gratuita Activa",
-        freeLocked: "Cuenta Free (Bloqueada)",
-        subButton: "Suscripción",
-        exitButton: "Salir",
-        quickFormations: "Formaciones rápidas:",
-        toolMove: "Mover",
-        toolRed: "Rojo",
-        toolBlue: "Azul",
-        toolBall: "Balón",
-        toolCone: "Cono",
-        toolCinesina: "Pica/Disco",
-        toolLadder: "Escalera",
-        toolArrow: "Flecha",
-        toolDelete: "Borrador",
-        toolClear: "Borrar Todo",
-        lockedTitle: "Función Bloqueada",
-        lockedDesc: "Suscríbete o activa la prueba de 3 días para usar la pizarra táctica interactiva.",
-        newDrill: "Nuevo Ejercicio",
-        drillTitlePlaceholder: "Título del ejercicio...",
-        categoryPossesso: "Posesión de Balón",
-        categoryTactics: "Táctica",
-        categoryFitness: "Físico",
-        categoryFinishing: "Finalización",
-        drillDurationPlaceholder: "Duración (ej. 15 min)",
-        drillDescPlaceholder: "Descripción y objetivos...",
-        saveDrill: "+ Guardar Ejercicio",
-        noDrills: "No hay ejercicios guardados. ¡Crea uno arriba!",
-        shareWhatsapp: "Compartir WhatsApp",
-        exportPdf: "📄 Exportar PDF Sesión",
-        exportDrillPdf: "📄 Exportar PDF Ejercicio",
-        playerPlaceholder: "Nombre del jugador...",
-        roleGoalkeeper: "Portero",
-        roleDefender: "Defensa",
-        roleMidfielder: "Centrocampista",
-        roleForward: "Delantero",
-        addPlayer: "Añadir",
-        noPlayers: "No hay jugadores. ¡Añade el primero arriba!",
-        statusPresent: "PRESENTE",
-        statusAbsent: "AUSENTE",
-        statusInjured: "LESIONADO",
-        paywallHeader: "Elige el Plan CoachPro",
-        paywallDesc: "Desbloquea todas las funciones avanzadas para ti o tu club.",
-        indProBtn: "PRO Individual - 29,99€/año",
-        clubBtn: "Paquete Club (10 Cuentas)",
-        clubSubBtn: "15% Descuento - Recibe Código de Invitación",
-        haveClubCode: "¿Tienes un código de invitación de club?",
-        activate: "Activar",
-        trialBtn: "Activar 3 Días de Prueba Gratuita",
-        navBoard: "Pizarra",
-        navDrills: "Ejercicios",
-        navSquad: "Plantilla",
-        profileSettings: "Perfil y Ajustes",
-        uploadPhoto: "📷 Subir Foto / Logo",
-        languageLabel: "Idioma / Language",
-        accountStatus: "Estado de la cuenta:",
-        clubLicenseActive: "🛡️ Licencia de club activa",
-        logoutAccount: "Cerrar sesión",
-        clubInviteBanner: "Licencia de Club",
-        inviteCoach: "📲 Invitar Entrenador"
-      },
-      fr: {
-        appTitle: "CoachPro",
-        subtitle: "Plateforme tactique professionnelle pour entraîneurs",
-        loginTitle: "Connexion à CoachPro",
-        registerTitle: "Créer un compte (3 jours gratuits)",
-        namePlaceholder: "ex. Coach Martin",
-        emailLabel: "E-mail",
-        passwordLabel: "Mot de passe",
-        loginButton: "Se connecter",
-        registerButton: "Créer un compte (3 jours gratuits)",
-        noAccount: "Pas de compte ? S'inscrire",
-        hasAccount: "Déjà un compte ? Se connecter",
-        proActive: "Plan PRO Actif",
-        trialActive: "Essai Gratuit Actif",
-        freeLocked: "Compte Free (Bloqué)",
-        subButton: "Abonnement",
-        exitButton: "Quitter",
-        quickFormations: "Systèmes rapides :",
-        toolMove: "Déplacer",
-        toolRed: "Rouge",
-        toolBlue: "Bleu",
-        toolBall: "Ballon",
-        toolCone: "Cône",
-        toolCinesina: "Coupelle",
-        toolLadder: "Échelle",
-        toolArrow: "Flèche",
-        toolDelete: "Gomme",
-        toolClear: "Tout Effacer",
-        lockedTitle: "Fonctionnalité Bloquée",
-        lockedDesc: "Abonnez-vous ou activez l'essai de 3 jours pour utiliser le tableau tactique.",
-        newDrill: "Nouvel Exercice",
-        drillTitlePlaceholder: "Titre de l'exercice...",
-        categoryPossesso: "Conservation",
-        categoryTactics: "Tactique",
-        categoryFitness: "Athlétique",
-        categoryFinishing: "Finition",
-        drillDurationPlaceholder: "Durée (ex. 15 min)",
-        drillDescPlaceholder: "Description et objectifs...",
-        saveDrill: "+ Enregistrer l'Exercice",
-        noDrills: "Aucun exercice enregistré. Créez-en un !",
-        shareWhatsapp: "Partager WhatsApp",
-        exportPdf: "📄 Exporter PDF Séance",
-        exportDrillPdf: "📄 Exporter PDF Exercice",
-        playerPlaceholder: "Nom du joueur...",
-        roleGoalkeeper: "Gardien",
-        roleDefender: "Défenseur",
-        roleMidfielder: "Milieu",
-        roleForward: "Attaquant",
-        addPlayer: "Ajouter",
-        noPlayers: "Aucun joueur dans l'effectif.",
-        statusPresent: "PRÉSENT",
-        statusAbsent: "ABSENT",
-        statusInjured: "BLESSÉ",
-        paywallHeader: "Choisissez votre plan CoachPro",
-        paywallDesc: "Débloquez toutes les fonctionnalités avancées pour vous ou votre club.",
-        indProBtn: "PRO Individuel - 29,99€/an",
-        clubBtn: "Pack Club (10 Comptes)",
-        clubSubBtn: "15% de réduction - Obtenez le code",
-        haveClubCode: "Vous avez un code d'invitation club ?",
-        activate: "Activer",
-        trialBtn: "Activer l'essai de 3 jours",
-        navBoard: "Tableau",
-        navDrills: "Exercices",
-        navSquad: "Effectif",
-        profileSettings: "Profil & Paramètres",
-        uploadPhoto: "📷 Charger Photo / Logo",
-        languageLabel: "Langue / Language",
-        accountStatus: "Statut du compte :",
-        clubLicenseActive: "🛡️ Licence de club active",
-        logoutAccount: "Se déconnecter",
-        clubInviteBanner: "Licence Club",
-        inviteCoach: "📲 Inviter un entraîneur"
-      },
-      de: {
-        appTitle: "CoachPro",
-        subtitle: "Professionelle Taktik-Plattform für Trainer",
-        loginTitle: "Bei CoachPro anmelden",
-        registerTitle: "Konto erstellen (3 Tage kostenlos)",
-        namePlaceholder: "z.B. Trainer Müller",
-        emailLabel: "E-Mail",
-        passwordLabel: "Passwort",
-        loginButton: "Anmelden",
-        registerButton: "Konto erstellen (3 Tage kostenlos)",
-        noAccount: "Kein Konto? Registrieren",
-        hasAccount: "Bereits ein Konto? Anmelden",
-        proActive: "PRO-Tarif aktiv",
-        trialActive: "Kostenlose Testversion aktiv",
-        freeLocked: "Kostenloses Konto (Gesperrt)",
-        subButton: "Abo",
-        exitButton: "Abmelden",
-        quickFormations: "Schnelle Systeme:",
-        toolMove: "Verschieben",
-        toolRed: "Rot",
-        toolBlue: "Blau",
-        toolBall: "Ball",
-        toolCone: "Hütchen",
-        toolCinesina: "Markierung",
-        toolLadder: "Leiter",
-        toolArrow: "Pfeil",
-        toolDelete: "Radierer",
-        toolClear: "Alles löschen",
-        lockedTitle: "Funktion gesperrt",
-        lockedDesc: "Abonnieren Sie oder aktivieren Sie die 3-tägige Testversion.",
-        newDrill: "Neue Übung",
-        drillTitlePlaceholder: "Titel der Übung...",
-        categoryPossesso: "Ballbesitz",
-        categoryTactics: "Taktik",
-        categoryFitness: "Athletik",
-        categoryFinishing: "Abschluss",
-        drillDurationPlaceholder: "Dauer (z.B. 15 Min.)",
-        drillDescPlaceholder: "Beschreibung und Ziele...",
-        saveDrill: "+ Übung speichern",
-        noDrills: "Keine Übungen gespeichert. Erstellen Sie eine!",
-        shareWhatsapp: "WhatsApp teilen",
-        exportPdf: "📄 Trainingseinheit als PDF",
-        exportDrillPdf: "📄 Übung als PDF",
-        playerPlaceholder: "Spielername...",
-        roleGoalkeeper: "Torhüter",
-        roleDefender: "Verteidiger",
-        roleMidfielder: "Mittelfeldspieler",
-        roleForward: "Stürmer",
-        addPlayer: "Hinzufügen",
-        noPlayers: "Keine Spieler im Kader.",
-        statusPresent: "ANWESEND",
-        statusAbsent: "ABWESEND",
-        statusInjured: "VERLETZT",
-        paywallHeader: "Wählen Sie Ihren CoachPro-Plan",
-        paywallDesc: "Schalten Sie alle erweiterten Funktionen für Sie oder Ihren Verein frei.",
-        indProBtn: "Einzel-PRO - 29,99 €/Jahr",
-        clubBtn: "Vereinspaket (10 Konten)",
-        clubSubBtn: "15% Rabatt - Einladungscode erhalten",
-        haveClubCode: "Haben Sie einen Vereins-Code?",
-        activate: "Aktivieren",
-        trialBtn: "3 Tage Testversion aktivieren",
-        navBoard: "Tafel",
-        navDrills: "Übungen",
-        navSquad: "Kader",
-        profileSettings: "Profil & Einstellungen",
-        uploadPhoto: "📷 Foto / Logo hochladen",
-        languageLabel: "Sprache / Language",
-        accountStatus: "Kontostatus:",
-        clubLicenseActive: "🛡️ Aktive Vereinslizenz",
-        logoutAccount: "Abmelden",
-        clubInviteBanner: "Vereinslizenz",
-        inviteCoach: "📲 Trainer einladen"
+        languageLabel: "Language"
       }
     };
 
@@ -428,12 +140,11 @@
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
-      const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
-      const [showBoardPdfModal, setShowBoardPdfModal] = useState(false);
+      const [isExporting, setIsExporting] = useState(false);
 
       const t = (key) => {
-        return translations[language][key] || translations['it'][key] || key;
+        return (translations[language] && translations[language][key]) || translations['it'][key] || key;
       };
 
       const [activeTab, setActiveTab] = useState('board');
@@ -443,13 +154,9 @@
       const [arrows, setArrows] = useState([]);
       const [isDrawingArrow, setIsDrawingArrow] = useState(false);
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
-      const [showPaywallModal, setShowPaywallModal] = useState(false);
 
       const [editingPlayerId, setEditingPlayerId] = useState(null);
       const [tempPlayerName, setTempPlayerName] = useState('');
-
-      const [clubCodeInput, setClubCodeInput] = useState('');
-      const [clubCodeMsg, setClubCodeMsg] = useState('');
 
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
@@ -458,150 +165,86 @@
       const [newPlayerRole, setNewPlayerRole] = useState('Centrocampista');
       
       const [newDrillTitle, setNewDrillTitle] = useState('');
-      const [newDrillCat, setNewDrillCat] = useState('Possesso Palla');
-      const [newDrillDur, setNewDrillDur] = useState('15 min');
       const [newDrillDesc, setNewDrillDesc] = useState('');
 
       const svgRef = useRef(null);
-
-      const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setProfileImage(reader.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-
-      const checkAccess = () => {
-        return true;
-      };
-
-      const hasAccess = checkAccess();
 
       const handleAuth = (evt) => {
         evt.preventDefault();
         if (!authData.email) return;
         const displayName = authData.name.trim() ? authData.name.trim() : authData.email.split('@')[0];
-        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
-
         setUser({
           name: displayName,
           email: authData.email,
-          isPro: false,
-          clubCode: null,
-          trialEndsAt: authMode === 'register' ? trialEndTime : null
+          isPro: true
         });
       };
 
       const handleLogout = () => {
         setUser(null);
         setAuthData({ name: '', email: '', password: '' });
-        setProfileImage(null);
       };
 
-      const activateTrial = () => {
-        const trialEndTime = new Date().getTime() + (TRIAL_DAYS * 24 * 60 * 60 * 1000);
-        setUser({ ...user, trialEndsAt: trialEndTime });
-        setShowPaywallModal(false);
-      };
+      // Esportazione diretta e universale (funziona su Mobile, Tablet e Desktop)
+      const handleExportBoard = async () => {
+        const pitchElement = document.getElementById('tactical-pitch-area');
+        if (!pitchElement) return;
 
-      const handleRedeemClubCode = (e) => {
-        e.preventDefault();
-        if (!clubCodeInput.trim()) return;
-        
-        const code = clubCodeInput.trim().toUpperCase();
-        if (code.length >= 4) {
-          setUser({
-            ...user,
-            isPro: true,
-            clubCode: code
-          });
-          setClubCodeMsg('✅ ' + (language === 'it' ? 'Codice Società riscattato con successo!' : 'Club code redeemed successfully!'));
-          setTimeout(() => {
-            setShowPaywallModal(false);
-            setClubCodeMsg('');
-            setClubCodeInput('');
-          }, 1500);
-        } else {
-          setClubCodeMsg('❌ ' + (language === 'it' ? 'Codice non valido.' : 'Invalid code.'));
-        }
-      };
-
-      const handleShareClubInvite = () => {
-        const codeToShare = user?.clubCode || "CP-CLUB-2026";
-        const text = `⚽ *COACHPRO - LICENZA SOCIETÀ*\n\n🔑 *Codice:* ${codeToShare}\n\n1. Open CoachPro\n2. Subscription > Redeem Club Code`;
-        const encodedText = encodeURIComponent(text);
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.location.href = `whatsapp://send?text=${encodedText}`;
-        } else {
-          window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+        setIsExporting(true);
+        try {
+          if (window.html2canvas) {
+            const canvas = await window.html2canvas(pitchElement, {
+              backgroundColor: '#0d5c2f',
+              scale: 2,
+              useCORS: true
+            });
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `CoachPro_Lavagna_${new Date().toISOString().slice(0,10)}.png`;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else {
+            window.print();
+          }
+        } catch (err) {
+          console.error(err);
+          window.print();
+        } finally {
+          setIsExporting(false);
         }
       };
 
       const addPlayer = (e) => {
         e.preventDefault();
         if (!newPlayerName.trim()) return;
-        
-        const squadPlayer = {
+        setPlayers([...players, {
           id: Date.now().toString(),
           name: newPlayerName.trim(),
           number: newPlayerNumber || '1',
-          role: newPlayerRole || 'Centrocampista',
-          status: 'presente'
-        };
-
-        setPlayers([...players, squadPlayer]);
+          role: newPlayerRole
+        }]);
         setNewPlayerName('');
         setNewPlayerNumber('');
       };
 
-      const togglePlayerStatus = (id) => {
-        setPlayers(players.map(p => {
-          if (p.id === id) {
-            const nextStatus = p.status === 'presente' ? 'assente' : p.status === 'assente' ? 'infortunato' : 'presente';
-            return { ...p, status: nextStatus };
-          }
-          return p;
-        }));
-      };
-
-      const removePlayer = (id) => {
-        setPlayers(players.filter(p => p.id !== id));
-      };
+      const removePlayer = (id) => setPlayers(players.filter(p => p.id !== id));
 
       const addDrill = (e) => {
         e.preventDefault();
         if (!newDrillTitle.trim()) return;
-        setDrills([...drills, { id: Date.now().toString(), title: newDrillTitle.trim(), category: newDrillCat, duration: newDrillDur, description: newDrillDesc }]);
+        setDrills([...drills, { id: Date.now().toString(), title: newDrillTitle.trim(), description: newDrillDesc }]);
         setNewDrillTitle('');
         setNewDrillDesc('');
       };
 
-      const removeDrill = (id) => {
-        setDrills(drills.filter(d => d.id !== id));
-      };
-
-     // Funzione Esportazione PDF Lavagna ottimizzata per il browser
-      const handleExportBoardPDF = () => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        // Apre direttamente la finestra di stampa del browser pulita per salvare in PDF
-        window.print();
-      };
+      const removeDrill = (id) => setDrills(drills.filter(d => d.id !== id));
 
       const presetFormation = (type) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
-        let formationElements = [];
-        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: '1', name: 'Portiere', x: 50, y: 90 });
+        let formationElements = [
+          { id: 'p1', type: 'player', color: 'red', number: '1', name: 'Portiere', x: 50, y: 90 }
+        ];
 
         if (type === '433') {
           formationElements.push(
@@ -657,6 +300,7 @@
           );
         }
         setElements(formationElements);
+        setArrows([]);
       };
 
       const getCoords = (evt) => {
@@ -670,10 +314,6 @@
       };
 
       const handleBoardClick = (evt) => {
-        if (!hasAccess) {
-          setShowPaywallModal(true);
-          return;
-        }
         if (draggedId) {
           setDraggedId(null);
           return;
@@ -683,7 +323,7 @@
         if (tool === 'red') {
           setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'red', number: (elements.filter(e => e.color === 'red').length + 1).toString(), name: 'Giocatore', x, y }]);
         } else if (tool === 'blue') {
-          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), name: 'Giocatore', x, y }]);
+          setElements([...elements, { id: Date.now().toString(), type: 'player', color: 'blue', number: (elements.filter(e => e.color === 'blue').length + 1).toString(), name: 'Avversario', x, y }]);
         } else if (tool === 'ball') {
           setElements([...elements, { id: Date.now().toString(), type: 'ball', x, y }]);
         } else if (tool === 'cone') {
@@ -705,7 +345,6 @@
       };
 
       const handleTouchMove = (evt) => {
-        if (!hasAccess) return;
         if (!draggedId || tool !== 'move') return;
         const { x, y } = getCoords(evt);
         setElements(elements.map(el => el.id === draggedId ? { ...el, x, y } : el));
@@ -788,10 +427,22 @@
               </div>
             </div>
             <div className="flex items-center space-x-2.5">
-              <button onClick={() => setShowProfileDrawer(true)} className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold border border-white/5">⚙️</button>
+              <button onClick={() => setShowProfileDrawer(!showProfileDrawer)} className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold border border-white/5">⚙️</button>
               <button onClick={handleLogout} className="px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold">{t('exitButton')}</button>
             </div>
           </header>
+
+          {showProfileDrawer && (
+            <div className="max-w-5xl w-full mx-auto px-4 pt-3">
+              <div className="glass-panel p-4 rounded-2xl flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-300">{t('languageLabel')}</span>
+                <select value={language} onChange={(e) => setLanguage(e.target.value)} className="bg-gray-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white">
+                  <option value="it">Italiano</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+            </div>
+          )}
 
           <nav className="glass-panel border-b border-white/5 flex justify-around p-2.5 max-w-5xl w-full mx-auto my-3 rounded-2xl">
             <button onClick={() => setActiveTab('board')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'board' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
@@ -809,139 +460,174 @@
             {activeTab === 'board' && (
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3 glass-panel p-3 rounded-2xl">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs font-bold text-gray-400">{t('quickFormations')}</span>
-                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-3-3</button>
-                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-4-2</button>
-                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">3-5-2</button>
-                    <button onClick={() => presetFormation('4321')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5 transition-all">4-3-2-1</button>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-xs font-bold text-gray-400 mr-1">{t('quickFormations')}</span>
+                    <button onClick={() => presetFormation('433')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-3-3</button>
+                    <button onClick={() => presetFormation('442')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-4-2</button>
+                    <button onClick={() => presetFormation('352')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">3-5-2</button>
+                    <button onClick={() => presetFormation('4321')} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-xs font-bold rounded-xl border border-white/5">4-3-2-1</button>
                   </div>
-                  <button onClick={handleExportBoardPDF} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-500/20 transition-all">{t('exportPdf')}</button>
+                  <button 
+                    type="button"
+                    onClick={handleExportBoard} 
+                    disabled={isExporting}
+                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-black text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-500/20"
+                  >
+                    {isExporting ? t('exporting') : t('exportPdf')}
+                  </button>
                 </div>
 
                 <div className="flex flex-wrap gap-2 glass-panel p-3 rounded-2xl">
-                  <button onClick={() => setTool('move')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'move' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>✋</span><span>{t('toolMove')}</span></button>
-                  <button onClick={() => setTool('red')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'red' ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔴</span><span>{t('toolRed')}</span></button>
-                  <button onClick={() => setTool('blue')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'blue' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔵</span><span>{t('toolBlue')}</span></button>
-                  <button onClick={() => setTool('ball')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'ball' ? 'bg-white text-black shadow-lg shadow-white/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>⚽</span><span>{t('toolBall')}</span></button>
-                  <button onClick={() => setTool('cone')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'cone' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔺</span><span>{t('toolCone')}</span></button>
-                  <button onClick={() => setTool('cinesina')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'cinesina' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>⏺</span><span>{t('toolCinesina')}</span></button>
-                  <button onClick={() => setTool('ladder')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'ladder' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🪜</span><span>{t('toolLadder')}</span></button>
-                  <button onClick={() => setTool('arrow')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'arrow' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>↗️</span><span>{t('toolArrow')}</span></button>
-                  <button onClick={() => setTool('delete')} className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${tool === 'delete' ? 'bg-rose-500 text-black shadow-lg shadow-rose-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🧹</span><span>{t('toolDelete')}</span></button>
-                  <button onClick={() => { setElements([]); setArrows([]); }} className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:text-white hover:bg-white/10">🗑️ {t('toolClear')}</button>
+                  <button onClick={() => setTool('move')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'move' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>✋</span><span>{t('toolMove')}</span></button>
+                  <button onClick={() => setTool('red')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'red' ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔴</span><span>{t('toolRed')}</span></button>
+                  <button onClick={() => setTool('blue')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'blue' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔵</span><span>{t('toolBlue')}</span></button>
+                  <button onClick={() => setTool('ball')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'ball' ? 'bg-white text-black shadow-lg shadow-white/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>⚽</span><span>{t('toolBall')}</span></button>
+                  <button onClick={() => setTool('cone')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'cone' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🔺</span><span>{t('toolCone')}</span></button>
+                  <button onClick={() => setTool('cinesina')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'cinesina' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>⏺</span><span>{t('toolCinesina')}</span></button>
+                  <button onClick={() => setTool('ladder')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'ladder' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🪜</span><span>{t('toolLadder')}</span></button>
+                  <button onClick={() => setTool('arrow')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'arrow' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>↗️</span><span>{t('toolArrow')}</span></button>
+                  <button onClick={() => setTool('delete')} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 ${tool === 'delete' ? 'bg-rose-500 text-black shadow-lg shadow-rose-500/20' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}><span>🧹</span><span>{t('toolDelete')}</span></button>
+                  <button onClick={() => { setElements([]); setArrows([]); }} className="px-3 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:text-white hover:bg-white/10">🗑️ {t('toolClear')}</button>
                 </div>
 
+                {isDrawingArrow && (
+                  <div className="text-center text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 py-2 rounded-xl">
+                    Tocca il punto di arrivo della freccia sul campo
+                  </div>
+                )}
+
                 <div 
+                  id="tactical-pitch-area"
                   ref={svgRef}
                   onClick={handleBoardClick}
                   onMouseMove={handleTouchMove}
+                  onMouseUp={() => setDraggedId(null)}
                   onTouchMove={handleTouchMove}
+                  onTouchEnd={() => setDraggedId(null)}
                   className="relative w-full aspect-[4/3] max-w-4xl mx-auto pitch-bg rounded-3xl overflow-hidden border border-white/10 shadow-2xl cursor-crosshair"
                 >
                   <div className="absolute inset-4 border-2 border-white/30 pointer-events-none"></div>
-                  <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/30 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-4 right-4 h-0.5 bg-white/30 -translate-y-1/2 pointer-events-none"></div>
                   <div className="absolute top-1/2 left-1/2 w-24 h-24 border-2 border-white/30 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-                  <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white/50 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                  <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white/60 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
                   <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    <defs>
+                      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#facc15" />
+                      </marker>
+                    </defs>
                     {arrows.map(arr => (
-                      <g key={arr.id}>
-                        <line x1={`${arr.startX}%`} y1={`${arr.startY}%`} x2={`${arr.endX}%`} y2={`${arr.endY}%`} stroke="#facc15" strokeWidth="3" strokeDasharray="6,4" />
-                      </g>
+                      <line 
+                        key={arr.id} 
+                        x1={`${arr.startX}%`} 
+                        y1={`${arr.startY}%`} 
+                        x2={`${arr.endX}%`} 
+                        y2={`${arr.endY}%`} 
+                        stroke="#facc15" 
+                        strokeWidth="3" 
+                        strokeDasharray="6,4"
+                        markerEnd="url(#arrowhead)"
+                      />
                     ))}
                   </svg>
 
-                 {elements.map(el => {
-                      let tokenContent = '';
-                      let tokenStyle = "";
+                  {elements.map(el => {
+                    let tokenContent = '';
+                    let tokenStyle = "";
 
-                      if (el.type === 'player') {
-                        let baseColor = el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400';
-                        tokenStyle = `w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${baseColor} text-white`;
-                        tokenContent = el.number;
-                      } else if (el.type === 'ball') {
-                        // Pallone da calcio geometrico e lucido
-                        tokenStyle = "w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-2xl bg-gradient-to-br from-white via-gray-100 to-gray-300 border-2 border-gray-900";
-                        tokenContent = '⚽';
-                      } else if (el.type === 'cone') {
-                        // Cono d'allenamento tridimensionale con base trapezoidale e striature
-                        tokenStyle = "w-8 h-7 flex flex-col items-center justify-center filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)] relative";
-                        tokenContent = (
-                          <div className="relative flex flex-col items-center">
-                            <div className="w-0.5 h-1 bg-white/80 absolute -top-1 z-10"></div>
-                            <div style={{
-                              width: 0, 
-                              height: 0, 
-                              borderLeft: '11px solid transparent', 
-                              borderRight: '11px solid transparent', 
-                              borderBottom: '22px solid #ea580c',
-                              filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.4))'
-                            }}></div>
-                            <div className="w-5 h-1.5 bg-orange-800 rounded-full -mt-0.5 shadow-md"></div>
-                          </div>
-                        );
-                      } else if (el.type === 'cinesina') {
-                        // Cinesina / piattino basso con effetto cupola professionale
-                        tokenStyle = "w-7 h-4 rounded-full bg-gradient-to-t from-amber-600 via-amber-400 to-amber-300 border border-amber-200 shadow-xl flex items-center justify-center filter drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] relative";
-                        tokenContent = (
-                          <div className="w-3.5 h-1.5 rounded-full bg-white/40 absolute top-0.5 shadow-inner"></div>
-                        );
-                      } else if (el.type === 'ladder') {
-                        // Scaletta di agilità a pioli rettangolari rigidi con texture in rilievo
-                        tokenStyle = "w-12 h-6 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 border border-yellow-200 rounded-sm shadow-2xl flex flex-col justify-around p-0.5 filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]";
-                        tokenContent = (
-                          <>
-                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
-                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
-                            <div className="w-full h-1 bg-yellow-700/60 rounded-sm shadow-inner"></div>
-                          </>
-                        );
-                      }
-
-                      return (
-                        <div
-                          key={el.id}
-                          onMouseDown={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); setArrows(arrows.filter(a => a.id !== el.id)); } else { setDraggedId(el.id); } } }}
-                          onTouchStart={(e) => { e.stopPropagation(); if (tool === 'move' || tool === 'delete') { if(tool === 'delete') { setElements(elements.filter(item => item.id !== el.id)); } else { setDraggedId(el.id); } } }}
-                          style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
-                          className="absolute flex flex-col items-center cursor-pointer select-none z-10"
-                        >
-                          <div className={tokenStyle}>
-                            {tokenContent}
-                          </div>
-                          {el.type === 'player' && (
-                            editingPlayerId === el.id ? (
-                              <input 
-                                autoFocus
-                                type="text"
-                                value={tempPlayerName}
-                                onChange={(e) => setTempPlayerName(e.target.value)}
-                                onBlur={() => {
-                                  setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                                  setEditingPlayerId(null);
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
-                                    setEditingPlayerId(null);
-                                  }
-                                }}
-                                className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
-                              />
-                            ) : (
-                              <span 
-                                onDoubleClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                                onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
-                                className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
-                              >
-                                {el.name || 'Nome'}
-                              </span>
-                            )
-                          )}
+                    if (el.type === 'player') {
+                      const baseColor = el.color === 'blue' ? 'from-blue-600 to-blue-800 border-blue-400' : 'from-rose-600 to-rose-800 border-rose-400';
+                      tokenStyle = `w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shadow-xl border-2 bg-gradient-to-br ${baseColor} text-white`;
+                      tokenContent = el.number;
+                    } else if (el.type === 'ball') {
+                      tokenStyle = "w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-2xl bg-gradient-to-br from-white via-gray-100 to-gray-300 border border-gray-800";
+                      tokenContent = '⚽';
+                    } else if (el.type === 'cone') {
+                      tokenStyle = "w-8 h-7 flex flex-col items-center justify-center filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)] relative";
+                      tokenContent = (
+                        <div className="relative flex flex-col items-center">
+                          <div style={{
+                            width: 0, 
+                            height: 0, 
+                            borderLeft: '10px solid transparent', 
+                            borderRight: '10px solid transparent', 
+                            borderBottom: '20px solid #ea580c'
+                          }}></div>
+                          <div className="w-5 h-1.5 bg-orange-900 rounded-full -mt-0.5 shadow-md"></div>
                         </div>
                       );
-                    })}
+                    } else if (el.type === 'cinesina') {
+                      tokenStyle = "w-7 h-4 rounded-full bg-gradient-to-t from-amber-600 via-amber-400 to-amber-300 border border-amber-200 shadow-xl flex items-center justify-center filter drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] relative";
+                      tokenContent = <div className="w-3.5 h-1.5 rounded-full bg-white/40 absolute top-0.5"></div>;
+                    } else if (el.type === 'ladder') {
+                      tokenStyle = "w-12 h-6 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 border border-yellow-200 rounded-sm shadow-2xl flex flex-col justify-around p-0.5 filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]";
+                      tokenContent = (
+                        <>
+                          <div className="w-full h-1 bg-yellow-800/60 rounded-sm"></div>
+                          <div className="w-full h-1 bg-yellow-800/60 rounded-sm"></div>
+                          <div className="w-full h-1 bg-yellow-800/60 rounded-sm"></div>
+                        </>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={el.id}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                          if (tool === 'delete') {
+                            setElements(elements.filter(item => item.id !== el.id));
+                          } else if (tool === 'move') {
+                            setDraggedId(el.id);
+                          }
+                        }}
+                        onTouchStart={(e) => {
+                          e.stopPropagation();
+                          if (tool === 'delete') {
+                            setElements(elements.filter(item => item.id !== el.id));
+                          } else if (tool === 'move') {
+                            setDraggedId(el.id);
+                          }
+                        }}
+                        style={{ left: `${el.x}%`, top: `${el.y}%`, transform: 'translate(-50%, -50%)' }}
+                        className="absolute flex flex-col items-center cursor-pointer select-none z-10"
+                      >
+                        <div className={tokenStyle}>
+                          {tokenContent}
+                        </div>
+
+                        {el.type === 'player' && (
+                          editingPlayerId === el.id ? (
+                            <input 
+                              autoFocus
+                              type="text"
+                              value={tempPlayerName}
+                              onChange={(e) => setTempPlayerName(e.target.value)}
+                              onBlur={() => {
+                                setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                setEditingPlayerId(null);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  setElements(elements.map(item => item.id === el.id ? { ...item, name: tempPlayerName } : item));
+                                  setEditingPlayerId(null);
+                                }
+                              }}
+                              className="mt-1 bg-black text-white text-[9px] px-1.5 py-0.5 rounded border border-emerald-500 text-center w-16 shadow-lg"
+                            />
+                          ) : (
+                            <span 
+                              onClick={(e) => { e.stopPropagation(); setEditingPlayerId(el.id); setTempPlayerName(el.name || ''); }}
+                              className="mt-0.5 bg-black/90 text-white px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap shadow-lg cursor-pointer border border-transparent hover:border-emerald-400"
+                            >
+                              {el.name || 'Nome'}
+                            </span>
+                          )
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -957,7 +643,10 @@
                 <div className="space-y-2">
                   {drills.length === 0 ? <p className="text-xs text-gray-400 text-center py-4">{t('noDrills')}</p> : drills.map(d => (
                     <div key={d.id} className="p-3 bg-white/5 border border-white/5 rounded-xl flex justify-between items-center text-xs">
-                      <span className="font-bold">{d.title}</span>
+                      <div>
+                        <p className="font-bold">{d.title}</p>
+                        {d.description && <p className="text-gray-400 text-[11px] mt-0.5">{d.description}</p>}
+                      </div>
                       <button onClick={()=>removeDrill(d.id)} className="text-rose-400 font-bold">Elimina</button>
                     </div>
                   ))}
@@ -976,7 +665,7 @@
                 <div className="space-y-2">
                   {players.length === 0 ? <p className="text-xs text-gray-400 text-center py-4">{t('noPlayers')}</p> : players.map(p => (
                     <div key={p.id} className="p-3 bg-white/5 border border-white/5 rounded-xl flex justify-between items-center text-xs">
-                      <span className="font-bold">#{p.number} - {p.name} ({p.role})</span>
+                      <span className="font-bold">#{p.number} - {p.name}</span>
                       <button onClick={()=>removePlayer(p.id)} className="text-rose-400 font-bold">Elimina</button>
                     </div>
                   ))}
@@ -988,7 +677,8 @@
       );
     }
 
-    ReactDOM.render(<CoachProApp />, document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CoachProApp />);
   </script>
 </body>
 </html>
