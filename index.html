@@ -397,12 +397,10 @@
     };
 
     function CoachProApp() {
-      // Auth state
       const [user, setUser] = useState(null);
       const [authMode, setAuthMode] = useState('login');
       const [authData, setAuthData] = useState({ name: '', email: '', password: '' });
 
-      // Profile & Settings state
       const [showProfileDrawer, setShowProfileDrawer] = useState(false);
       const [profileImage, setProfileImage] = useState(null);
       const [language, setLanguage] = useState('it');
@@ -411,7 +409,6 @@
         return translations[language][key] || translations['it'][key] || key;
       };
 
-      // App state
       const [activeTab, setActiveTab] = useState('board');
       const [tool, setTool] = useState('move');
       const [draggedId, setDraggedId] = useState(null);
@@ -421,11 +418,9 @@
       const [currentArrowStart, setCurrentArrowStart] = useState(null);
       const [showPaywallModal, setShowPaywallModal] = useState(false);
 
-      // Club License state
       const [clubCodeInput, setClubCodeInput] = useState('');
       const [clubCodeMsg, setClubCodeMsg] = useState('');
 
-      // Data state
       const [drills, setDrills] = useState([]);
       const [players, setPlayers] = useState([]);
       const [newPlayerName, setNewPlayerName] = useState('');
@@ -450,7 +445,7 @@
       };
 
       const checkAccess = () => {
-       return true;
+        return true;
       };
 
       const hasAccess = checkAccess();
@@ -609,6 +604,69 @@
         printWindow.document.close();
       };
 
+      const handleExportSingleDrillPDF = (drill) => {
+        if (!hasAccess) {
+          setShowPaywallModal(true);
+          return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          alert("Abilita i popup per scaricare il PDF.");
+          return;
+        }
+
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8" />
+            <title>CoachPro - Esercizio</title>
+            <style>
+              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; }
+              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
+              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
+              .drill-card { background: #fafafa; border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-top: 20px; }
+              .badge { display: inline-block; background: #15803d; color: white; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title-box">
+                <h1>COACHPRO - SCHEDA ESERCIZIO</h1>
+                <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
+              </div>
+              <div>
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
+              </div>
+            </div>
+
+            <div class="drill-card">
+              <span class="badge">${drill.category}</span>
+              <h2 style="margin: 5px 0 10px 0; color: #111; font-size: 20px;">${drill.title}</h2>
+              <p style="margin: 0 0 15px 0; font-size: 13px; color: #555;">⏱️ <strong>Durata:</strong> ${drill.duration}</p>
+              <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;" />
+              <p style="margin: 0; font-size: 14px; color: #333; line-height: 1.6; white-space: pre-line;">${drill.description || 'Nessuna descrizione.'}</p>
+            </div>
+
+            <div class="footer">
+              Generato con CoachPro App - Piattaforma Tattica Professionale
+            </div>
+            
+            <script>
+              window.onload = function() {
+                window.print();
+              };
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+      };
+
       const handleExportBoardPDF = () => {
         if (!hasAccess) {
           setShowPaywallModal(true);
@@ -621,7 +679,6 @@
           return;
         }
 
-        // Catturiamo l'HTML dell'SVG della lavagna attuale
         const svgContent = svgRef.current ? svgRef.current.outerHTML : '';
 
         printWindow.document.write(`
@@ -836,7 +893,6 @@
         }));
       };
 
-      // LOGIN / REGISTRAZIONE
       if (!user) {
         return (
           <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -901,7 +957,6 @@
         );
       }
 
-      // APP PRINCIPALE
       return (
         <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col pb-24 relative">
           <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
@@ -1059,9 +1114,13 @@
                   <button onClick={() => setTool('delete')} className={`p-2 rounded-xl font-semibold text-center ${tool === 'delete' ? 'bg-red-500/20 text-red-400 border border-red-500/50' : 'bg-gray-800 text-gray-300'}`}>❌ {t('toolDelete')}</button>
                   <button onClick={() => { if(!hasAccess) { setShowPaywallModal(true); return; } setElements([]); setArrows([]); }} className="p-2 rounded-xl font-semibold text-center bg-red-950/60 text-red-300 border border-red-900/50 col-span-3">🗑️ {t('toolClear')}</button>
                 </div>
-                  <button onClick={handleExportBoardPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-lg transition">
-                   <span>📄 Esporta Lavagna in PDF</span>
-                 </button>
+
+                <button onClick={handleExportBoardPDF} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-lg transition">
+                  <span>📄 Esporta Lavagna in PDF</span>
+                </button>
+
+                <div className="relative w-full aspect-[4/3] pitch-bg rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800">
+                  {!hasAccess && (
                     <div 
                       onClick={() => setShowPaywallModal(true)}
                       className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-4 text-center cursor-pointer"
@@ -1309,7 +1368,7 @@
             </div>
           )}
 
-<nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
+          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
             <button
               onClick={() => setActiveTab('board')}
               className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
