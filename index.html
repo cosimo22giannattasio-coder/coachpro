@@ -679,7 +679,20 @@
           return;
         }
 
-        const svgContent = svgRef.current ? svgRef.current.outerHTML : '';
+        const svgElement = svgRef.current;
+        if (!svgElement) {
+          alert("Lavagna non trovata.");
+          return;
+        }
+
+        // Cloniamo l'SVG e forziamo attributi di viewBox e dimensioni pulite per la stampa
+        const clonedSvg = svgElement.cloneNode(true);
+        clonedSvg.setAttribute("width", "100%");
+        clonedSvg.setAttribute("height", "100%");
+        if (!clonedSvg.getAttribute("viewBox")) {
+          clonedSvg.setAttribute("viewBox", "0 0 800 600");
+        }
+        const svgContent = clonedSvg.outerHTML;
 
         printWindow.document.write(`
           <!DOCTYPE html>
@@ -688,14 +701,15 @@
             <meta charset="UTF-8" />
             <title>CoachPro - Lavagna Tattica</title>
             <style>
-              body { font-family: Arial, sans-serif; color: #111; padding: 30px; max-width: 800px; margin: auto; text-align: center; }
-              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 15px; margin-bottom: 25px; text-align: left; }
-              .logo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid #15803d; }
-              .title-box h1 { margin: 0; color: #15803d; font-size: 22px; }
-              .title-box p { margin: 4px 0 0 0; font-size: 13px; color: #666; }
-              .pitch-container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #15803d; border-radius: 12px; overflow: hidden; border: 4px solid #1f2937; padding: 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.2); }
-              .pitch-container svg { width: 100%; height: auto; display: block; }
-              .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+              @page { size: landscape; margin: 15mm; }
+              body { font-family: Arial, sans-serif; color: #111; padding: 20px; max-width: 1000px; margin: auto; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+              .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #15803d; padding-bottom: 12px; margin-bottom: 20px; text-align: left; }
+              .logo { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; border: 2px solid #15803d; }
+              .title-box h1 { margin: 0; color: #15803d; font-size: 20px; }
+              .title-box p { margin: 3px 0 0 0; font-size: 12px; color: #556; }
+              .pitch-container { width: 100%; max-width: 800px; margin: 0 auto; background-color: #15803d; border-radius: 12px; overflow: hidden; border: 4px solid #1f2937; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+              .pitch-container svg { width: 100%; height: auto; display: block; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; }
+              .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #ddd; padding-top: 8px; }
             </style>
           </head>
           <body>
@@ -705,7 +719,7 @@
                 <p>Mister: <strong>${user.name}</strong> | Data: ${new Date().toLocaleDateString()}</p>
               </div>
               <div>
-                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:10px;">CP</div>`}
+                ${profileImage ? `<img src="${profileImage}" class="logo" />` : `<div style="background:#15803d; color:white; font-weight:bold; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:14px;">CP</div>`}
               </div>
             </div>
 
@@ -719,7 +733,9 @@
             
             <script>
               window.onload = function() {
-                window.print();
+                setTimeout(() => {
+                  window.print();
+                }, 300);
               };
             <\/script>
           </body>
@@ -727,6 +743,7 @@
         `);
         printWindow.document.close();
       };
+  
 
       const getCoords = (evt) => {
         if (!svgRef.current) return { x: 50, y: 50 };
