@@ -1309,7 +1309,7 @@
             </div>
           )}
 
-          <nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
+<nav className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 px-6 py-2 flex justify-around items-center z-40">
             <button
               onClick={() => setActiveTab('board')}
               className={`flex flex-col items-center space-y-1 ${activeTab === 'board' ? 'text-emerald-400' : 'text-gray-400'}`}
@@ -1336,8 +1336,7 @@
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<CoachProApp />);
+    ReactDOM.render(<CoachProApp />, document.getElementById('root'));
   </script>
 </body>
 </html>
