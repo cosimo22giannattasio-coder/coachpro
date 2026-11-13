@@ -553,66 +553,132 @@
         setDrills(drills.filter(d => d.id !== id));
       };
 
-      const presetFormation = (type) => {
+     const presetFormation = (type) => {
         if (!hasAccess) {
           setShowPaywallModal(true);
           return;
         }
+
+        // Funzione di supporto per prendere un giocatore dalla rosa in base al ruolo o all'ordine
+        const getPlayerForPos = (index, fallbackName, fallbackNum) => {
+          if (players && players.length > index) {
+            return {
+              name: players[index].name,
+              number: players[index].number || fallbackNum
+            };
+          }
+          return { name: fallbackName, number: fallbackNum };
+        };
+
         let formationElements = [];
-        // Portiere fisso
-        formationElements.push({ id: 'p1', type: 'player', color: 'red', number: '1', name: 'Portiere', x: 50, y: 90 });
+        
+        // Portiere (Prende il primo portiere o il primo della rosa)
+        const gkPlayer = players.find(p => p.role === 'Portiere') || players[0];
+        formationElements.push({ 
+          id: 'p1', 
+          type: 'player', 
+          color: 'red', 
+          number: gkPlayer ? gkPlayer.number : '1', 
+          name: gkPlayer ? gkPlayer.name : 'Portiere', 
+          x: 50, 
+          y: 90 
+        });
 
         if (type === '433') {
+          const p2 = getPlayerForPos(1, 'Terzino', '2');
+          const p3 = getPlayerForPos(2, 'Difensore', '5');
+          const p4 = getPlayerForPos(3, 'Difensore', '6');
+          const p5 = getPlayerForPos(4, 'Terzino', '3');
+          const p6 = getPlayerForPos(5, 'Mediano', '8');
+          const p7 = getPlayerForPos(6, 'Regista', '4');
+          const p8 = getPlayerForPos(7, 'Mezzala', '10');
+          const p9 = getPlayerForPos(8, 'Ala', '7');
+          const p10 = getPlayerForPos(9, 'Punta', '9');
+          const p11 = getPlayerForPos(10, 'Ala', '11');
+
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 65, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', number: '7', name: 'Ala Dx', x: 20, y: 25 },
-            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 },
-            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Ala Sx', x: 80, y: 25 }
+            { id: 'p2', type: 'player', color: 'red', number: p2.number, name: p2.name, x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: p3.number, name: p3.name, x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: p4.number, name: p4.name, x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: p5.number, name: p5.name, x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: p6.number, name: p6.name, x: 35, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: p7.number, name: p7.name, x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: p8.number, name: p8.name, x: 65, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: p9.number, name: p9.name, x: 20, y: 25 },
+            { id: 'p10', type: 'player', color: 'red', number: p10.number, name: p10.name, x: 50, y: 20 },
+            { id: 'p11', type: 'player', color: 'red', number: p11.number, name: p11.name, x: 80, y: 25 }
           );
         } else if (type === '442') {
+          const p2 = getPlayerForPos(1, 'Terzino', '2');
+          const p3 = getPlayerForPos(2, 'Difensore', '5');
+          const p4 = getPlayerForPos(3, 'Difensore', '6');
+          const p5 = getPlayerForPos(4, 'Terzino', '3');
+          const p6 = getPlayerForPos(5, 'Esterno', '7');
+          const p7 = getPlayerForPos(6, 'Centrocampista', '4');
+          const p8 = getPlayerForPos(7, 'Centrocampista', '8');
+          const p9 = getPlayerForPos(8, 'Esterno', '11');
+          const p10 = getPlayerForPos(9, 'Attaccante', '9');
+          const p11 = getPlayerForPos(10, 'Attaccante', '10');
+
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', number: '7', name: 'Est. Dx', x: 20, y: 45 },
-            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Centr.', x: 40, y: 50 },
-            { id: 'p8', type: 'player', color: 'red', number: '8', name: 'Centr.', x: 60, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Est. Sx', x: 80, y: 45 },
-            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Prima P.', x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', number: '10', name: 'Seconda P.', x: 60, y: 22 }
+            { id: 'p2', type: 'player', color: 'red', number: p2.number, name: p2.name, x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: p3.number, name: p3.name, x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: p4.number, name: p4.name, x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: p5.number, name: p5.name, x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: p6.number, name: p6.name, x: 20, y: 45 },
+            { id: 'p7', type: 'player', color: 'red', number: p7.number, name: p7.name, x: 40, y: 50 },
+            { id: 'p8', type: 'player', color: 'red', number: p8.number, name: p8.name, x: 60, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: p9.number, name: p9.name, x: 80, y: 45 },
+            { id: 'p10', type: 'player', color: 'red', number: p10.number, name: p10.name, x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: p11.number, name: p11.name, x: 60, y: 22 }
           );
         } else if (type === '352') {
+          const p2 = getPlayerForPos(1, 'Braccetto', '2');
+          const p3 = getPlayerForPos(2, 'Libero', '5');
+          const p4 = getPlayerForPos(3, 'Braccetto', '3');
+          const p5 = getPlayerForPos(4, 'Tornante', '7');
+          const p6 = getPlayerForPos(5, 'Mediano', '8');
+          const p7 = getPlayerForPos(6, 'Regista', '4');
+          const p8 = getPlayerForPos(7, 'Mezzala', '10');
+          const p9 = getPlayerForPos(8, 'Tornante', '11');
+          const p10 = getPlayerForPos(9, 'Attaccante', '9');
+          const p11 = getPlayerForPos(10, 'Attaccante', '12');
+
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Bracc. Dx', x: 30, y: 75 },
-            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Libero', x: 50, y: 80 },
-            { id: 'p4', type: 'player', color: 'red', number: '3', name: 'Bracc. Sx', x: 70, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', number: '7', name: 'Torn. Dx', x: 15, y: 50 },
-            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 38, y: 50 },
-            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 55 },
-            { id: 'p8', type: 'player', color: 'red', number: '10', name: 'Mezzala', x: 62, y: 50 },
-            { id: 'p9', type: 'player', color: 'red', number: '11', name: 'Torn. Sx', x: 85, y: 50 },
-            { id: 'p10', type: 'player', color: 'red', number: '9', name: 'Attaccante', x: 40, y: 22 },
-            { id: 'p11', type: 'player', color: 'red', number: '11', name: 'Attaccante', x: 60, y: 22 }
+            { id: 'p2', type: 'player', color: 'red', number: p2.number, name: p2.name, x: 30, y: 75 },
+            { id: 'p3', type: 'player', color: 'red', number: p3.number, name: p3.name, x: 50, y: 80 },
+            { id: 'p4', type: 'player', color: 'red', number: p4.number, name: p4.name, x: 70, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: p5.number, name: p5.name, x: 15, y: 50 },
+            { id: 'p6', type: 'player', color: 'red', number: p6.number, name: p6.name, x: 38, y: 50 },
+            { id: 'p7', type: 'player', color: 'red', number: p7.number, name: p7.name, x: 50, y: 55 },
+            { id: 'p8', type: 'player', color: 'red', number: p8.number, name: p8.name, x: 62, y: 50 },
+            { id: 'p9', type: 'player', color: 'red', number: p9.number, name: p9.name, x: 85, y: 50 },
+            { id: 'p10', type: 'player', color: 'red', number: p10.number, name: p10.name, x: 40, y: 22 },
+            { id: 'p11', type: 'player', color: 'red', number: p11.number, name: p11.name, x: 60, y: 22 }
           );
         } else if (type === '4321') {
+          const p2 = getPlayerForPos(1, 'Terzino', '2');
+          const p3 = getPlayerForPos(2, 'Difensore', '5');
+          const p4 = getPlayerForPos(3, 'Difensore', '6');
+          const p5 = getPlayerForPos(4, 'Terzino', '3');
+          const p6 = getPlayerForPos(5, 'Mediano', '8');
+          const p7 = getPlayerForPos(6, 'Regista', '4');
+          const p8 = getPlayerForPos(7, 'Mediano', '14');
+          const p9 = getPlayerForPos(8, 'Trequartista', '10');
+          const p10 = getPlayerForPos(9, 'Trequartista', '11');
+          const p11 = getPlayerForPos(10, 'Punta', '9');
+
           formationElements.push(
-            { id: 'p2', type: 'player', color: 'red', number: '2', name: 'Ter. Dx', x: 20, y: 70 },
-            { id: 'p3', type: 'player', color: 'red', number: '5', name: 'Dif. Cen', x: 40, y: 75 },
-            { id: 'p4', type: 'player', color: 'red', number: '6', name: 'Dif. Cen', x: 60, y: 75 },
-            { id: 'p5', type: 'player', color: 'red', number: '3', name: 'Ter. Sx', x: 80, y: 70 },
-            { id: 'p6', type: 'player', color: 'red', number: '8', name: 'Mediano', x: 35, y: 55 },
-            { id: 'p7', type: 'player', color: 'red', number: '4', name: 'Regista', x: 50, y: 60 },
-            { id: 'p8', type: 'player', color: 'red', number: '14', name: 'Mediano', x: 65, y: 55 },
-            { id: 'p9', type: 'player', color: 'red', number: '10', name: 'Trequart.', x: 40, y: 35 },
-            { id: 'p10', type: 'player', color: 'red', number: '11', name: 'Trequart.', x: 60, y: 35 },
-            { id: 'p11', type: 'player', color: 'red', number: '9', name: 'Punta', x: 50, y: 20 }
+            { id: 'p2', type: 'player', color: 'red', number: p2.number, name: p2.name, x: 20, y: 70 },
+            { id: 'p3', type: 'player', color: 'red', number: p3.number, name: p3.name, x: 40, y: 75 },
+            { id: 'p4', type: 'player', color: 'red', number: p4.number, name: p4.name, x: 60, y: 75 },
+            { id: 'p5', type: 'player', color: 'red', number: p5.number, name: p5.name, x: 80, y: 70 },
+            { id: 'p6', type: 'player', color: 'red', number: p6.number, name: p6.name, x: 35, y: 55 },
+            { id: 'p7', type: 'player', color: 'red', number: p7.number, name: p7.name, x: 50, y: 60 },
+            { id: 'p8', type: 'player', color: 'red', number: p8.number, name: p8.name, x: 65, y: 55 },
+            { id: 'p9', type: 'player', color: 'red', number: p9.number, name: p9.name, x: 40, y: 35 },
+            { id: 'p10', type: 'player', color: 'red', number: p10.number, name: p10.name, x: 60, y: 35 },
+            { id: 'p11', type: 'player', color: 'red', number: p11.number, name: p11.name, x: 50, y: 20 }
           );
         }
         setElements(formationElements);
