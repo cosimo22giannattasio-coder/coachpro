@@ -697,37 +697,26 @@
 
       if (!user) {
         return (
-        <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-          {/* Header Principale */}
-          <header className="bg-gray-900/60 backdrop-blur border border-white/5 p-5 rounded-3xl shadow-xl space-y-4"
-            <div className="flex items-center space-x-3.5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center font-black text-black shadow-lg shadow-emerald-500/25 tracking-wider">CP</div>
-              <div>
-                <h1 className="font-bold text-sm tracking-wide text-white">{user.name}</h1>
-                <div className="flex items-center space-x-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <p className="text-[10px] text-emerald-400 font-semibold tracking-wide uppercase">{t('proActive')}</p>
-                </div>
+          <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4">
+            <div className="max-w-md w-full bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl">
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center font-black text-2xl text-white mb-3 shadow-lg shadow-emerald-600/30">CP</div>
+                <h1 className="text-2xl font-black text-white tracking-tight">{t('appTitle')}</h1>
+                <p className="text-xs text-gray-400 mt-1">{t('subtitle')}</p>
               </div>
-            </div>
-            <div className="flex items-center space-x-2.5">
-              <button onClick={() => setShowProfileDrawer(true)} className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-bold border border-white/5">⚙️</button>
-              <button onClick={handleLogout} className="px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold">{t('exitButton')}</button>
-            </div>
-          </header>
 
-          {/* Barra di Navigazione Tab */}
-          <nav className="bg-gray-900/80 backdrop-blur border-b border-white/5 flex justify-around p-2.5 max-w-5xl w-full mx-auto my-3 rounded-2xl">
-            <button onClick={() => setActiveTab('board')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'board' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-              <span>📋</span><span>{t('navBoard')}</span>
-            </button>
-            <button onClick={() => setActiveTab('drills')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'drills' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-              <span>⚽</span><span>{t('navDrills')}</span>
-            </button>
-            <button onClick={() => setActiveTab('squad')} className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all flex items-center justify-center space-x-2 ${activeTab === 'squad' ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25 font-extrabold' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-              <span>👥</span><span>{t('navSquad')}</span>
-            </button>
-          </nav>
+              <form onSubmit={handleAuth} className="space-y-4">
+                {authMode === 'register' && (
+                  <div>
+                    <label className="block text-xs font-bold text-gray-300 mb-1">Nome Mister / Società</label>
+                    <input 
+                      type="text" 
+                      placeholder={t('namePlaceholder')} 
+                      value={authData.name} 
+                      onChange={(e) => setAuthData({ ...authData, name: e.target.value })} 
+                      className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white"
+                    />
+                  </div>
                 )}
                 <div>
                   <label className="block text-xs font-bold text-gray-300 mb-1">{t('emailLabel')}</label>
