@@ -342,8 +342,11 @@
       const getCoords = (evt) => {
         if (!svgRef.current) return { x: 50, y: 50 };
         const rect = svgRef.current.getBoundingClientRect();
+        // Supporto unificato per mouse e touch screen
         const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
         const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        
+        // Calcoliamo la posizione in percentuale rispetto alla viewBox (0 a 100)
         const x = Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100));
         const y = Math.max(5, Math.min(95, ((clientY - rect.top) / rect.height) * 100));
         return { x, y };
@@ -351,7 +354,13 @@
 
       const handleBoardClick = (evt) => {
         if (!hasAccess) { setShowPaywallModal(true); return; }
-        if (draggedId) { setDraggedId(null); return; }
+        
+        // Se stavamo trascinando un elemento e clicchiamo sul campo, rilasciamo l'oggetto
+        if (draggedId) {
+          setDraggedId(null);
+          return;
+        }
+
         const { x, y } = getCoords(evt);
 
         if (tool === 'player-red') {
@@ -387,9 +396,11 @@
       const handleElementClick = (id, evt) => {
         evt.stopPropagation();
         if (!hasAccess) { setShowPaywallModal(true); return; }
+        
         if (tool === 'delete') {
           setElements(elements.filter(el => el.id !== id));
         } else if (tool === 'move') {
+          // Se lo strumento è "Sposta", il primo click seleziona l'elemento, il secondo lo rilascia nella nuova posizione
           setDraggedId(draggedId === id ? null : id);
         }
       };
